@@ -75,7 +75,7 @@ ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=15, pad=20)
 **Palette:** `#4575b4` (blue) for true, `#d73027` (red) for rolling avg, grey scatter for predictions.
 
 ```python
-sns.set_theme(font_scale=1.0, style="whitegrid")
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
 ax.grid(False)
@@ -160,7 +160,7 @@ pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 darkblue = pal[5]  # "#1f253f"
 lightblue = pal[2]  # "#58849f"
 
-fig, ax = plt.subplots(figsize=(10, 8))
+fig, ax = plt.subplots(figsize=(10, 8), dpi=300)
 
 DOT_SIZE = 150
 
@@ -208,7 +208,7 @@ blueish = "#4575b4"
 orangeish = "#fc8d59"
 colormap = np.array([redish, blueish, orangeish])
 
-fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
+fig, ax = plt.subplots(figsize=(8, 6), dpi=300)
 
 # probability dots (mesh grid predictions)
 ax.scatter(xx[:, 0], xx[:, 1], c=colormap[yy_hat], alpha=0.4,
@@ -279,7 +279,7 @@ sns.despine(left=True, bottom=True, right=True)
 ```python
 from matplotlib import gridspec
 
-sns.set_theme(font_scale=1.0, style="whitegrid")
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig = plt.figure(figsize=(14, 12), dpi=300)
 gs = gridspec.GridSpec(3, 3)
@@ -316,9 +316,9 @@ sns.despine(left=True, bottom=True)
 **Palette:** Cubehelix `pal[5]` for average, grey for k-folds, orange dashed for baseline.
 
 ```python
-sns.set_theme(style="whitegrid", context="notebook")
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True, dpi=150)
+fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True, dpi=300)
 fig.tight_layout(pad=5.0)
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
