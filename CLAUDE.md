@@ -19,19 +19,23 @@ docs/gallery/           # Before/after captures at each iteration
   00-original/          # ... through 04-verification-checklist/
 
 scratch/
-  test_chart_patterns.py  # Generates all 8 testable patterns (pattern 6 skipped)
+  test_chart_patterns.py  # Standalone test harness -- exercises chart-patterns.md code with dummy data (pattern 6 skipped)
   figures/                # Working output directory (gitignored PNGs)
 ```
 
 ## Symlink Setup
 
-The directory `~/dotfiles/claude/skills/matplotlib-chart/` is a **symlink** pointing to this repo's `skills/matplotlib-chart/`:
+Claude Code discovers the skill through a **two-hop symlink chain**:
 
 ```
-~/dotfiles/claude/skills/matplotlib-chart -> ~/Documents/matplotlib-chart-skill/skills/matplotlib-chart
+~/.claude/skills/matplotlib-chart
+  -> ~/dotfiles/claude/skills/matplotlib-chart/
+    -> ~/Documents/matplotlib-chart-skill/skills/matplotlib-chart  (this repo)
 ```
 
-Edits to skill files in this repo propagate globally -- no copy step needed. Do not create or modify skill files directly in dotfiles.
+Edits to skill files in this repo propagate instantly to `~/.claude/skills/` -- no copy or sync step needed. Do not create or modify skill files directly in dotfiles or `~/.claude/skills/`.
+
+This repo has no `.claude/` directory because the skill is loaded globally via the chain above. The repo-level `CLAUDE.md` provides project instructions only when working inside this repo.
 
 ## Gallery Workflow
 
@@ -39,7 +43,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 
 1. Make skill changes in `skills/matplotlib-chart/`
 2. Update `scratch/test_chart_patterns.py` if chart patterns changed
-3. Run `uv run scratch/test_chart_patterns.py` to regenerate test charts
+3. Run `uv run scratch/test_chart_patterns.py` to regenerate test charts (this runs the code patterns directly with dummy data -- it does not invoke the skill's LLM workflow)
 4. Create `docs/gallery/NN-name/` folder (next sequential number)
 5. Copy relevant PNGs from `scratch/figures/` into the gallery folder
 6. Write `README.md` following `docs/gallery/TEMPLATE.md`
