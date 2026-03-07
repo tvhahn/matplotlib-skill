@@ -116,14 +116,20 @@ sns.despine(left=True, bottom=True, right=True)
 
 ## Saving Convention
 
-Always save with tight bounding box. For publication, save both PDF and PNG:
+Always save with tight bounding box.
 
+**Verification render** (during iterative development -- used for LLM visual inspection):
+```python
+plt.savefig("./figures/chart_name.png", dpi=150, bbox_inches="tight")
+```
+
+**Publication render** (final output, default):
 ```python
 plt.savefig("./figures/chart_name.pdf", dpi=300, bbox_inches="tight")
 plt.savefig("./figures/chart_name.png", dpi=300, bbox_inches="tight")
 ```
 
-For exploratory/quick plots, PNG only at 150 DPI:
+**Exploratory render** (user says "quick plot"):
 ```python
 plt.savefig("./figures/chart_name.png", dpi=150, bbox_inches="tight")
 ```

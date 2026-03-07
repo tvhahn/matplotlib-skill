@@ -40,7 +40,8 @@ Determine the output format from context:
 
 Map the chart type to defaults from `style-reference.md`:
 - **figsize:** Use the sizing lookup table
-- **DPI:** 300 for publication (default), 150 for exploratory
+- **DPI:** 300 for publication (default), 150 for exploratory, 150 for verification renders
+- **Verification DPI:** During iterative development, all renders use 150 DPI to save time; only the final save uses 300 DPI
 - **Palette:** Match chart type to recommended palette
 - **Layout:** Single panel or GridSpec multi-panel
 - **Output format:** PDF+PNG dual save (default), or PNG-only for exploratory
@@ -124,15 +125,17 @@ When user says "quick plot" or "exploratory":
 
 After generating the code:
 
-1. **Run the script** automatically with `uv run <script_name>.py` via Bash
-2. **Read the generated PNG** using the Read tool (which supports image analysis) to visually inspect the output
-3. **Verify the chart** matches the style rules:
-   - Correct palette used
-   - All spines removed (despined)
-   - Proper annotations present
-   - Text is readable and not overlapping
-   - Legend has `frameon=False`
-   - Annotations use dimgrey
-4. **If something looks wrong**, fix the code and re-run
-5. **Report to the user:** what was generated, the file paths, and any observations about the output
-6. **Ask if refinements are needed** (colors, sizing, annotations, layout adjustments)
+1. **Verification render:** Temporarily set `dpi=150` in the script and run with `uv run <script_name>.py` via Bash. This saves a 150 DPI PNG for quick LLM inspection without wasting time on full-resolution rendering.
+2. **Read the generated PNG** using the Read tool (which supports image analysis) to visually inspect the output.
+3. **Verification checklist** -- confirm each item passes:
+   1. Count visible spines -- expected: 0
+   2. Check grid lines -- expected: none unless single-axis deliberately enabled
+   3. Read legend -- confirm white background with light grey border (`frameon=True`)
+   4. Check annotation text color -- should be grey, not black
+   5. For multi-panel: verify bold (a)/(b)/(c) labels present
+   6. Check for default matplotlib styling leaking through (default blue, visible spines)
+   7. Verify text is readable and not overlapping
+4. **If something looks wrong**, fix the code and re-run at 150 DPI
+5. **Final render:** Once verified, set `dpi=300` (publication) or `dpi=150` (exploratory) and run one final time to produce the deliverable output
+6. **Report to the user:** what was generated, the file paths, and any observations about the output
+7. **Ask if refinements are needed** (colors, sizing, annotations, layout adjustments)
