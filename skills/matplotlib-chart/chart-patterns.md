@@ -1,0 +1,363 @@
+# Chart Patterns
+
+9 self-contained code patterns for common chart types, all following Tim's aesthetic.
+Claude reads this file and adapts the closest pattern to the user's data.
+
+---
+
+## 1. Horizontal Bar Chart
+
+**When to use:** Ranked percentages, category comparisons, survey results.
+**Palette:** `Blues_d` for neutral ranking, or `Greys_r` + `ACCENT_RED` for selective emphasis.
+
+```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
+fig, ax = plt.subplots(figsize=(4, 7), dpi=300)
+
+sns.barplot(x="percent", y="category", hue="category", data=df, palette="Blues_d", legend=False, ax=ax)
+
+for p in ax.patches:
+    space = 1.5
+    _x = p.get_x() + p.get_width() + space
+    _y = p.get_y() + p.get_height() / 2
+    value = p.get_width()
+    ax.text(_x, _y, f"{value:.1f}%", ha="left", va="center",
+            weight="semibold", size=10, color="dimgrey")
+
+ax.set_ylabel("")
+ax.set_xlabel("")
+ax.grid(alpha=0.7, linewidth=1, axis="x")
+ax.set_xticks([0])
+ax.set_xticklabels([], alpha=0)
+ax.set_title("Chart Title", fontsize=14, loc="center")
+sns.despine(left=True, bottom=True)
+```
+
+**Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey). Add `ax.tick_params(axis="y", labelsize=16)` to increase label size.
+
+---
+
+## 2. Vertical Bar Chart
+
+**When to use:** Correlations, scored rankings, model comparisons.
+**Palette:** `rocket` for sequential, diverging colorblind palette for pos/neg values.
+
+```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
+fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
+
+sns.barplot(x="category", y="value", hue="category", data=df, palette="rocket", legend=False, ax=ax)
+
+for i, p in enumerate(ax.patches):
+    space = abs(df["value"].max()) * 0.1
+    value = p.get_height()
+    _y = p.get_y() + p.get_height() + space
+    _x = p.get_x() + p.get_width() / 2
+    ax.text(_x, _y, f"{value:.2f}", ha="center", va="center",
+            weight="semibold", size=12, color="dimgrey")
+
+sns.despine(left=True, bottom=True)
+ax.grid(alpha=0.7, linewidth=1, axis="y")
+ax.set_xlabel("")
+ax.set_ylabel("")
+ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=15, pad=20)
+```
+
+**Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`.
+
+---
+
+## 3. Time Series with Predictions
+
+**When to use:** Predicted vs actual with rolling average, RUL estimation, regression results.
+**Palette:** `#4575b4` (blue) for true, `#d73027` (red) for rolling avg, grey scatter for predictions.
+
+```python
+sns.set_theme(font_scale=1.0, style="whitegrid")
+
+fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
+ax.grid(False)
+
+ax.plot(y_true_sorted, label="True Values", alpha=1, color="#4575b4", linewidth=1, zorder=0)
+
+ax.scatter(np.arange(len(y_pred)), y_pred_sorted, label="Predicted",
+           alpha=0.4, c="grey", edgecolors="none", s=2)
+
+window_size = 12
+rolling_avg = np.convolve(y_pred_sorted, np.ones(window_size), "valid") / window_size
+ax.plot(np.arange(len(y_pred))[window_size - 1:], rolling_avg,
+        color="#d73027", alpha=1, label="Rolling Avg", linewidth=1.5)
+
+# metric annotation box
+rmse = 0.042
+r2 = 0.95
+x_min, x_max = ax.get_xlim()
+y_min, y_max = ax.get_ylim()
+ax.text(
+    (x_max - x_min) * 0.03 + x_min,
+    y_max - (y_max - y_min) * 0.05,
+    f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}",
+    fontsize=9, fontweight="normal",
+    verticalalignment="top", horizontalalignment="left",
+    bbox={"facecolor": "gray", "alpha": 0.0, "pad": 6},
+)
+
+ax.set_xlabel("Time")
+ax.set_ylabel("Value")
+ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", pad=7)
+```
+
+**Customize:** Adjust `window_size` for smoothing. Change x-axis labels to time units. Use `*100` to convert to percentages.
+
+---
+
+## 4. Violin + Strip Plot
+
+**When to use:** Distribution comparisons, showing individual observations within categories.
+**Palette:** White violins with black strip overlay.
+
+```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
+fig, ax = plt.subplots(figsize=(12, 5), dpi=300)
+
+sns.violinplot(
+    x="value", y="category", data=df,
+    density_norm="width", inner=None, linewidth=2,
+    color="white", saturation=1, cut=0,
+    orient="h", zorder=0, width=0.8, ax=ax,
+)
+
+sns.stripplot(
+    x="value", y="category", data=df,
+    size=6, jitter=0.2, color="black", linewidth=0.5,
+    marker="o", edgecolor=None, alpha=0.1,
+    zorder=4, orient="h", ax=ax,
+)
+
+ax.grid(axis="x", alpha=0.5)
+ax.yaxis.label.set_visible(False)
+ax.tick_params(axis="x", labelsize=12)
+ax.set_xlabel("Value", labelpad=10, fontsize=12)
+ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left")
+sns.despine(bottom=True, left=True)
+```
+
+**Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
+
+---
+
+## 5. Lollipop / Dumbbell Chart
+
+**When to use:** Showing min/max/avg ranges, model comparison across k-folds.
+**Palette:** Cubehelix for dots, grey for connecting lines, dimgrey for text.
+
+```python
+pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
+darkblue = pal[5]  # "#1f253f"
+lightblue = pal[2]  # "#58849f"
+
+fig, ax = plt.subplots(figsize=(10, 8))
+
+DOT_SIZE = 150
+
+# avg dots
+ax.scatter(x=df["avg"], y=df["name"], s=DOT_SIZE, alpha=1,
+           label="Average", color=lightblue, edgecolors="white")
+# min/max dots
+ax.scatter(x=df["min"], y=df["name"], s=DOT_SIZE, alpha=1,
+           color=darkblue, label="Min/Max", edgecolors="white")
+ax.scatter(x=df["max"], y=df["name"], s=DOT_SIZE, alpha=1,
+           color=darkblue, edgecolors="white")
+
+# connecting lines
+ax.hlines(y=df["name"], xmin=df["min"], xmax=df["max"],
+          color="grey", alpha=0.4, lw=4, zorder=0)
+
+# value annotations
+for i in range(df.shape[0]):
+    ax.text(x=df["avg"].iloc[i], y=i + 0.15, s=f'{df["avg"].iloc[i]:.2f}',
+            ha="center", va="bottom", size="x-large",
+            color="dimgrey", weight="medium")
+
+ax.grid(False)
+sns.despine(left=True, bottom=True)
+ax.tick_params(axis="x", pad=20, labelsize="x-large", labelcolor="dimgrey")
+
+legend = ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
+                   bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large")
+for text in legend.get_texts():
+    text.set_color("dimgrey")
+```
+
+**Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
+
+---
+
+## 6. Decision Boundary / Scatter
+
+**When to use:** Classification visualization, probability maps, cluster visualization.
+**Palette:** Colorblind diverging (`#d73027`, `#4575b4`, `#fc8d59`).
+
+```python
+redish = "#d73027"
+blueish = "#4575b4"
+orangeish = "#fc8d59"
+colormap = np.array([redish, blueish, orangeish])
+
+fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
+
+# probability dots (mesh grid predictions)
+ax.scatter(xx[:, 0], xx[:, 1], c=colormap[yy_hat], alpha=0.4,
+           s=40 * yy_size**3, linewidths=0)
+
+# contour lines at decision boundaries
+ax.contour(x0_range, x1_range,
+           np.reshape(yy_hat, (xx0.shape[0], -1)),
+           levels=3, linewidths=1,
+           colors=[redish, blueish, blueish, orangeish])
+
+# true data points
+ax.scatter(x[:, 0], x[:, 1], c=colormap[y], s=50,
+           zorder=3, linewidths=0.7, edgecolor="k")
+
+ax.set_ylabel(r"$x_1$")
+ax.set_xlabel(r"$x_0$")
+ax.set_aspect(1)
+ax.grid(False)
+
+legend1 = ax.legend(handles=class_handles, loc="center",
+                    bbox_to_anchor=(1.05, 0.35), frameon=True, facecolor="white",
+                    framealpha=0.8, edgecolor="lightgrey", title="class")
+legend2 = ax.legend(handles=prob_handles, loc="center",
+                    bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
+                    framealpha=0.8, edgecolor="lightgrey", title="prob")
+ax.add_artist(legend1)
+```
+
+**Customize:** Build legend handles with `matplotlib.lines.Line2D`. Adjust `PROB_DOT_SCALE` and `PROB_DOT_SCALE_POWER` to control probability dot sizing.
+
+---
+
+## 7. Heatmap / Spectrogram
+
+**When to use:** Frequency-time plots, spectrograms, correlation matrices, pcolormesh data.
+**Palette:** `inferno` for spectrograms, `rocket` for correlation heatmaps.
+
+```python
+fig, ax = plt.subplots(1, 2, figsize=(11, 4), dpi=300)
+
+ax[0].pcolormesh(time_axis, freq_axis, data, cmap="inferno",
+                 vmax=vmax_val, shading="auto")
+ax[0].set_ylabel("Frequency (Hz)")
+ax[0].set_xlabel("Runtime (days)")
+ax[0].tick_params(axis="both", which="both", length=0)
+ax[0].set_title(r"$\bf{(a)}$" + " Spectrogram", loc="left", fontsize=12)
+
+ax[1].pcolormesh(time_axis, bins, binned_data, cmap="inferno",
+                 vmax=vmax_val2, shading="auto")
+ax[1].set_xlabel("Runtime (days)")
+ax[1].set_ylabel("Frequency Bin")
+ax[1].tick_params(axis="both", which="both", length=0)
+ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12)
+
+sns.despine(left=True, bottom=True, right=True)
+```
+
+**Customize:** Adjust `vmax` to control color scaling. For spectrograms with dark backgrounds, use white text for panel labels. For correlation heatmaps, use `sns.heatmap()` with `cmap="rocket"`.
+
+---
+
+## 8. Multi-Panel Grid (GridSpec)
+
+**When to use:** 2x2, 3x3, or irregular layouts showing same metric across different datasets/conditions.
+**Layout:** GridSpec with shared formatting, enumerated panel labels.
+
+```python
+from matplotlib import gridspec
+
+sns.set_theme(font_scale=1.0, style="whitegrid")
+
+fig = plt.figure(figsize=(14, 12), dpi=300)
+gs = gridspec.GridSpec(3, 3)
+axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(3)]
+gs.update(wspace=0.15, hspace=0.4)
+
+labels = [chr(ord('a') + i) for i in range(9)]
+titles = [f"Dataset {i+1}" for i in range(9)]
+
+for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
+    ax.grid(False)
+
+    # ... plot data on ax ...
+
+    ax.set_title(r"$\bf{(" + label + r")}$" + f" {title}", loc="left", pad=7)
+
+    if i == 0:
+        ax.set_xlabel("X Label")
+        ax.set_ylabel("Y Label")
+        ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+    else:
+        ax.set_yticklabels([])
+
+sns.despine(left=True, bottom=True)
+```
+
+**Customize:** Adjust GridSpec dimensions. Only label axes on the first panel (i==0). Use `gs.update(wspace=, hspace=)` for spacing.
+
+---
+
+## 9. PR/ROC Curves
+
+**When to use:** Classification model evaluation, cross-validation performance.
+**Palette:** Cubehelix `pal[5]` for average, grey for k-folds, orange dashed for baseline.
+
+```python
+sns.set_theme(style="whitegrid", context="notebook")
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True, dpi=150)
+fig.tight_layout(pad=5.0)
+
+pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
+
+# PR curve panel
+for i, (p, r) in enumerate(zip(precision_array, recall_array)):
+    label = "k-fold model" if i == len(precision_array) - 1 else None
+    axes[0].plot(r, p, color="gray", alpha=0.5, linewidth=1, label=label)
+
+axes[0].plot(recall_avg, precision_avg, label="Average model",
+             color=pal[5], linewidth=2)
+
+axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
+             label="No skill model", color="orange", linewidth=2, zorder=0)
+
+axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+axes[0].set_title("Precision-Recall Curve")
+axes[0].set_xlabel("Recall")
+axes[0].set_ylabel("Precision")
+
+# ROC curve panel
+for i, (t, f) in enumerate(zip(tpr_array, fpr_array)):
+    label = "k-fold models" if i == len(tpr_array) - 1 else None
+    axes[1].plot(f, t, color="grey", alpha=0.5, linewidth=1, label=label)
+
+axes[1].plot(fpr_avg, tpr_avg, label="Average of k-folds",
+             color=pal[5], linewidth=2)
+
+axes[1].plot([0, 1], [0, 1], linestyle="--",
+             label="No skill", color="orange", linewidth=2, zorder=0)
+
+axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+axes[1].set_title("ROC Curve")
+axes[1].set_xlabel("False Positive Rate")
+axes[1].set_ylabel("True Positive Rate")
+
+for ax in axes.flatten():
+    ax.yaxis.set_tick_params(labelleft=True, which="major")
+    ax.grid(False)
+```
+
+**Customize:** Add AUC text annotations below each panel. Adjust `x_axis_n` for curve smoothing resolution.
