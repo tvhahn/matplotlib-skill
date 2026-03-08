@@ -12,11 +12,13 @@ A Claude Code skill that generates publication-quality matplotlib/seaborn charts
 
 docs/gallery/              # Before/after captures at each iteration
   TEMPLATE.md              # Blog capture template
-  00-original/             # Baseline from original commit
-  01-current/              # After API modernization + visual polish
-  02-dpi-optimization/     # Verification DPI fix
-  03-consistency-audit/    # Pattern consistency fixes
-  04-verification-checklist/ # Phase 5 checklist rewrite
+  00-original-inspiration/ # Source material from 4 inspiring projects
+  01-original/             # Baseline from original commit
+  02-current/              # After API modernization + visual polish
+  03-dpi-optimization/     # Verification DPI fix
+  04-consistency-audit/    # Pattern consistency fixes
+  05-verification-checklist/ # Phase 5 checklist rewrite
+  06-subplot-outlines/     # Subplot borders + RUL test data
 
 scratch/                   # Test scripts and working output
   test_chart_patterns.py   # Generates all 8 testable patterns

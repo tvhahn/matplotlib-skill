@@ -16,7 +16,7 @@ The skill generates publication-quality matplotlib/seaborn charts matching Tim's
 
 docs/gallery/           # Before/after captures at each iteration
   TEMPLATE.md           # Template for new gallery entries
-  00-original/          # ... through 04-verification-checklist/
+  00-original-inspiration/  # ... through 05-verification-checklist/
 
 scratch/
   test_chart_patterns.py  # Standalone test harness -- exercises chart-patterns.md code with dummy data (pattern 6 skipped)
@@ -54,11 +54,12 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 
 | Entry | Description |
 |---|---|
-| `00-original` | Baseline from the original commit -- captures all quirks before improvements |
-| `01-current` | API modernization (`sns.set()` -> `sns.set_theme()`, pandas iloc fixes) + visual polish (dimgrey annotations, framed legends, `sns.despine()`) |
-| `02-dpi-optimization` | Added verification render at 150 DPI during iterative development; final output stays 300 DPI |
-| `03-consistency-audit` | Fixed 5 patterns with inconsistent `sns.set_theme()` calls or wrong `dpi=` values |
-| `04-verification-checklist` | Rewrote Phase 5 verification from vague prose to a 7-item numbered checklist |
+| `00-original-inspiration` | Source material from 4 projects that inspired the skill's 9 chart patterns |
+| `01-original` | Baseline from the original commit -- captures all quirks before improvements |
+| `02-current` | API modernization (`sns.set()` -> `sns.set_theme()`, pandas iloc fixes) + visual polish (dimgrey annotations, framed legends, `sns.despine()`) |
+| `03-dpi-optimization` | Added verification render at 150 DPI during iterative development; final output stays 300 DPI |
+| `04-consistency-audit` | Fixed 5 patterns with inconsistent `sns.set_theme()` calls or wrong `dpi=` values |
+| `05-verification-checklist` | Rewrote Phase 5 verification from vague prose to a 7-item numbered checklist |
 | `06-subplot-outlines` | Added `ax.patch` subplot borders to pattern 8; replaced sine test data with synthetic RUL predictions |
 
 ## Style Rules

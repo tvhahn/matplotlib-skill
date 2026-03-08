@@ -1,4 +1,4 @@
-# 05 -- Original Inspiration
+# 00 -- Original Inspiration
 
 ## What Changed
 N/A -- this is the source material that inspired the skill, not an iteration on it.
@@ -36,7 +36,7 @@ Documents the origin of each chart pattern for the blog article. The matplotlib-
 
 ## Before vs After
 - **Before:** These are the "before" -- the original research figures
-- **After:** See `../00-original/` for the first skill-generated versions
+- **After:** See `../01-original/` for the first skill-generated versions
 
 ## Files Modified
 None -- source material only
