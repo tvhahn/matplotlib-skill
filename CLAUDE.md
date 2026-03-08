@@ -58,6 +58,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `02-dpi-optimization` | Added verification render at 150 DPI during iterative development; final output stays 300 DPI |
 | `03-consistency-audit` | Fixed 5 patterns with inconsistent `sns.set_theme()` calls or wrong `dpi=` values |
 | `04-verification-checklist` | Rewrote Phase 5 verification from vague prose to a 7-item numbered checklist |
+| `06-subplot-outlines` | Added `ax.patch` subplot borders to pattern 8; replaced sine test data with synthetic RUL predictions |
 
 ## Style Rules
 

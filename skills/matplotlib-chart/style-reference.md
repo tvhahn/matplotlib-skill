@@ -89,6 +89,21 @@ For spectrograms/heatmaps, also remove the right spine:
 sns.despine(left=True, bottom=True, right=True)
 ```
 
+### Subplot outlines (multi-panel only)
+
+For GridSpec multi-panel layouts, add a subtle rectangular border around each
+subplot's background patch. This frames each panel visually without re-enabling
+axis spines:
+
+```python
+for ax in axes_list:
+    ax.patch.set_edgecolor("lightgrey")
+    ax.patch.set_linewidth(0.8)
+```
+
+Apply **after** `sns.despine()`. Spines remain removed; the border comes from
+the axes background patch, not the spine objects.
+
 ## Typography
 
 - **Font family:** DejaVu Sans (set via `sns.set_theme(font="DejaVu Sans")`)

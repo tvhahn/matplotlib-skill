@@ -292,6 +292,10 @@ titles = [f"Dataset {i+1}" for i in range(9)]
 for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.grid(False)
 
+    # --- subplot outline (frames each panel) ---
+    ax.patch.set_edgecolor("lightgrey")
+    ax.patch.set_linewidth(0.8)
+
     # ... plot data on ax ...
 
     ax.set_title(r"$\bf{(" + label + r")}$" + f" {title}", loc="left", pad=7)
@@ -306,7 +310,7 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Adjust GridSpec dimensions. Only label axes on the first panel (i==0). Use `gs.update(wspace=, hspace=)` for spacing.
+**Customize:** Adjust GridSpec dimensions. Only label axes on the first panel (i==0). Use `gs.update(wspace=, hspace=)` for spacing. Remove `ax.patch.set_edgecolor/linewidth` lines if panel borders are not desired.
 
 ---
 
