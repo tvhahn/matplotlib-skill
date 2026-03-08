@@ -1,0 +1,16 @@
+# ruff.toml
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Assume Python 3.11+
+target-version = "py311"
+
+[lint]
+# Enable Pyflakes, pycodestyle, and isort rules.
+select = ["E", "F", "I"]
+
+[format]
+# Like Black, use double quotes for strings.
+quote-style = "double"

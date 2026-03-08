@@ -1,0 +1,40 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        TZ: "America/Vancouver"
+        CLAUDE_CODE_VERSION: "latest"
+        GIT_DELTA_VERSION: "0.18.2"
+        ZSH_IN_DOCKER_VERSION: "1.2.0"
+    hostname: matplotlib-chart-skill-devcontainer
+    volumes:
+      - .:/workspace:cached
+      - claude-code-bashhistory:/commandhistory
+      - claude-code-config:/home/node/.claude
+      - codex-config:/home/node/.codex
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${SSH_AUTH_SOCK:-/dev/null}:/tmp/ssh-auth-host.sock
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
+      - CLAUDE_CONFIG_DIR=/home/node/.claude
+      - POWERLEVEL9K_DISABLE_GITSTATUS=true
+    working_dir: /workspace
+    command: sleep infinity
+    networks:
+      - matplotlib-chart-skill-network
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    group_add:
+      - "999"
+
+volumes:
+  claude-code-bashhistory:
+  claude-code-config:
+  codex-config:
+
+networks:
+  matplotlib-chart-skill-network:
+    driver: bridge

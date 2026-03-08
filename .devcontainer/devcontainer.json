@@ -1,0 +1,61 @@
+{
+  "name": "matplotlib-chart-skill",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "devcontainer",
+  "shutdownAction": "none",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "eamodio.gitlens",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.vscode-jupyter-slideshow",
+        "charliermarsh.ruff",
+        "ms-python.black-formatter",
+        "njpwerner.autodocstring",
+        "mechatroner.rainbow-csv"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.ruff": "explicit",
+          "source.organizeImports.ruff": "explicit"
+        },
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true
+        },
+        "[jupyter]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "python.analysis.autoImportCompletions": true,
+        "jupyter.interactiveWindow.creationMode": "perFile",
+        "jupyter.notebookFileRoot": "${workspaceFolder}",
+        "jupyter.askForKernelRestart": false,
+        "files.associations": {
+          "*.py": "python"
+        },
+        "autoDocstring.docstringFormat": "numpy",
+        "workbench.colorCustomizations": {
+          "titleBar.activeBackground": "#854d0e",
+          "titleBar.activeForeground": "#ffffff",
+          "titleBar.inactiveBackground": "#854d0e",
+          "titleBar.inactiveForeground": "#cccccc"
+        }
+      }
+    }
+  },
+  "remoteUser": "node",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "bash -c 'cp .devcontainer/settings.json /home/node/.claude/settings.json 2>/dev/null || true && curl -fsSL https://raw.githubusercontent.com/ericbuess/claude-code-docs/main/install.sh | bash && uv sync || true'",
+  "postStartCommand": "[ -f ~/.docker/config.json ] && jq 'del(.credsStore)' ~/.docker/config.json > /tmp/docker-config.json && mv /tmp/docker-config.json ~/.docker/config.json 2>/dev/null || true"
+}
