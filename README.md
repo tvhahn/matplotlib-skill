@@ -5,7 +5,7 @@ A Claude Code skill that generates publication-quality matplotlib/seaborn charts
 ## Structure
 
 ```
-skills/matplotlib-chart/   # Source of truth for skill files
+.claude/skills/matplotlib-chart/  # Source of truth for skill files
   SKILL.md                 # Persona, workflow, code generation rules
   style-reference.md       # Full style spec (palettes, sizing, conventions)
   chart-patterns.md        # 9 code patterns by chart type
@@ -25,7 +25,7 @@ scratch/                   # Test scripts and working output
 
 ## Skill Installation
 
-The skill is symlinked from `~/dotfiles/claude/skills/matplotlib-chart/` back to this repo's `skills/matplotlib-chart/` directory, keeping it globally available while the source of truth lives here.
+The skill lives in `.claude/skills/matplotlib-chart/`, where Claude Code discovers it automatically in any clone or devcontainer. On the host, a symlink from `~/dotfiles/claude/skills/matplotlib-chart/` keeps it globally available.
 
 ## Gallery
 

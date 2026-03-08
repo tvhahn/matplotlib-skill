@@ -9,7 +9,7 @@ The skill generates publication-quality matplotlib/seaborn charts matching Tim's
 ### Key files
 
 ```
-skills/matplotlib-chart/
+.claude/skills/matplotlib-chart/
   SKILL.md              # Persona, 5-phase workflow, code generation rules
   style-reference.md    # Full style spec (palettes, sizing, save conventions)
   chart-patterns.md     # 9 self-contained code patterns by chart type
@@ -23,25 +23,26 @@ scratch/
   figures/                # Working output directory (gitignored PNGs)
 ```
 
-## Symlink Setup
+## Skill Discovery
 
-Claude Code discovers the skill through a **two-hop symlink chain**:
+Claude Code discovers the skill through two mechanisms:
+
+- **Devcontainer / any clone:** Claude Code finds `.claude/skills/matplotlib-chart/SKILL.md` directly from the repo -- no symlinks needed.
+- **Host (global availability):** A two-hop symlink chain makes the skill available outside this repo:
 
 ```
 ~/.claude/skills/matplotlib-chart
   -> ~/dotfiles/claude/skills/matplotlib-chart/
-    -> ~/Documents/matplotlib-chart-skill/skills/matplotlib-chart  (this repo)
+    -> ~/Documents/matplotlib-chart-skill/.claude/skills/matplotlib-chart  (this repo)
 ```
 
 Edits to skill files in this repo propagate instantly to `~/.claude/skills/` -- no copy or sync step needed. Do not create or modify skill files directly in dotfiles or `~/.claude/skills/`.
-
-This repo has no `.claude/` directory because the skill is loaded globally via the chain above. The repo-level `CLAUDE.md` provides project instructions only when working inside this repo.
 
 ## Gallery Workflow
 
 Each `docs/gallery/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
 
-1. Make skill changes in `skills/matplotlib-chart/`
+1. Make skill changes in `.claude/skills/matplotlib-chart/`
 2. Update `scratch/test_chart_patterns.py` if chart patterns changed
 3. Run `uv run scratch/test_chart_patterns.py` to regenerate test charts (this runs the code patterns directly with dummy data -- it does not invoke the skill's LLM workflow)
 4. Create `docs/gallery/NN-name/` folder (next sequential number)
@@ -62,7 +63,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 
 ## Style Rules
 
-All charts follow the aesthetic defined in `skills/matplotlib-chart/style-reference.md`:
+All charts follow the aesthetic defined in `.claude/skills/matplotlib-chart/style-reference.md`:
 
 - `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")` -- identical in every pattern
 - `sns.despine(left=True, bottom=True)` -- all spines removed
@@ -78,10 +79,10 @@ Quick consistency checks:
 
 ```bash
 # All sns.set_theme calls should be identical
-grep 'sns.set_theme' skills/matplotlib-chart/chart-patterns.md
+grep 'sns.set_theme' .claude/skills/matplotlib-chart/chart-patterns.md
 
 # All patterns should use dpi=300
-grep 'dpi=' skills/matplotlib-chart/chart-patterns.md
+grep 'dpi=' .claude/skills/matplotlib-chart/chart-patterns.md
 ```
 
 ## Future Work
