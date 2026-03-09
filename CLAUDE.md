@@ -100,6 +100,9 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `06-subplot-outlines` | Added `ax.patch` subplot borders to pattern 8; replaced sine test data with synthetic RUL predictions |
 | `07-datasets-and-evaluation` | Infrastructure pivot: devcontainer, public datasets, evaluate_skill.py, /iterate-skill command, DPI 300→150 |
 | `08-clean-room-testing` | Docker clean-room verification: Claude Code generates charts from one-line prompts in isolated container |
+| `14-tick-marks-and-evaluator` | Fixed evaluator despine check for superset args; added tick_params to P1-P3; dimgrey legend text to P3 |
+| `15-violin-lollipop-polish` | Added tick_params to P4-P6; fixed P4 grid alpha; added title placeholders to P5/P6 |
+| `16-pr-roc-and-multipanel-consistency` | P9 spelling/label/title fixes; tick_params + dimgrey legend text for P6/P8/P9 |
 
 ## Style Rules
 
