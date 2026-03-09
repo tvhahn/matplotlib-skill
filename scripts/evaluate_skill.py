@@ -97,28 +97,36 @@ def check_theme_calls(blocks: dict[str, str]) -> list[dict]:
 
 
 def check_despine(blocks: dict[str, str]) -> list[dict]:
-    """Check that every pattern has sns.despine(left=True, bottom=True)."""
+    """Check that every pattern has sns.despine(left=True, bottom=True).
+
+    Accepts any despine call that contains both left=True and bottom=True,
+    allowing extra keyword args like right=True for spectrograms.
+    """
     results = []
     for num, block in blocks.items():
         code = _extract_code(block)
         has_despine = "sns.despine(" in code
-        correct_despine = EXPECTED_DESPINE in code
 
         if not has_despine:
             results.append(
                 {"pattern": num, "check": "sns.despine", "status": "MISSING",
                  "detail": "No sns.despine() call found"}
             )
-        elif not correct_despine:
-            despine_match = re.search(r"sns\.despine\([^)]+\)", code)
-            actual = despine_match.group(0) if despine_match else "unknown"
+            continue
+
+        despine_match = re.search(r"sns\.despine\([^)]+\)", code)
+        actual = despine_match.group(0) if despine_match else ""
+        has_left = "left=True" in actual
+        has_bottom = "bottom=True" in actual
+
+        if has_left and has_bottom:
             results.append(
-                {"pattern": num, "check": "sns.despine", "status": "WRONG",
-                 "detail": f"Found: {actual}"}
+                {"pattern": num, "check": "sns.despine", "status": "OK", "detail": ""}
             )
         else:
             results.append(
-                {"pattern": num, "check": "sns.despine", "status": "OK", "detail": ""}
+                {"pattern": num, "check": "sns.despine", "status": "WRONG",
+                 "detail": f"Found: {actual}"}
             )
     return results
 
