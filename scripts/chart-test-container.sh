@@ -19,14 +19,14 @@
 #   scripts/chart-test-container.sh --full-archive      # keep data/ in workspace archives
 #   scripts/chart-test-container.sh "horizontal bar chart of collision rates by state from data/raw/public/car_crashes.csv"
 #
-# Results are saved to logs/clean-room/YYYY-MM-DD_HH.MMam/
+# Results are saved to logs/clean-room/YYYY-MM-DD_HH.MM/
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%I.%M%p" | sed 's/AM/am/;s/PM/pm/')
+TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%H.%M")
 RESULTS_DIR="$REPO_DIR/logs/clean-room/$TIMESTAMP"
 mkdir -p "$RESULTS_DIR"
 
