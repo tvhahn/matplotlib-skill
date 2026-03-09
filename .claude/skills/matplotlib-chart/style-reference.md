@@ -160,11 +160,11 @@ plt.savefig("./figures/chart_name.png", dpi=150, bbox_inches="tight")
 
 ```python
 ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
-          bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large")
+          labelcolor="dimgrey", bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large")
 ```
 
 - **Always:** `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"` (white box with subtle outline)
-- **Text color:** `"dimgrey"` (set via `labelcolor="dimgrey"` on mpl>=3.3, or iterate `l.get_texts()`)
+- **Text color:** `labelcolor="dimgrey"` inline in the legend constructor (requires mpl>=3.3)
 - **Position:** `bbox_to_anchor` for outside placement, or `loc="lower right"` / `loc="upper left"` for inside
 
 ## Subplot Convention

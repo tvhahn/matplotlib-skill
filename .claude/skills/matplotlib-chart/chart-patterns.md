@@ -243,14 +243,10 @@ ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
 legend1 = ax.legend(handles=class_handles, loc="center",
                     bbox_to_anchor=(1.05, 0.35), frameon=True, facecolor="white",
-                    framealpha=0.8, edgecolor="lightgrey", title="class")
-for text in legend1.get_texts():
-    text.set_color("dimgrey")
-legend2 = ax.legend(handles=prob_handles, loc="center",
-                    bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
-                    framealpha=0.8, edgecolor="lightgrey", title="prob")
-for text in legend2.get_texts():
-    text.set_color("dimgrey")
+                    framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="class")
+ax.legend(handles=prob_handles, loc="center",
+          bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
+          framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="prob")
 ax.add_artist(legend1)
 
 sns.despine(left=True, bottom=True)
@@ -324,9 +320,8 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     if i == 0:
         ax.set_xlabel("X Label")
         ax.set_ylabel("Y Label")
-        legend = ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
-        for text in legend.get_texts():
-            text.set_color("dimgrey")
+        ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white",
+                 framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey")
     else:
         ax.set_yticklabels([])
 
