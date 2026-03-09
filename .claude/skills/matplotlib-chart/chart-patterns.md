@@ -31,7 +31,7 @@ ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)
 ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0)
 ax.set_xticks([])
-ax.set_title("Chart Title", fontsize=14, loc="center")
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
@@ -64,7 +64,7 @@ ax.grid(alpha=0.7, linewidth=1, axis="y")
 ax.tick_params(axis="both", which="both", length=0)
 ax.set_xlabel("")
 ax.set_ylabel("")
-ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=15, pad=20)
+ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=14, pad=12)
 ```
 
 **Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`.
@@ -148,7 +148,7 @@ ax.tick_params(axis="both", which="both", length=0)
 ax.yaxis.label.set_visible(False)
 ax.tick_params(axis="x", labelsize=12)
 ax.set_xlabel("Value", labelpad=10, fontsize=12)
-ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left")
+ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
