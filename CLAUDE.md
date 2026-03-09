@@ -30,11 +30,11 @@ docs/gallery/           # Before/after captures at each iteration
   00-original-inspiration/  # ... through 06-subplot-outlines/
 
 scratch/
-  test_chart_patterns.py  # Test harness -- exercises chart-patterns.md code (supports --real-data flag)
-  evaluate_skill.py       # Automated style compliance checker
   figures/                # Working output directory (gitignored PNGs)
 
 scripts/
+  test_chart_patterns.py  # Test harness -- exercises chart-patterns.md code (supports --real-data flag)
+  evaluate_skill.py       # Automated style compliance checker
   chart-test-container.sh # Docker clean room for isolated skill testing
 ```
 
@@ -58,9 +58,9 @@ Edits to skill files in this repo propagate instantly to `~/.claude/skills/` -- 
 Each `docs/gallery/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
 
 1. Make skill changes in `.claude/skills/matplotlib-chart/`
-2. Update `scratch/test_chart_patterns.py` if chart patterns changed
-3. Run `uv run scratch/test_chart_patterns.py` to regenerate test charts (synthetic data)
-4. Run `uv run scratch/test_chart_patterns.py --real-data` to test with real datasets
+2. Update `scripts/test_chart_patterns.py` if chart patterns changed
+3. Run `uv run scripts/test_chart_patterns.py` to regenerate test charts (synthetic data)
+4. Run `uv run scripts/test_chart_patterns.py --real-data` to test with real datasets
 5. Create `docs/gallery/NN-name/` folder (next sequential number)
 6. Copy relevant PNGs from `scratch/figures/` into the gallery folder
 7. Write `README.md` following `docs/gallery/TEMPLATE.md`
@@ -102,13 +102,13 @@ grep 'sns.set_theme' .claude/skills/matplotlib-chart/chart-patterns.md
 grep 'dpi=' .claude/skills/matplotlib-chart/chart-patterns.md
 
 # Automated style compliance report
-uv run scratch/evaluate_skill.py --check-renders
+uv run scripts/evaluate_skill.py --check-renders
 
 # Test all patterns with synthetic data
-uv run scratch/test_chart_patterns.py
+uv run scripts/test_chart_patterns.py
 
 # Test all patterns with real datasets
-uv run scratch/test_chart_patterns.py --real-data
+uv run scripts/test_chart_patterns.py --real-data
 ```
 
 ## Autonomous Iteration

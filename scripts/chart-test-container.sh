@@ -36,7 +36,7 @@ echo "Image: $IMAGE"
 echo "Host path: $HOST_REPO_DIR"
 
 # --- Extract OAuth token ---
-CREDS_FILE="/home/node/.claude/.credentials.json"
+CREDS_FILE="${HOME}/.claude/.credentials.json"
 OAUTH_TOKEN=$(python3 -c "
 import json
 with open('$CREDS_FILE') as f:

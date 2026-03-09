@@ -13,17 +13,17 @@ Run a single evaluation-improvement-documentation cycle on the matplotlib-chart 
 
 2. Run the automated evaluation script:
    ```bash
-   uv run scratch/evaluate_skill.py --check-renders
+   uv run scripts/evaluate_skill.py --check-renders
    ```
 
 3. Run the test harness with synthetic data:
    ```bash
-   uv run scratch/test_chart_patterns.py
+   uv run scripts/test_chart_patterns.py
    ```
 
 4. Run the test harness with real data:
    ```bash
-   uv run scratch/test_chart_patterns.py --real-data
+   uv run scripts/test_chart_patterns.py --real-data
    ```
 
 5. Visually inspect the generated PNGs in `scratch/figures/` by reading them.
@@ -58,19 +58,19 @@ Write the proposed changes BEFORE making them. Create a structured evaluation:
 ### Step 4: Apply Changes
 
 Make targeted edits to skill files in `.claude/skills/matplotlib-chart/`.
-Update `scratch/test_chart_patterns.py` if the chart patterns changed.
+Update `scripts/test_chart_patterns.py` if the chart patterns changed.
 
 ### Step 5: Regenerate & Verify
 
 1. Run the test harness again:
    ```bash
-   uv run scratch/test_chart_patterns.py
-   uv run scratch/test_chart_patterns.py --real-data
+   uv run scripts/test_chart_patterns.py
+   uv run scripts/test_chart_patterns.py --real-data
    ```
 
 2. Run the automated evaluation:
    ```bash
-   uv run scratch/evaluate_skill.py --check-renders
+   uv run scripts/evaluate_skill.py --check-renders
    ```
 
 3. Visually inspect the regenerated PNGs.
