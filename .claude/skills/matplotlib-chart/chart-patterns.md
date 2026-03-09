@@ -109,9 +109,8 @@ ax.text(
 
 ax.set_xlabel("Time")
 ax.set_ylabel("Value")
-legend = ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
-for text in legend.get_texts():
-    text.set_color("dimgrey")
+ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white",
+         framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey")
 ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
@@ -198,10 +197,8 @@ ax.tick_params(axis="both", which="both", length=0)
 ax.tick_params(axis="x", pad=20, labelsize="x-large", labelcolor="dimgrey")
 ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 
-legend = ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
-                   bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large")
-for text in legend.get_texts():
-    text.set_color("dimgrey")
+ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
+         bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large", labelcolor="dimgrey")
 ```
 
 **Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
@@ -364,9 +361,8 @@ axes[0].plot(recall_avg, precision_avg, label="Average model",
 axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
              label="No skill model", color="orange", linewidth=2, zorder=0)
 
-legend0 = axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
-for text in legend0.get_texts():
-    text.set_color("dimgrey")
+axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
+               labelcolor="dimgrey")
 axes[0].set_title(r"$\bf{(a)}$" + " Precision-Recall Curve", loc="left", fontsize=12)
 axes[0].set_xlabel("Recall")
 axes[0].set_ylabel("Precision")
@@ -382,9 +378,8 @@ axes[1].plot(fpr_avg, tpr_avg, label="Average of k-folds",
 axes[1].plot([0, 1], [0, 1], linestyle="--",
              label="No skill", color="orange", linewidth=2, zorder=0)
 
-legend1 = axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
-for text in legend1.get_texts():
-    text.set_color("dimgrey")
+axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
+               labelcolor="dimgrey")
 axes[1].set_title(r"$\bf{(b)}$" + " ROC Curve", loc="left", fontsize=12)
 axes[1].set_xlabel("False Positive Rate")
 axes[1].set_ylabel("True Positive Rate")
