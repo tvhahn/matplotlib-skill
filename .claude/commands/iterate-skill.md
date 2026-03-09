@@ -11,24 +11,14 @@ Run a single evaluation-improvement-documentation cycle on the matplotlib-chart 
    - `.claude/skills/matplotlib-chart/style-reference.md`
    - `.claude/skills/matplotlib-chart/chart-patterns.md`
 
-2. Run the automated evaluation script:
+2. Run static analysis for style compliance:
    ```bash
    uv run scripts/evaluate_skill.py --check-renders
    ```
 
-3. Run the test harness with synthetic data:
-   ```bash
-   uv run scripts/test_chart_patterns.py
-   ```
+3. Note the latest clean-room results directory (`logs/clean-room/latest/`) as the comparison baseline. If no previous run exists, note that this is the first run.
 
-4. Run the test harness with real data:
-   ```bash
-   uv run scripts/test_chart_patterns.py --real-data
-   ```
-
-5. Visually inspect the generated PNGs in `scratch/figures/` by reading them.
-
-6. Record the "Before" automated check scores.
+4. Record the "Before" automated check scores.
 
 ### Step 2: Identify Improvements
 
@@ -58,33 +48,33 @@ Write the proposed changes BEFORE making them. Create a structured evaluation:
 ### Step 4: Apply Changes
 
 Make targeted edits to skill files in `.claude/skills/matplotlib-chart/`.
-Update `scripts/test_chart_patterns.py` if the chart patterns changed.
 
-### Step 5: Regenerate & Verify
+### Step 5: Verify
 
-1. Run the test harness again:
-   ```bash
-   uv run scripts/test_chart_patterns.py
-   uv run scripts/test_chart_patterns.py --real-data
-   ```
-
-2. Run the automated evaluation:
+1. Run static analysis for style compliance:
    ```bash
    uv run scripts/evaluate_skill.py --check-renders
    ```
 
-3. Visually inspect the regenerated PNGs.
+2. Run the container-based skill test (Claude Code generates charts from minimal prompts in a Docker clean room):
+   ```bash
+   scripts/chart-test-container.sh --quick
+   ```
 
-4. Record "After" automated check scores.
+3. Read the generated PNGs from the timestamped results directory (`logs/clean-room/latest/`) to visually inspect chart quality.
 
-5. **Drift detection**: If any check score DECREASED, halt and explain why.
+4. Read the generated Python scripts in each results subdirectory to confirm style conventions (`sns.set_theme`, `sns.despine`).
+
+5. Record "After" automated check scores.
+
+6. **Regression detection**: If the container script exits nonzero (any prompt produced zero charts), or generated code is missing `sns.set_theme`/`sns.despine`, halt and explain why.
 
 ### Step 6: Document
 
 Determine the next gallery entry number by looking at `docs/gallery/` and create:
 
 1. Create `docs/gallery/NN-description/` folder
-2. Copy relevant PNGs from `scratch/figures/` into the gallery folder
+2. Copy relevant PNGs from the clean-room results directory (`logs/clean-room/latest/`) into the gallery folder
 3. Write `README.md` following this format:
 
 ```markdown

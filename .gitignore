@@ -87,6 +87,7 @@ Thumbs.db
 
 # Project-specific
 scratch/
+.clean-room-*
 docker-compose.override.yml
 output/*
 !output/README.md

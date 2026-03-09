@@ -32,10 +32,12 @@ docs/gallery/           # Before/after captures at each iteration
 scratch/
   figures/                # Working output directory (gitignored PNGs)
 
+logs/clean-room/            # Archived clean-room runs (gitignored)
+
 scripts/
-  test_chart_patterns.py  # Test harness -- exercises chart-patterns.md code (supports --real-data flag)
-  evaluate_skill.py       # Automated style compliance checker
-  chart-test-container.sh # Docker clean room for isolated skill testing
+  chart-test-container.sh # Primary verification — Claude Code generates charts in Docker clean room
+  evaluate_skill.py       # Static analysis — checks chart-patterns.md for style compliance
+  test_chart_patterns.py  # Optional syntax check — directly runs chart-patterns.md code blocks
 ```
 
 ## Skill Discovery
@@ -58,13 +60,11 @@ Edits to skill files in this repo propagate instantly to `~/.claude/skills/` -- 
 Each `docs/gallery/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
 
 1. Make skill changes in `.claude/skills/matplotlib-chart/`
-2. Update `scripts/test_chart_patterns.py` if chart patterns changed
-3. Run `uv run scripts/test_chart_patterns.py` to regenerate test charts (synthetic data)
-4. Run `uv run scripts/test_chart_patterns.py --real-data` to test with real datasets
-5. Create `docs/gallery/NN-name/` folder (next sequential number)
-6. Copy relevant PNGs from `scratch/figures/` into the gallery folder
-7. Write `README.md` following `docs/gallery/TEMPLATE.md`
-8. Commit
+2. Run `scripts/chart-test-container.sh --quick` (or full run without `--quick`) to generate charts in a clean room
+3. Create `docs/gallery/NN-name/` folder (next sequential number)
+4. Copy relevant PNGs from `logs/clean-room/latest/` into the gallery folder
+5. Write `README.md` following `docs/gallery/TEMPLATE.md`
+6. Commit
 
 ## Existing Gallery Entries
 
@@ -92,6 +92,19 @@ All charts follow the aesthetic defined in `.claude/skills/matplotlib-chart/styl
 
 ## Verification
 
+```bash
+# Primary: Claude Code generates charts from minimal prompts (Docker required)
+scripts/chart-test-container.sh
+scripts/chart-test-container.sh --quick            # 3 prompts instead of 5
+scripts/chart-test-container.sh --full-archive     # keep data/ in workspace archives
+
+# Static analysis (fast, no Docker)
+uv run scripts/evaluate_skill.py --check-renders
+
+# Optional: syntax check of chart-patterns.md code blocks
+uv run scripts/test_chart_patterns.py
+```
+
 Quick consistency checks:
 
 ```bash
@@ -100,29 +113,22 @@ grep 'sns.set_theme' .claude/skills/matplotlib-chart/chart-patterns.md
 
 # All patterns should use dpi=300
 grep 'dpi=' .claude/skills/matplotlib-chart/chart-patterns.md
-
-# Automated style compliance report
-uv run scripts/evaluate_skill.py --check-renders
-
-# Test all patterns with synthetic data
-uv run scripts/test_chart_patterns.py
-
-# Test all patterns with real datasets
-uv run scripts/test_chart_patterns.py --real-data
 ```
 
 ## Autonomous Iteration
 
 Use `/iterate-skill` to run a single evaluation-improvement-documentation cycle. The command:
 
-1. Evaluates current skill state (automated checks + visual inspection)
+1. Evaluates current skill state (static analysis + latest clean-room results)
 2. Identifies 1-2 improvements
-3. Applies changes, regenerates charts, verifies no regressions
-4. Creates a gallery entry and atomic commit
+3. Applies changes, verifies via `scripts/chart-test-container.sh --quick` (Docker clean room)
+4. Creates a gallery entry from clean-room results and atomic commit
 
 Guardrails: max 3 iterations without human feedback, no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
 
-For isolated testing (no access to prior gallery/history), use `scripts/chart-test-container.sh`.
+## Plan Verification — MANDATORY
+
+**When implementing a plan that includes a "Verification" section, you MUST execute every verification step before considering the work complete.** This is non-negotiable. Do not skip verification because the code "looks right" or because you "just wrote it." Run the commands, check the output, and confirm each expected result. If a verification step fails, fix the issue and re-verify. Unverified work is unfinished work.
 
 ## Future Work
 

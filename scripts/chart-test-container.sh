@@ -9,18 +9,25 @@
 # The container has NO access to gallery entries, git history, prior
 # evaluations, or the test harness (which would bypass the skill).
 #
+# After each prompt, the full clean room is archived into the results
+# directory (minus data/, __pycache__/, .venv/, .claude-config/ by default).
+# Use --full-archive to keep data/ in the archive (~15 MB extra per prompt).
+#
 # Usage:
-#   scripts/chart-test-container.sh                    # run all test prompts
+#   scripts/chart-test-container.sh                    # run all 5 test prompts
+#   scripts/chart-test-container.sh --quick             # run 3 prompts (bar, violin, lollipop)
+#   scripts/chart-test-container.sh --full-archive      # keep data/ in workspace archives
 #   scripts/chart-test-container.sh "horizontal bar chart of collision rates by state from data/raw/public/car_crashes.csv"
 #
-# Results are saved to scratch/clean-room-results/
+# Results are saved to logs/clean-room/YYYY-MM-DD_HH.MMam/
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-RESULTS_DIR="$REPO_DIR/scratch/clean-room-results"
+TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%I.%M%p" | sed 's/AM/am/;s/PM/pm/')
+RESULTS_DIR="$REPO_DIR/logs/clean-room/$TIMESTAMP"
 mkdir -p "$RESULTS_DIR"
 
 # --- Resolve devcontainer image + host path (for DooD) ---
@@ -49,6 +56,18 @@ if [ -z "$OAUTH_TOKEN" ]; then
     exit 1
 fi
 
+# --- Parse flags ---
+QUICK=false
+FULL_ARCHIVE=false
+CUSTOM_PROMPT=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --quick) QUICK=true; shift ;;
+        --full-archive) FULL_ARCHIVE=true; shift ;;
+        *) CUSTOM_PROMPT="$1"; shift ;;
+    esac
+done
+
 # --- Test prompts ---
 # Each prompt is a realistic, minimal chart request — the kind a user would type.
 # The skill should handle everything from here.
@@ -60,9 +79,18 @@ DEFAULT_PROMPTS=(
     "lollipop chart comparing health spending per capita across countries from data/raw/public/healthexp.csv — show min/avg/max range"
 )
 
-# Use provided prompt or all defaults
-if [ $# -gt 0 ]; then
-    PROMPTS=("$1")
+# --quick: run 3 of 5 prompts (horizontal bar, violin, lollipop)
+QUICK_PROMPTS=(
+    "${DEFAULT_PROMPTS[0]}"
+    "${DEFAULT_PROMPTS[1]}"
+    "${DEFAULT_PROMPTS[4]}"
+)
+
+# Select prompts
+if [ -n "$CUSTOM_PROMPT" ]; then
+    PROMPTS=("$CUSTOM_PROMPT")
+elif [ "$QUICK" = true ]; then
+    PROMPTS=("${QUICK_PROMPTS[@]}")
 else
     PROMPTS=("${DEFAULT_PROMPTS[@]}")
 fi
@@ -112,7 +140,7 @@ CLEANEOF
         bash -c "claude --dangerously-skip-permissions -p '${prompt//\'/\'\\\'\'}' --max-turns 15" \
         > "$run_dir/claude_output.txt" 2>&1
 
-    # Copy results
+    # Copy highlights to run_dir top level
     if ls "$TMPDIR/figures/"* 1>/dev/null 2>&1; then
         cp "$TMPDIR/figures/"* "$run_dir/"
         echo "  Charts: $(ls "$TMPDIR/figures/" | wc -l) files saved to $run_dir/"
@@ -120,14 +148,23 @@ CLEANEOF
         echo "  No charts generated."
     fi
 
-    # Copy any generated scripts
-    find "$TMPDIR" -maxdepth 1 -name "*.py" ! -name "pyproject.toml" -exec cp {} "$run_dir/" \; 2>/dev/null
+    # Copy any generated scripts (recursive, excluding data/ and __pycache__/)
+    find "$TMPDIR" -name "*.py" \
+        -not -path "$TMPDIR/data/*" \
+        -not -path "$TMPDIR/__pycache__/*" \
+        -not -path "$TMPDIR/.venv/*" \
+        -not -name "pyproject.toml" \
+        -exec cp {} "$run_dir/" \; 2>/dev/null
 
     # Save the prompt
     echo "$prompt" > "$run_dir/prompt.txt"
 
-    # Cleanup
-    rm -rf "$TMPDIR"
+    # Archive the full clean room into workspace/
+    rm -rf "$TMPDIR/__pycache__" "$TMPDIR/.venv" "$TMPDIR/.claude-config"
+    if [ "$FULL_ARCHIVE" != true ]; then
+        rm -rf "$TMPDIR/data"
+    fi
+    mv "$TMPDIR" "$run_dir/workspace"
 }
 
 # Run tests
@@ -136,8 +173,36 @@ for i in "${!PROMPTS[@]}"; do
     run_clean_room "${PROMPTS[$i]}" "$run_id"
 done
 
+# --- Check results ---
+FAILURES=0
+for i in "${!PROMPTS[@]}"; do
+    run_id=$(printf "%02d" $((i + 1)))
+    run_dir="$RESULTS_DIR/$run_id"
+    png_count=$(find "$run_dir" -maxdepth 1 -name "*.png" 2>/dev/null | wc -l)
+    if [ "$png_count" -eq 0 ]; then
+        echo "FAIL: Prompt $run_id produced zero PNGs"
+        FAILURES=$((FAILURES + 1))
+    fi
+done
+
 echo ""
 echo "=========================================="
-echo "All tests complete. Results in: $RESULTS_DIR/"
+if [ "$FAILURES" -gt 0 ]; then
+    echo "FAILED: $FAILURES prompt(s) produced no charts."
+else
+    echo "All tests passed."
+fi
+echo "Results in: $RESULTS_DIR/"
 echo "=========================================="
 ls -la "$RESULTS_DIR/"
+
+# Symlink latest run for convenience
+ln -sfn "$TIMESTAMP" "$REPO_DIR/logs/clean-room/latest"
+
+# Disk usage summary
+echo ""
+RUN_SIZE=$(du -sh "$RESULTS_DIR" 2>/dev/null | cut -f1)
+TOTAL_SIZE=$(du -sh "$REPO_DIR/logs/clean-room" 2>/dev/null | cut -f1)
+echo "This run: $RUN_SIZE | Total logs/clean-room/: $TOTAL_SIZE"
+
+exit "$FAILURES"
