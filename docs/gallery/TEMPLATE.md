@@ -18,6 +18,15 @@ See `prompt.md` or `script.py` in this folder.
 - **Before:** See `../[previous-folder]/output.png`
 - **After:** See `output.png` in this folder
 
+## Visual Evaluation
+<!-- For each chart, record observations from the Visual Evaluation Protocol -->
+
+### [Chart Name]
+- **Observe:** <!-- 2-3 sentences describing what you see — layout, colors, text, spacing. No judgments. -->
+- **Compare:** <!-- Gaps vs style-reference.md: typography, color, layout, annotations, legends, despine -->
+- **Judge:** <!-- Taste-based: publishable? First thing that catches your eye? One change to improve? -->
+- **Verdict:** <!-- PUBLISH | POLISH | REWORK -->
+
 ## Files Modified
 <!-- Which skill files were edited, with brief description of each change -->
 
