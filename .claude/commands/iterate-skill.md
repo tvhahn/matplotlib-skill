@@ -147,8 +147,12 @@ When invoked with `--iterations N` (max 3):
 1. Create a staging branch: `iterate/batch-YYYYMMDD-HHMMSS`
 2. Run Steps 1-7 for each iteration, committing after each
 3. Between iterations, check if automated scores decreased — if so, HALT
-4. After all iterations, produce a summary listing all changes
-5. Do NOT merge — leave the staging branch for human review
+4. After all iterations, merge the staging branch back to master:
+   - `git checkout master && git merge <branch>`
+   - Delete the staging branch: `git branch -d <branch>`
+5. Produce a final summary listing all changes, the score progression,
+   and a reminder that each iteration is an atomic commit revertible
+   with `git revert <hash>`
 
 ## Guardrails
 
