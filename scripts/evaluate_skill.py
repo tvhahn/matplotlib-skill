@@ -124,7 +124,7 @@ def check_despine(blocks: dict[str, str]) -> list[dict]:
 
 
 def check_dpi(blocks: dict[str, str]) -> list[dict]:
-    """Check that all patterns specify dpi=300 for publication output."""
+    """Check that all patterns specify dpi=150 (default output)."""
     results = []
     for num, block in blocks.items():
         code = _extract_code(block)
@@ -134,15 +134,15 @@ def check_dpi(blocks: dict[str, str]) -> list[dict]:
                 {"pattern": num, "check": "dpi", "status": "MISSING",
                  "detail": "No dpi= parameter found"}
             )
-        elif all(d == "300" for d in dpi_matches):
+        elif all(d == "150" for d in dpi_matches):
             results.append(
                 {"pattern": num, "check": "dpi", "status": "OK", "detail": ""}
             )
         else:
-            wrong = [d for d in dpi_matches if d != "300"]
+            wrong = [d for d in dpi_matches if d != "150"]
             results.append(
                 {"pattern": num, "check": "dpi", "status": "WRONG",
-                 "detail": f"Found dpi={', '.join(wrong)} (should be 300)"}
+                 "detail": f"Found dpi={', '.join(wrong)} (should be 150)"}
             )
     return results
 

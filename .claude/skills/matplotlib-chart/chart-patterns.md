@@ -13,7 +13,7 @@ Claude reads this file and adapts the closest pattern to the user's data.
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(4, 7), dpi=300)
+fig, ax = plt.subplots(figsize=(4, 7), dpi=150)
 
 sns.barplot(x="percent", y="category", hue="category", data=df, palette="Blues_d", legend=False, ax=ax)
 
@@ -46,7 +46,7 @@ sns.despine(left=True, bottom=True)
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
+fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
 sns.barplot(x="category", y="value", hue="category", data=df, palette="rocket", legend=False, ax=ax)
 
@@ -77,7 +77,7 @@ ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=15, pad=20)
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
+fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 ax.grid(False)
 
 ax.plot(y_true_sorted, label="True Values", alpha=1, color="#4575b4", linewidth=1, zorder=0)
@@ -122,7 +122,7 @@ ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", pad=7)
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(12, 5), dpi=300)
+fig, ax = plt.subplots(figsize=(12, 5), dpi=150)
 
 sns.violinplot(
     x="value", y="category", data=df,
@@ -160,7 +160,7 @@ pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 darkblue = pal[5]  # "#1f253f"
 lightblue = pal[2]  # "#58849f"
 
-fig, ax = plt.subplots(figsize=(10, 8), dpi=300)
+fig, ax = plt.subplots(figsize=(10, 8), dpi=150)
 
 DOT_SIZE = 150
 
@@ -208,7 +208,7 @@ blueish = "#4575b4"
 orangeish = "#fc8d59"
 colormap = np.array([redish, blueish, orangeish])
 
-fig, ax = plt.subplots(figsize=(8, 6), dpi=300)
+fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
 
 # probability dots (mesh grid predictions)
 ax.scatter(xx[:, 0], xx[:, 1], c=colormap[yy_hat], alpha=0.4,
@@ -248,7 +248,7 @@ ax.add_artist(legend1)
 **Palette:** `inferno` for spectrograms, `rocket` for correlation heatmaps.
 
 ```python
-fig, ax = plt.subplots(1, 2, figsize=(11, 4), dpi=300)
+fig, ax = plt.subplots(1, 2, figsize=(11, 4), dpi=150)
 
 ax[0].pcolormesh(time_axis, freq_axis, data, cmap="inferno",
                  vmax=vmax_val, shading="auto")
@@ -281,7 +281,7 @@ from matplotlib import gridspec
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig = plt.figure(figsize=(14, 12), dpi=300)
+fig = plt.figure(figsize=(14, 12), dpi=150)
 gs = gridspec.GridSpec(3, 3)
 axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(3)]
 gs.update(wspace=0.15, hspace=0.4)
@@ -322,7 +322,7 @@ sns.despine(left=True, bottom=True)
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True, dpi=300)
+fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True, dpi=150)
 fig.tight_layout(pad=5.0)
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)

@@ -135,3 +135,12 @@ Curated small datasets with permissive licenses, downloaded via `data/fetch_data
 - **Rows:** ~51
 - **Description:** Iowa electricity generation by source type
 - **Patterns:** P2 (vertical bar — generation by source)
+
+### public/iris.csv
+
+- **Source:** [UCI ML Repository](https://archive.ics.uci.edu/dataset/53/iris) (Fisher, 1936) via scikit-learn
+- **License:** CC0 (public domain)
+- **Domain:** Ecology
+- **Rows:** 150
+- **Description:** Sepal and petal measurements for 3 iris species
+- **Patterns:** P6 (decision boundary — petal length vs petal width)

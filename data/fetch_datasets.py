@@ -146,6 +146,18 @@ def fetch_iowa_electricity():
     print(f"  -> iowa_electricity.csv ({len(df)} rows)")
 
 
+def fetch_iris():
+    """Fisher's Iris — 150 rows — CC0 (public domain via scikit-learn)."""
+    from sklearn.datasets import load_iris
+
+    data = load_iris()
+    df = pd.DataFrame(data.data, columns=data.feature_names)
+    df["target"] = data.target
+    df["target_name"] = [data.target_names[t] for t in data.target]
+    df.to_csv(PUBLIC_DIR / "iris.csv", index=False)
+    print(f"  -> iris.csv ({len(df)} rows)")
+
+
 def main():
     PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Downloading public reference datasets to {PUBLIC_DIR}/\n")
@@ -159,6 +171,7 @@ def main():
         ("Breast Cancer", fetch_breast_cancer),
         ("Health Expenditure", fetch_healthexp),
         ("Iowa Electricity", fetch_iowa_electricity),
+        ("Iris", fetch_iris),
     ]
 
     succeeded = 0

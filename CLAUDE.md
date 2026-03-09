@@ -23,7 +23,7 @@ data/
     beautiful-plots/    # Beautiful-Plots (birth %, classifier AUC)
     ml-tool-wear/       # Tool wear labels (167 rows)
     weibull/            # Weibull RUL experiments + HDF5 spectrograms
-    public/             # Curated public datasets (8 CSVs, ~300KB)
+    public/             # Curated public datasets (9 CSVs, ~300KB)
 
 docs/gallery/           # Before/after captures at each iteration
   TEMPLATE.md           # Template for new gallery entries
@@ -86,9 +86,9 @@ All charts follow the aesthetic defined in `.claude/skills/matplotlib-chart/styl
 - `sns.despine(left=True, bottom=True)` -- all spines removed
 - Legends: `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"`
 - Annotations: `color="dimgrey"`
-- Publication output: 300 DPI, PDF+PNG dual save
+- Standard output: 150 DPI, PDF+PNG dual save
+- Publication output (on explicit request): 300 DPI, PDF+PNG dual save
 - Exploratory output: 150 DPI, PNG-only
-- Verification renders during development: 150 DPI
 
 ## Verification
 
@@ -111,7 +111,7 @@ Quick consistency checks:
 # All sns.set_theme calls should be identical
 grep 'sns.set_theme' .claude/skills/matplotlib-chart/chart-patterns.md
 
-# All patterns should use dpi=300
+# All patterns should use dpi=150
 grep 'dpi=' .claude/skills/matplotlib-chart/chart-patterns.md
 ```
 

@@ -184,3 +184,12 @@
   rows: 51
   patterns: [2]
   description: Iowa electricity generation by source type
+
+- name: iris
+  file: raw/public/iris.csv
+  source: https://archive.ics.uci.edu/dataset/53
+  license: CC0
+  domain: ecology
+  rows: 150
+  patterns: [6]
+  description: Iris flower measurements for 3 species (setosa, versicolor, virginica)

@@ -33,15 +33,15 @@ If the request is ambiguous (e.g., just "make a chart"), ask the user what data 
 Determine the output format from context:
 - Working in a `.ipynb` file -> notebook cell
 - User says "add a function to..." -> function mode
-- User says "quick plot" or "exploratory" -> standalone script with reduced quality (PNG-only, 150 DPI)
-- Otherwise -> standalone script (default)
+- User says "quick plot" or "exploratory" -> standalone script (PNG-only, 150 DPI)
+- User says "publication", "300 DPI", or "high resolution" -> standalone script (PDF+PNG, 300 DPI)
+- Otherwise -> standalone script (default: 150 DPI, PDF+PNG)
 
 # Phase 2 -- Determine Configuration
 
 Map the chart type to defaults from `style-reference.md`:
 - **figsize:** Use the sizing lookup table
-- **DPI:** 300 for publication (default), 150 for exploratory, 150 for verification renders
-- **Verification DPI:** During iterative development, all renders use 150 DPI to save time; only the final save uses 300 DPI
+- **DPI:** 150 (default), 300 only when user explicitly requests "publication", "300 DPI", or "high resolution"
 - **Palette:** Match chart type to recommended palette
 - **Layout:** Single panel or GridSpec multi-panel
 - **Output format:** PDF+PNG dual save (default), or PNG-only for exploratory
@@ -68,7 +68,7 @@ Select the closest pattern from `chart-patterns.md` and adapt it to the user's d
 9. **Bold subplot labels:** `r"$\bf{(a)}$"` prefix pattern for multi-panel figures
 10. **Alpha=0.4** for supporting/background visual elements
 11. **DejaVu Sans font** in the sns.set call
-12. **300 DPI** for publication output (150 for exploratory)
+12. **150 DPI** default (300 only on explicit user request for publication quality)
 
 Dependencies are limited to: `matplotlib`, `seaborn`, `numpy`, `pandas` (as needed by the chart).
 
@@ -97,7 +97,7 @@ Structure:
 - Section comments: `# --- Style Setup ---`, `# --- Data ---`, `# --- Plot ---`, `# --- Save ---`
 - Helpers only when logic genuinely repeats; three similar lines > a premature abstraction
 - `if __name__ == "__main__": main()` at the bottom
-- Save to `./figures/` as both PDF and PNG at 300 DPI
+- Save to `./figures/` as both PDF and PNG at 150 DPI
 - Create `./figures/` directory with `Path("./figures").mkdir(exist_ok=True)`
 
 ## Notebook Cell
@@ -108,7 +108,7 @@ Structure:
 
 ## Function
 
-- Signature: `def plot_thing(df, figsize=(10, 8), dpi=300):`
+- Signature: `def plot_thing(df, figsize=(10, 8), dpi=150):`
 - Accept data directly (DataFrames/arrays), not file paths
 - Return `fig, ax` -- caller decides whether to save
 - Numpy-style docstring with Parameters and Returns sections
@@ -125,7 +125,7 @@ When user says "quick plot" or "exploratory":
 
 After generating the code:
 
-1. **Verification render:** Temporarily set `dpi=150` in the script and run with `uv run <script_name>.py` via Bash. This saves a 150 DPI PNG for quick LLM inspection without wasting time on full-resolution rendering.
+1. **Run the script** with `uv run <script_name>.py` via Bash. Default is 150 DPI.
 2. **Read the generated PNG** using the Read tool (which supports image analysis) to visually inspect the output.
 3. **Verification checklist** -- confirm each item passes:
    1. Count visible spines -- expected: 0
@@ -135,7 +135,7 @@ After generating the code:
    5. For multi-panel: verify bold (a)/(b)/(c) labels present
    6. Check for default matplotlib styling leaking through (default blue, visible spines)
    7. Verify text is readable and not overlapping
-4. **If something looks wrong**, fix the code and re-run at 150 DPI
-5. **Final render:** Once verified, set `dpi=300` (publication) or `dpi=150` (exploratory) and run one final time to produce the deliverable output
+4. **If something looks wrong**, fix the code and re-run
+5. **Final render:** If user requested publication quality, set `dpi=300` and run one final time
 6. **Report to the user:** what was generated, the file paths, and any observations about the output
 7. **Ask if refinements are needed** (colors, sizing, annotations, layout adjustments)

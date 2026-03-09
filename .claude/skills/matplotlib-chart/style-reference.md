@@ -133,12 +133,13 @@ the axes background patch, not the spine objects.
 
 Always save with tight bounding box.
 
-**Verification render** (during iterative development -- used for LLM visual inspection):
+**Standard render** (default):
 ```python
+plt.savefig("./figures/chart_name.pdf", dpi=150, bbox_inches="tight")
 plt.savefig("./figures/chart_name.png", dpi=150, bbox_inches="tight")
 ```
 
-**Publication render** (final output, default):
+**Publication render** (only when user explicitly requests "publication", "300 DPI", or "high resolution"):
 ```python
 plt.savefig("./figures/chart_name.pdf", dpi=300, bbox_inches="tight")
 plt.savefig("./figures/chart_name.png", dpi=300, bbox_inches="tight")
@@ -177,7 +178,7 @@ labels = [chr(ord('a') + i) for i in range(n_panels)]
 ```python
 from matplotlib import gridspec
 
-fig = plt.figure(figsize=(14, 12), dpi=300)
+fig = plt.figure(figsize=(14, 12), dpi=150)
 gs = gridspec.GridSpec(3, 3)
 ax1 = plt.subplot(gs[0, 0])
 # ...
