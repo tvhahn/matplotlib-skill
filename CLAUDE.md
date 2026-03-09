@@ -14,13 +14,28 @@ The skill generates publication-quality matplotlib/seaborn charts matching Tim's
   style-reference.md    # Full style spec (palettes, sizing, save conventions)
   chart-patterns.md     # 9 self-contained code patterns by chart type
 
+data/
+  datasets.yaml         # Manifest of all datasets (source project + public)
+  SOURCES.md            # Attribution and licensing for all datasets
+  fetch_datasets.py     # Download script for public reference datasets
+  raw/                  # All datasets (committed to repo)
+    arxiv/              # arxiv-code-search (4,665 rows)
+    beautiful-plots/    # Beautiful-Plots (birth %, classifier AUC)
+    ml-tool-wear/       # Tool wear labels (167 rows)
+    weibull/            # Weibull RUL experiments + HDF5 spectrograms
+    public/             # Curated public datasets (8 CSVs, ~300KB)
+
 docs/gallery/           # Before/after captures at each iteration
   TEMPLATE.md           # Template for new gallery entries
-  00-original-inspiration/  # ... through 05-verification-checklist/
+  00-original-inspiration/  # ... through 06-subplot-outlines/
 
 scratch/
-  test_chart_patterns.py  # Standalone test harness -- exercises chart-patterns.md code with dummy data (pattern 6 skipped)
+  test_chart_patterns.py  # Test harness -- exercises chart-patterns.md code (supports --real-data flag)
+  evaluate_skill.py       # Automated style compliance checker
   figures/                # Working output directory (gitignored PNGs)
+
+scripts/
+  chart-test-container.sh # Docker clean room for isolated skill testing
 ```
 
 ## Skill Discovery
@@ -44,11 +59,12 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 
 1. Make skill changes in `.claude/skills/matplotlib-chart/`
 2. Update `scratch/test_chart_patterns.py` if chart patterns changed
-3. Run `uv run scratch/test_chart_patterns.py` to regenerate test charts (this runs the code patterns directly with dummy data -- it does not invoke the skill's LLM workflow)
-4. Create `docs/gallery/NN-name/` folder (next sequential number)
-5. Copy relevant PNGs from `scratch/figures/` into the gallery folder
-6. Write `README.md` following `docs/gallery/TEMPLATE.md`
-7. Commit
+3. Run `uv run scratch/test_chart_patterns.py` to regenerate test charts (synthetic data)
+4. Run `uv run scratch/test_chart_patterns.py --real-data` to test with real datasets
+5. Create `docs/gallery/NN-name/` folder (next sequential number)
+6. Copy relevant PNGs from `scratch/figures/` into the gallery folder
+7. Write `README.md` following `docs/gallery/TEMPLATE.md`
+8. Commit
 
 ## Existing Gallery Entries
 
@@ -84,7 +100,29 @@ grep 'sns.set_theme' .claude/skills/matplotlib-chart/chart-patterns.md
 
 # All patterns should use dpi=300
 grep 'dpi=' .claude/skills/matplotlib-chart/chart-patterns.md
+
+# Automated style compliance report
+uv run scratch/evaluate_skill.py --check-renders
+
+# Test all patterns with synthetic data
+uv run scratch/test_chart_patterns.py
+
+# Test all patterns with real datasets
+uv run scratch/test_chart_patterns.py --real-data
 ```
+
+## Autonomous Iteration
+
+Use `/iterate-skill` to run a single evaluation-improvement-documentation cycle. The command:
+
+1. Evaluates current skill state (automated checks + visual inspection)
+2. Identifies 1-2 improvements
+3. Applies changes, regenerates charts, verifies no regressions
+4. Creates a gallery entry and atomic commit
+
+Guardrails: max 3 iterations without human feedback, no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
+
+For isolated testing (no access to prior gallery/history), use `scripts/chart-test-container.sh`.
 
 ## Future Work
 

@@ -1,0 +1,186 @@
+# Dataset manifest — covers all datasets in data/raw/
+# Used by scratch/test_chart_patterns.py --real-data to load appropriate data per pattern.
+
+# --- Source project datasets (from original inspiration projects) ---
+
+- name: weibull_loss_func_pct
+  file: raw/weibull/femto_count_results.csv
+  source: weibull-knowledge-informed-ml (Tim's PhD research)
+  license: author
+  domain: predictive-maintenance
+  rows: 12
+  patterns: [1]
+  description: Loss function usage percentages across FEMTO bearing experiments
+
+- name: weibull_loss_func_pct_ims
+  file: raw/weibull/ims_count_results.csv
+  source: weibull-knowledge-informed-ml (Tim's PhD research)
+  license: author
+  domain: predictive-maintenance
+  rows: 9
+  patterns: [1]
+  description: Loss function usage percentages across IMS bearing experiments
+
+- name: arxiv_labels
+  file: raw/arxiv/labels.csv
+  source: arxiv-code-search (Tim's research tool)
+  license: author
+  domain: bibliometrics
+  rows: 4665
+  patterns: [1, 9]
+  description: Paper labels with code availability for ML classification
+
+- name: weibull_correlations_femto
+  file: raw/weibull/femto_correlation_results.csv
+  source: weibull-knowledge-informed-ml
+  license: author
+  domain: predictive-maintenance
+  rows: 15
+  patterns: [2]
+  description: Correlation values between predicted and true RUL for FEMTO bearings
+
+- name: weibull_correlations_ims
+  file: raw/weibull/ims_correlation_results.csv
+  source: weibull-knowledge-informed-ml
+  license: author
+  domain: predictive-maintenance
+  rows: 15
+  patterns: [2]
+  description: Correlation values between predicted and true RUL for IMS bearings
+
+- name: weibull_results_femto
+  file: raw/weibull/femto_results_filtered.csv
+  source: weibull-knowledge-informed-ml
+  license: author
+  domain: predictive-maintenance
+  rows: 582
+  patterns: [3, 8]
+  description: Full RUL experiment results for FEMTO bearings
+
+- name: weibull_results_ims
+  file: raw/weibull/ims_results_filtered.csv
+  source: weibull-knowledge-informed-ml
+  license: author
+  domain: predictive-maintenance
+  rows: 775
+  patterns: [3, 8]
+  description: Full RUL experiment results for IMS bearings
+
+- name: weibull_early_stop_femto
+  file: raw/weibull/femto_early_stop_summary_stats.csv
+  source: weibull-knowledge-informed-ml
+  license: author
+  domain: predictive-maintenance
+  rows: 9
+  patterns: [4]
+  description: Early stopping epoch distributions for FEMTO bearings
+
+- name: weibull_early_stop_ims
+  file: raw/weibull/ims_early_stop_summary_stats.csv
+  source: weibull-knowledge-informed-ml
+  license: author
+  domain: predictive-maintenance
+  rows: 9
+  patterns: [4]
+  description: Early stopping epoch distributions for IMS bearings
+
+- name: beautiful_plots_classifiers
+  file: raw/beautiful-plots/best_results.csv
+  source: Beautiful-Plots
+  license: author
+  domain: machine-learning
+  rows: 6
+  patterns: [5]
+  description: Classifier min/max/avg AUC comparison results
+
+- name: beautiful_plots_births
+  file: raw/beautiful-plots/birth_percentage.csv
+  source: Beautiful-Plots
+  license: author
+  domain: demographics
+  rows: 468
+  patterns: [3, 7]
+  description: Birth percentage above average by month and year
+
+- name: ml_tool_wear_labels
+  file: raw/ml-tool-wear/labels_with_tool_class.csv
+  source: ml-tool-wear
+  license: author
+  domain: manufacturing
+  rows: 167
+  patterns: [2]
+  description: Tool wear cases with class labels for anomaly detection
+
+# --- Public reference datasets ---
+
+- name: penguins
+  file: raw/public/penguins.csv
+  source: https://github.com/allisonhorst/palmerpenguins
+  license: CC-0
+  domain: ecology
+  rows: 344
+  patterns: [4, 6, 9]
+  description: Body measurements of 3 penguin species from Palmer Station
+
+- name: gapminder
+  file: raw/public/gapminder.csv
+  source: https://www.gapminder.org/
+  license: CC0
+  domain: global-development
+  rows: 3313
+  patterns: [1, 8]
+  description: Life expectancy, population, and GDP per capita by country and year
+
+- name: tips
+  file: raw/public/tips.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: social-science
+  rows: 244
+  patterns: [4, 7]
+  description: Restaurant tip amounts with meal context
+
+- name: global_temp
+  file: raw/public/global_temp.csv
+  source: https://data.giss.nasa.gov/gistemp/
+  license: PDDL
+  domain: climate
+  rows: 1753
+  patterns: [3, 7]
+  description: Global surface temperature anomalies (monthly)
+
+- name: car_crashes
+  file: raw/public/car_crashes.csv
+  source: https://fivethirtyeight.com/
+  license: CC-BY-4.0
+  domain: transportation
+  rows: 51
+  patterns: [1, 2]
+  description: US state-level bad driver statistics
+
+- name: breast_cancer
+  file: raw/public/breast_cancer.csv
+  source: https://archive.ics.uci.edu/dataset/17
+  license: CC-BY-4.0
+  domain: medical
+  rows: 569
+  patterns: [6, 9]
+  description: Cell nucleus features from breast mass FNA images
+
+- name: healthexp
+  file: raw/public/healthexp.csv
+  source: https://data.oecd.org/
+  license: CC-BY
+  domain: health-economics
+  rows: 274
+  patterns: [5, 8]
+  description: Health expenditure per capita by country and year
+
+- name: iowa_electricity
+  file: raw/public/iowa_electricity.csv
+  source: https://www.eia.gov/
+  license: public-domain
+  domain: energy
+  rows: 51
+  patterns: [2]
+  description: Iowa electricity generation by source type
