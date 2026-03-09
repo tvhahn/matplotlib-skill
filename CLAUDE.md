@@ -103,6 +103,9 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `14-tick-marks-and-evaluator` | Fixed evaluator despine check for superset args; added tick_params to P1-P3; dimgrey legend text to P3 |
 | `15-violin-lollipop-polish` | Added tick_params to P4-P6; fixed P4 grid alpha; added title placeholders to P5/P6 |
 | `16-pr-roc-and-multipanel-consistency` | P9 spelling/label/title fixes; tick_params + dimgrey legend text for P6/P8/P9 |
+| `17-labelcolor-cleanup` | Replaced legend `get_texts()` loops with inline `labelcolor="dimgrey"` in P3, P5, P9 |
+| `18-labelcolor-complete` | Completed `labelcolor` migration for P6, P8; updated style-reference.md legend convention |
+| `19-title-consistency` | Normalized title `loc="left"` and `pad` across P1, P2, P4 for consistency |
 
 ## Style Rules
 
