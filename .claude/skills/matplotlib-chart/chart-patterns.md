@@ -247,9 +247,13 @@ ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 legend1 = ax.legend(handles=class_handles, loc="center",
                     bbox_to_anchor=(1.05, 0.35), frameon=True, facecolor="white",
                     framealpha=0.8, edgecolor="lightgrey", title="class")
+for text in legend1.get_texts():
+    text.set_color("dimgrey")
 legend2 = ax.legend(handles=prob_handles, loc="center",
                     bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
                     framealpha=0.8, edgecolor="lightgrey", title="prob")
+for text in legend2.get_texts():
+    text.set_color("dimgrey")
 ax.add_artist(legend1)
 
 sns.despine(left=True, bottom=True)
@@ -310,6 +314,7 @@ titles = [f"Dataset {i+1}" for i in range(9)]
 
 for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.grid(False)
+    ax.tick_params(axis="both", which="both", length=0)
 
     # --- subplot outline (frames each panel) ---
     ax.patch.set_edgecolor("lightgrey")
@@ -322,7 +327,9 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     if i == 0:
         ax.set_xlabel("X Label")
         ax.set_ylabel("Y Label")
-        ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+        legend = ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+        for text in legend.get_texts():
+            text.set_color("dimgrey")
     else:
         ax.set_yticklabels([])
 
@@ -348,8 +355,8 @@ pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
 # PR curve panel
 for i, (p, r) in enumerate(zip(precision_array, recall_array)):
-    label = "k-fold model" if i == len(precision_array) - 1 else None
-    axes[0].plot(r, p, color="gray", alpha=0.5, linewidth=1, label=label)
+    label = "k-fold models" if i == len(precision_array) - 1 else None
+    axes[0].plot(r, p, color="grey", alpha=0.5, linewidth=1, label=label)
 
 axes[0].plot(recall_avg, precision_avg, label="Average model",
              color=pal[5], linewidth=2)
@@ -357,8 +364,10 @@ axes[0].plot(recall_avg, precision_avg, label="Average model",
 axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
              label="No skill model", color="orange", linewidth=2, zorder=0)
 
-axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
-axes[0].set_title("Precision-Recall Curve")
+legend0 = axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+for text in legend0.get_texts():
+    text.set_color("dimgrey")
+axes[0].set_title(r"$\bf{(a)}$" + " Precision-Recall Curve", loc="left", fontsize=12)
 axes[0].set_xlabel("Recall")
 axes[0].set_ylabel("Precision")
 
@@ -373,13 +382,16 @@ axes[1].plot(fpr_avg, tpr_avg, label="Average of k-folds",
 axes[1].plot([0, 1], [0, 1], linestyle="--",
              label="No skill", color="orange", linewidth=2, zorder=0)
 
-axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
-axes[1].set_title("ROC Curve")
+legend1 = axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+for text in legend1.get_texts():
+    text.set_color("dimgrey")
+axes[1].set_title(r"$\bf{(b)}$" + " ROC Curve", loc="left", fontsize=12)
 axes[1].set_xlabel("False Positive Rate")
 axes[1].set_ylabel("True Positive Rate")
 
 for ax in axes.flatten():
     ax.yaxis.set_tick_params(labelleft=True, which="major")
+    ax.tick_params(axis="both", which="both", length=0)
     ax.grid(False)
 
 sns.despine(left=True, bottom=True)
