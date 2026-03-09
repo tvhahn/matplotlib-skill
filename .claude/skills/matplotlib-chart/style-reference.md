@@ -84,6 +84,12 @@ ax.grid(alpha=0.7, linewidth=1, axis="x")  # horizontal bars (omit when value la
 ax.grid(alpha=0.7, linewidth=1, axis="y")  # vertical bars
 ```
 
+For horizontal bar charts with value labels, disable grid but add a baseline:
+```python
+ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)  # anchors bar origins
+ax.grid(False)
+```
+
 For spectrograms/heatmaps, also remove the right spine:
 ```python
 sns.despine(left=True, bottom=True, right=True)

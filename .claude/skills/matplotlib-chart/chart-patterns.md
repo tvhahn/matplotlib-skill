@@ -27,6 +27,7 @@ for p in ax.patches:
 
 ax.set_ylabel("")
 ax.set_xlabel("")
+ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)
 ax.grid(False)
 ax.set_xticks([])
 ax.set_title("Chart Title", fontsize=14, loc="center")
