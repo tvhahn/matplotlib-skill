@@ -76,7 +76,7 @@ Curated small datasets with permissive licenses, downloaded via `data/fetch_data
 ### public/gapminder.csv
 
 - **Source:** [Gapminder](https://www.gapminder.org/) via Plotly datasets
-- **License:** CC0 (public domain)
+- **License:** CC-BY 4.0
 - **Domain:** Global development
 - **Rows:** ~1,700
 - **Description:** Life expectancy, population, and GDP per capita by country and year
@@ -139,7 +139,7 @@ Curated small datasets with permissive licenses, downloaded via `data/fetch_data
 ### public/iris.csv
 
 - **Source:** [UCI ML Repository](https://archive.ics.uci.edu/dataset/53/iris) (Fisher, 1936) via scikit-learn
-- **License:** CC0 (public domain)
+- **License:** CC-BY 4.0
 - **Domain:** Ecology
 - **Rows:** 150
 - **Description:** Sepal and petal measurements for 3 iris species

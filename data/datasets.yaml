@@ -125,7 +125,7 @@
 - name: gapminder
   file: raw/public/gapminder.csv
   source: https://www.gapminder.org/
-  license: CC0
+  license: CC-BY-4.0
   domain: global-development
   rows: 3313
   patterns: [1, 8]
@@ -188,7 +188,7 @@
 - name: iris
   file: raw/public/iris.csv
   source: https://archive.ics.uci.edu/dataset/53
-  license: CC0
+  license: CC-BY-4.0
   domain: ecology
   rows: 150
   patterns: [6]
