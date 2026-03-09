@@ -156,6 +156,8 @@ sns.despine(bottom=True, left=True)
 **Palette:** Cubehelix for dots, grey for connecting lines, dimgrey for text.
 
 ```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 darkblue = pal[5]  # "#1f253f"
 lightblue = pal[2]  # "#58849f"
@@ -203,6 +205,8 @@ for text in legend.get_texts():
 **Palette:** Colorblind diverging (`#d73027`, `#4575b4`, `#fc8d59`).
 
 ```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
 redish = "#d73027"
 blueish = "#4575b4"
 orangeish = "#fc8d59"
@@ -236,6 +240,8 @@ legend2 = ax.legend(handles=prob_handles, loc="center",
                     bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
                     framealpha=0.8, edgecolor="lightgrey", title="prob")
 ax.add_artist(legend1)
+
+sns.despine(left=True, bottom=True)
 ```
 
 **Customize:** Build legend handles with `matplotlib.lines.Line2D`. Adjust `PROB_DOT_SCALE` and `PROB_DOT_SCALE_POWER` to control probability dot sizing.
@@ -248,6 +254,8 @@ ax.add_artist(legend1)
 **Palette:** `inferno` for spectrograms, `rocket` for correlation heatmaps.
 
 ```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
 fig, ax = plt.subplots(1, 2, figsize=(11, 4), dpi=150)
 
 ax[0].pcolormesh(time_axis, freq_axis, data, cmap="inferno",
