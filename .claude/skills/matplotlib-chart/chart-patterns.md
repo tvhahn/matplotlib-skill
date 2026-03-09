@@ -29,6 +29,7 @@ ax.set_ylabel("")
 ax.set_xlabel("")
 ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)
 ax.grid(False)
+ax.tick_params(axis="both", which="both", length=0)
 ax.set_xticks([])
 ax.set_title("Chart Title", fontsize=14, loc="center")
 sns.despine(left=True, bottom=True)
@@ -60,6 +61,7 @@ for i, p in enumerate(ax.patches):
 
 sns.despine(left=True, bottom=True)
 ax.grid(alpha=0.7, linewidth=1, axis="y")
+ax.tick_params(axis="both", which="both", length=0)
 ax.set_xlabel("")
 ax.set_ylabel("")
 ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=15, pad=20)
@@ -79,6 +81,7 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 ax.grid(False)
+ax.tick_params(axis="both", which="both", length=0)
 
 ax.plot(y_true_sorted, label="True Values", alpha=1, color="#4575b4", linewidth=1, zorder=0)
 
@@ -106,7 +109,9 @@ ax.text(
 
 ax.set_xlabel("Time")
 ax.set_ylabel("Value")
-ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+legend = ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
+for text in legend.get_texts():
+    text.set_color("dimgrey")
 ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
