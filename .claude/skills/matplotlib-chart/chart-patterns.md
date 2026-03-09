@@ -99,7 +99,7 @@ ax.text(
     (x_max - x_min) * 0.03 + x_min,
     y_max - (y_max - y_min) * 0.05,
     f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}",
-    fontsize=9, fontweight="normal",
+    fontsize=9, fontweight="normal", color="dimgrey",
     verticalalignment="top", horizontalalignment="left",
     bbox={"facecolor": "gray", "alpha": 0.0, "pad": 6},
 )
@@ -108,6 +108,7 @@ ax.set_xlabel("Time")
 ax.set_ylabel("Value")
 ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey")
 ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", pad=7)
+sns.despine(left=True, bottom=True)
 ```
 
 **Customize:** Adjust `window_size` for smoothing. Change x-axis labels to time units. Use `*100` to convert to percentages.
@@ -143,7 +144,7 @@ ax.yaxis.label.set_visible(False)
 ax.tick_params(axis="x", labelsize=12)
 ax.set_xlabel("Value", labelpad=10, fontsize=12)
 ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left")
-sns.despine(bottom=True, left=True)
+sns.despine(left=True, bottom=True)
 ```
 
 **Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
@@ -370,6 +371,8 @@ axes[1].set_ylabel("True Positive Rate")
 for ax in axes.flatten():
     ax.yaxis.set_tick_params(labelleft=True, which="major")
     ax.grid(False)
+
+sns.despine(left=True, bottom=True)
 ```
 
 **Customize:** Add AUC text annotations below each panel. Adjust `x_axis_n` for curve smoothing resolution.
