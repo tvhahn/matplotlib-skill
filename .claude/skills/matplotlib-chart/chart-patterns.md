@@ -128,13 +128,13 @@ fig, ax = plt.subplots(figsize=(12, 5), dpi=150)
 sns.violinplot(
     x="value", y="category", data=df,
     density_norm="width", inner=None, linewidth=2,
-    color="white", saturation=1, cut=0,
+    color="white", saturation=1, cut=0,  # white fill is the signature look
     orient="h", zorder=0, width=0.8, ax=ax,
 )
 
 sns.stripplot(
     x="value", y="category", data=df,
-    size=6, jitter=0.2, color="black", linewidth=0.5,
+    size=6, jitter=0.2, color="black", linewidth=0.5,  # black dots on white violins
     marker="o", edgecolor=None, alpha=0.1,
     zorder=4, orient="h", ax=ax,
 )
@@ -147,7 +147,7 @@ ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left")
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
+**Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths. For vertical orientation, swap x/y and set `orient="v"`. Keep `color="white"` on violins — the white-fill-with-black-dots aesthetic is distinctive; only use colored fills when the user explicitly requests it.
 
 ---
 
