@@ -144,7 +144,8 @@ sns.stripplot(
     zorder=4, orient="h", ax=ax,
 )
 
-ax.grid(axis="x", alpha=0.5)
+ax.grid(axis="x", alpha=0.7, linewidth=1)
+ax.tick_params(axis="both", which="both", length=0)
 ax.yaxis.label.set_visible(False)
 ax.tick_params(axis="x", labelsize=12)
 ax.set_xlabel("Value", labelpad=10, fontsize=12)
@@ -193,7 +194,9 @@ for i in range(df.shape[0]):
 
 ax.grid(False)
 sns.despine(left=True, bottom=True)
+ax.tick_params(axis="both", which="both", length=0)
 ax.tick_params(axis="x", pad=20, labelsize="x-large", labelcolor="dimgrey")
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 
 legend = ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
                    bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large")
@@ -238,6 +241,8 @@ ax.set_ylabel(r"$x_1$")
 ax.set_xlabel(r"$x_0$")
 ax.set_aspect(1)
 ax.grid(False)
+ax.tick_params(axis="both", which="both", length=0)
+ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
 legend1 = ax.legend(handles=class_handles, loc="center",
                     bbox_to_anchor=(1.05, 0.35), frameon=True, facecolor="white",
