@@ -1,6 +1,46 @@
+---
+description: Run a single evaluation-improvement-documentation cycle on the matplotlib-chart skill. Creates gallery entries and atomic commits.
+argument-hint: [--iterations N] [--quick] [focus area]
+disable-model-invocation: true
+allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash(cp *), Bash(ls *), Bash(docker *)
+---
+
 # Iterate Skill
 
 Run a single evaluation-improvement-documentation cycle on the matplotlib-chart skill.
+
+## Guardrails
+
+- **Max 3 iterations** without human feedback
+- **No destructive changes** — add/modify only, never delete patterns
+- **Style invariants** — `sns.set_theme()` and `sns.despine()` calls are immutable
+- **Rollback** — each iteration is an atomic commit; `git revert` any single one
+
+## Current State
+
+**Evaluation score:**
+!`uv run scripts/evaluate_skill.py 2>&1 || true`
+
+**Latest clean-room runs:**
+!`ls -1t logs/clean-room/ 2>/dev/null | head -5 || echo "No runs yet"`
+
+**Current gallery entries:**
+!`ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -5 || echo "None"`
+
+**Git branch:**
+!`git branch --show-current`
+
+**Recent commits:**
+!`git log --oneline -3`
+
+## Arguments
+
+Parse `$ARGUMENTS` for:
+- `--iterations N` (1-3): Run N cycles on a staging branch, merging at the end. Default: 1 (no branch).
+- `--quick`: Use `--quick` flag for chart-test-container.sh (3 prompts instead of 5).
+- Remaining text: Focus area hint (e.g., "tick marks", "P9 spelling"). Prioritize this in Step 2.
+
+${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 ## Workflow
 
@@ -11,20 +51,13 @@ Run a single evaluation-improvement-documentation cycle on the matplotlib-chart 
    - `.claude/skills/matplotlib-chart/style-reference.md`
    - `.claude/skills/matplotlib-chart/chart-patterns.md`
 
-2. Run static analysis for style compliance:
-   ```bash
-   uv run scripts/evaluate_skill.py --check-renders
-   ```
+2. Review the injected evaluation score above — note any failures or style compliance gaps.
 
-3. Note the latest clean-room results directory (`logs/clean-room/latest/`) as the comparison baseline. If no previous run exists, note that this is the first run.
-
-4. If previous clean-room results exist (`logs/clean-room/latest/`), read each PNG and perform a **Visual Evaluation** (see protocol in Step 5 item 3). Record visual observations as the qualitative baseline alongside the automated score.
-
-5. Record the "Before" automated check scores.
+3. If previous clean-room results exist (`logs/clean-room/latest/`), read each PNG and perform a **Visual Evaluation** (see protocol in Step 5 item 3). Record visual observations as the qualitative baseline.
 
 ### Step 2: Identify Improvements
 
-Select **1-2 areas** for improvement. Prioritize in this order:
+Select **1-2 areas** for improvement. If a focus area was provided in arguments, prioritize it. Otherwise prioritize in this order:
 1. Style compliance gaps flagged by evaluate_skill.py
 2. Visual issues identified during Step 1 evaluation (layout, readability, color, spacing)
 3. Pattern inconsistencies (different annotations, missing legend styling)
@@ -100,38 +133,8 @@ Determine the next gallery entry number by looking at `docs/gallery/` and create
 
 1. Create `docs/gallery/NN-description/` folder
 2. Copy relevant PNGs from the clean-room results directory (`logs/clean-room/latest/`) into the gallery folder
-3. Write `README.md` following this format:
-
-```markdown
-# [NN] — [Short Title]
-
-## What Changed
-- Bullet points describing skill file edits
-
-## Why
-The reasoning / problem this change addresses.
-
-## Automated Checks (Before)
-Style compliance: X/Y | Render success: X/Y | DPI correct: X/Y
-
-## Automated Checks (After)
-Style compliance: X/Y | Render success: X/Y | DPI correct: X/Y
-
-## Charts Generated
-- List of modified chart PNGs
-
-## Visual Evaluation
-For each chart, record observations from the Visual Evaluation Protocol:
-
-### [Chart Name]
-- **Observe:** [2-3 sentences describing what you see]
-- **Compare:** [gaps vs style-reference.md]
-- **Judge:** [taste-based assessment]
-- **Verdict:** PUBLISH | POLISH | REWORK
-
-## Agent Notes
-What changed and why. What the agent is uncertain about.
-```
+3. Write `README.md` following `docs/gallery/TEMPLATE.md`. Include all Visual Evaluation
+   observations from Step 5 in the appropriate sections.
 
 ### Step 7: Commit
 
@@ -142,7 +145,7 @@ Stage all changes and create an atomic commit:
 
 ## Autonomous Mode
 
-When invoked with `--iterations N` (max 3):
+When `--iterations N` is provided (max 3):
 
 1. Create a staging branch: `iterate/batch-YYYYMMDD-HHMMSS`
 2. Run Steps 1-7 for each iteration, committing after each
@@ -154,9 +157,25 @@ When invoked with `--iterations N` (max 3):
    and a reminder that each iteration is an atomic commit revertible
    with `git revert <hash>`
 
-## Guardrails
+## Error Handling
 
-- **Max 3 iterations** without human feedback
-- **No destructive changes** — add/modify only, never delete patterns
-- **Style invariants** — `sns.set_theme()` and `sns.despine()` calls are immutable
-- **Rollback** — each iteration is an atomic commit; `git revert` any single one
+- **Docker not running:** If `scripts/chart-test-container.sh` fails with a Docker connection error, report the error and halt. Do not retry.
+- **Eval score decreases:** If the "After" automated score is lower than the "Before" score, revert the skill file changes (`git checkout -- .claude/skills/`) and halt with an explanation.
+- **Chart generation fails:** If the container script exits nonzero, inspect the logs in `logs/clean-room/latest/` for the root cause before deciding whether to fix or halt.
+- **No changes needed:** If the evaluation score is perfect and visual evaluation shows all PUBLISH verdicts, report "no improvements identified" and skip Steps 3-7.
+
+## Example Usage
+
+```bash
+# Single iteration, full test suite
+/iterate-skill
+
+# Quick iteration focused on a specific area
+/iterate-skill --quick P9 title consistency
+
+# Three autonomous iterations
+/iterate-skill --iterations 3
+
+# Quick autonomous run focused on tick marks
+/iterate-skill --iterations 2 --quick tick marks
+```
