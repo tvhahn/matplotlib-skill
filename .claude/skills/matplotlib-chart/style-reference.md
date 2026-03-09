@@ -80,7 +80,7 @@ ax.grid(False)
 
 When a single-axis grid improves readability (e.g., bar charts):
 ```python
-ax.grid(alpha=0.7, linewidth=1, axis="x")  # horizontal bars
+ax.grid(alpha=0.7, linewidth=1, axis="x")  # horizontal bars (omit when value labels are present)
 ax.grid(alpha=0.7, linewidth=1, axis="y")  # vertical bars
 ```
 

@@ -27,9 +27,8 @@ for p in ax.patches:
 
 ax.set_ylabel("")
 ax.set_xlabel("")
-ax.grid(alpha=0.7, linewidth=1, axis="x")
-ax.set_xticks([0])
-ax.set_xticklabels([], alpha=0)
+ax.grid(False)
+ax.set_xticks([])
 ax.set_title("Chart Title", fontsize=14, loc="center")
 sns.despine(left=True, bottom=True)
 ```
