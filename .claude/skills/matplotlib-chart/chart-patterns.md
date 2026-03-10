@@ -489,7 +489,7 @@ fig.tight_layout(pad=5.0)
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
-# PR curve panel
+# axes[0] = PR curve panel (always first), axes[1] = ROC curve panel (always second)
 for i, (p, r) in enumerate(zip(precision_array, recall_array)):
     label = "k-fold models" if i == len(precision_array) - 1 else None
     axes[0].plot(r, p, color="grey", alpha=0.5, linewidth=1, label=label)
@@ -533,7 +533,7 @@ sns.despine(left=True, bottom=True)
 **Rules:**
 - Always use k-fold cross-validation (`StratifiedKFold(n_splits=5, shuffle=True, random_state=42)`) — never use a single train/test split. Each fold is a grey line; the average is `pal[5]`.
 - Panel order is fixed: **(a) PR first**, **(b) ROC second**. Do not swap.
-- Three line layers per panel: (1) grey k-fold lines (`alpha=0.5, linewidth=1`), (2) average line (`pal[5], linewidth=2`), (3) baseline (`"orange", linestyle="--", linewidth=2, zorder=0`).
+- Three line layers per panel: (1) grey k-fold lines (`color="grey", alpha=0.5, linewidth=1`), (2) average line (`pal[5], linewidth=2`), (3) baseline (`"orange", linestyle="--", linewidth=2, zorder=0`). Use exactly `alpha=0.5` for fold lines — not 0.3 or 0.4.
 - Average line color is always `pal[5]` on both panels — do not use `pal[4]` or any other index.
 - Do not add `fill_between` shading under curves — the pattern uses lines only.
 - Do not add `sharex=True` or `sharey=True` to `plt.subplots` — PR axes (Recall/Precision) and ROC axes (FPR/TPR) are different.
@@ -543,5 +543,9 @@ sns.despine(left=True, bottom=True)
 - Legend: `loc="upper right"` for PR panel, `loc="lower right"` for ROC panel, `fontsize=10`.
 - Axis labels: `fontsize=12, labelpad=8, color="dimgrey"` on all four axis labels (xlabel + ylabel on both panels).
 - `tight_layout(pad=5.0)` — do not change the pad value.
+- Average line label must start with `"Average"` — e.g., `f"Average (AP = {ap:.3f})"`. Do not use the model/classifier name as the label.
+- Baseline: always use `ax.plot([0, 1], [baseline, baseline], ...)` for PR and `ax.plot([0, 1], [0, 1], ...)` for ROC. Do not use `axhline`.
+- Do not add explicit axis limits (`set_xlim`, `set_ylim`) — let matplotlib auto-scale.
+- K-fold is mandatory even for simple datasets. The "Customize" single-model fallback below is only for explicitly requested single-model evaluation. Default behavior is always k-fold with grey fold lines.
 
 **Customize:** Add AUC/AP values in legend labels. Adjust number of folds. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.

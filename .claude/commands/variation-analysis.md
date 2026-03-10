@@ -1,7 +1,7 @@
 ---
 description: Run parallel clean-room variation analysis on a single chart pattern with dataset variety — each parallel run uses a different prompt from the pool.
 argument-hint: P1..P9 [--prompt "..."] [--rounds N]
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash(cp *), Bash(ls *), Bash(docker *)
 ---
 

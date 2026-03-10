@@ -123,6 +123,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `33-p9-variation-analysis` | P9 decision boundary: DIVERGING_COLORBLIND mandate, prob dots not contourf, two outside legends, 7 rules; 2-round convergence |
 | `34-p1-variation-analysis` | P1 horizontal bar: added 10-item Rules section (Blues_d mandate, sns.barplot not ax.barh, no annotation prefixes/suffixes, set_xticks([]), fontsize=14); 3-round convergence 4/10 to 9/10 |
 | `35-p4-variation-analysis` | P4 PR/ROC: removed sharex/sharey, added 12-item Rules section (k-fold mandate, panel order, no fill_between/suptitle/ax.patch, axis label styling); 2-round convergence |
+| `36-p4-variation-analysis` | P4 PR/ROC: added 4 rules (Average label prefix, no axhline, no axis limits, k-fold mandatory default), explicit alpha=0.5; 3-round convergence |
 
 ## Style Rules
 

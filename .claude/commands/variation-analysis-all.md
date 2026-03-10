@@ -1,7 +1,7 @@
 ---
 description: Run variation analysis across multiple chart patterns sequentially with per-pattern subagent isolation.
 argument-hint: [P1,P3,P5] [--rounds N]
-disable-model-invocation: true
+disable-model-invocation: false
 allowed-tools: Agent, Bash(git *), Bash(ls *), Read, Edit, Write
 ---
 
