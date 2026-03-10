@@ -76,51 +76,59 @@ ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 
 ---
 
-## 3. Time Series with Predictions
+## 3. Time Series with Rolling Average
 
-**When to use:** Predicted vs actual with rolling average, RUL estimation, regression results.
-**Palette:** `#4575b4` (blue) for true, `#d73027` (red) for rolling avg, grey scatter for predictions.
+**When to use:** Time series visualization with annual/periodic aggregation and smoothing trend line. Also suitable for predicted vs actual (see Customize).
+**Palette:** `#4575b4` (blue) for negative/below-average values, `#d73027` (red) for positive/above-average values. Rolling line: cubehelix `pal[5]`.
+**Data:** Always read from CSV — aggregate with `.groupby().mean()` for annual data. Filter partial periods (keep only periods with ≥6 observations). Never hardcode values.
+**Rolling:** Use `pd.DataFrame.rolling(10, center=True).mean()` — never `np.convolve`. Default window is 10.
+**Figsize:** `(12, 6)` for single-panel time series.
+**API:** Always use `ax.bar()` for the main data — never use `ax.scatter()`, `fill_between`, colorbars, or line-only variants for the primary layer.
+**Annotations:** Do not add data point annotations unless the user explicitly requests them.
+**Legend:** Exactly 3 items: above-average Patch, below-average Patch, rolling mean Line2D. Do not add extra entries for the zero baseline.
 
 ```python
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
+
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
-ax.grid(False)
+pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
+
+fig, ax = plt.subplots(figsize=(12, 6), dpi=150)
+
+# Colored bars: positive vs negative
+bar_colors = ["#d73027" if v >= 0 else "#4575b4" for v in df_annual["value"]]
+ax.bar(df_annual["year"], df_annual["value"],
+       color=bar_colors, alpha=0.55, width=0.9, zorder=2)
+
+# Rolling mean trend line
+ax.plot(df_annual["year"], df_annual["rolling"],
+        color=pal[5], linewidth=2.5, label="10-year rolling mean", zorder=4)
+
+# Zero baseline
+ax.axhline(y=0, color="lightgrey", linewidth=0.8, zorder=1)
+
+ax.set_xlabel("Year", fontsize=12, labelpad=8, color="dimgrey")
+ax.set_ylabel("Y-Axis Label (Unit)", fontsize=12, labelpad=8, color="dimgrey")
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
+
+# Legend with Patch handles for bar colors + Line2D for rolling
+legend_handles = [
+    Patch(facecolor="#d73027", alpha=0.55, label="Above average"),
+    Patch(facecolor="#4575b4", alpha=0.55, label="Below average"),
+    Line2D([0], [0], color=pal[5], linewidth=2.5, label="10-year rolling mean"),
+]
+ax.legend(handles=legend_handles, loc="upper left", fontsize=10,
+         frameon=True, facecolor="white", framealpha=0.8,
+         edgecolor="lightgrey", labelcolor="dimgrey")
+
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-
-ax.plot(y_true_sorted, label="True Values", alpha=1, color="#4575b4", linewidth=1, zorder=0)
-
-ax.scatter(np.arange(len(y_pred)), y_pred_sorted, label="Predicted",
-           alpha=0.4, c="grey", edgecolors="none", s=2)
-
-window_size = 12
-rolling_avg = np.convolve(y_pred_sorted, np.ones(window_size), "valid") / window_size
-ax.plot(np.arange(len(y_pred))[window_size - 1:], rolling_avg,
-        color="#d73027", alpha=1, label="Rolling Avg", linewidth=1.5)
-
-# metric annotation box
-rmse = 0.042
-r2 = 0.95
-x_min, x_max = ax.get_xlim()
-y_min, y_max = ax.get_ylim()
-ax.text(
-    (x_max - x_min) * 0.03 + x_min,
-    y_max - (y_max - y_min) * 0.05,
-    f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}",
-    fontsize=9, fontweight="normal", color="dimgrey",
-    verticalalignment="top", horizontalalignment="left",
-    bbox={"facecolor": "gray", "alpha": 0.0, "pad": 6},
-)
-
-ax.set_xlabel("Time")
-ax.set_ylabel("Value")
-ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white",
-         framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey")
-ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", fontsize=12, pad=7)
+ax.grid(False)
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Adjust `window_size` for smoothing. Change x-axis labels to time units. Use `*100` to convert to percentages.
+**Customize:** Adjust rolling window size (default 10). For predicted-vs-actual, replace bars with `ax.plot()` for true values (`#4575b4`, linewidth=1) and `ax.scatter()` for predictions (grey, alpha=0.4, s=2), compute rolling on predictions via `pd.rolling()`, and add RMSE/R² annotation box. Use `ax.annotate()` with `arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8)` for notable data points.
 
 ---
 
