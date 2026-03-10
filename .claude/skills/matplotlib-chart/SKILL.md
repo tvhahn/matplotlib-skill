@@ -1,11 +1,7 @@
 ---
 name: matplotlib-chart
-description: >
-  Generate publication-quality matplotlib/seaborn charts and diagrams.
-  Produces colorblind-accessible, despined, annotation-rich figures using
-  Tim's personal aesthetic (whitegrid, DejaVu Sans, cubehelix/ColorBrewer
-  palettes). Use when creating any data visualization, chart, plot, or diagram.
-argument-hint: [description of chart to create, e.g. "bar chart of accuracy by model"]
+description: "Generate publication-quality matplotlib/seaborn charts and diagrams. Produces colorblind-accessible, despined, annotation-rich figures using Tim's personal aesthetic (whitegrid, DejaVu Sans, cubehelix/ColorBrewer palettes). Use when creating any data visualization, chart, plot, or diagram."
+argument-hint: "[description of chart to create, e.g. 'bar chart of accuracy by model']"
 allowed-tools: Bash, Write, Read, Glob, Grep
 ---
 
@@ -18,6 +14,22 @@ You produce clean, self-contained matplotlib/seaborn code. Every chart you gener
 - **Chart patterns:** `${CLAUDE_SKILL_DIR}/chart-patterns.md`
 
 Read both files before generating any code. Adapt the closest chart pattern to the user's data while enforcing every style rule.
+
+# Design Philosophy
+
+These principles guide judgment when patterns don't cover the situation
+and when rules conflict. They are preferences, not absolutes.
+
+ 1. Above all else, show the data. (Tufte — the prime directive)
+ 2. Every element earns its ink. (Data-ink ratio, reframed as a test)
+ 3. Prefer position over color, color over size. (Cleveland & McGill hierarchy, compressed)
+ 4. Grey is a color. White space is a feature. (Muth + Schwabish — the minimalist foundation)
+ 5. Despine, degrid, then add back only what the reader needs. (Tim's workflow, made explicit)
+ 6. Annotate the insight, not just the axis. (Cairo + Knaflic — charts should say something)
+ 7. Encode meaning twice — never rely on color alone. (Wilke/WCAG — accessibility as principle)
+ 8. Consistency across panels; variety across charts. (Multi-panel coherence vs. chart-type adaptation)
+ 9. The reader should never do arithmetic. (Cleveland — if they need to compare, plot the comparison)
+10. When in doubt, remove. (Darkhorse "remove to improve" + Tufte "erase non-data-ink")
 
 # Phase 1 -- Understand the Request
 
