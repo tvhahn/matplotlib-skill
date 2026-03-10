@@ -238,7 +238,7 @@ ax.set_ylabel(r"$x_1$")
 ax.set_xlabel(r"$x_0$")
 ax.set_aspect(1)
 ax.grid(False)
-ax.tick_params(axis="both", which="both", length=0)
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
 legend1 = ax.legend(handles=class_handles, loc="center",
@@ -271,7 +271,7 @@ ax[0].pcolormesh(time_axis, freq_axis, data, cmap="inferno",
 ax[0].set_ylabel("Frequency (Hz)")
 ax[0].set_xlabel("Runtime (days)")
 ax[0].grid(False)
-ax[0].tick_params(axis="both", which="both", length=0)
+ax[0].tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax[0].set_title(r"$\bf{(a)}$" + " Spectrogram", loc="left", fontsize=12, pad=7)
 
 ax[1].pcolormesh(time_axis, bins, binned_data, cmap="inferno",
@@ -279,7 +279,7 @@ ax[1].pcolormesh(time_axis, bins, binned_data, cmap="inferno",
 ax[1].set_xlabel("Runtime (days)")
 ax[1].set_ylabel("Frequency Bin")
 ax[1].grid(False)
-ax[1].tick_params(axis="both", which="both", length=0)
+ax[1].tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12, pad=7)
 
 sns.despine(left=True, bottom=True, right=True)
@@ -309,7 +309,7 @@ titles = [f"Dataset {i+1}" for i in range(9)]
 
 for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.grid(False)
-    ax.tick_params(axis="both", which="both", length=0)
+    ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 
     # --- subplot outline (frames each panel) ---
     ax.patch.set_edgecolor("lightgrey")
