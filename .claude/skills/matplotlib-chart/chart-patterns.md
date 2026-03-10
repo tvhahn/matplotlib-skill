@@ -64,7 +64,7 @@ ax.grid(alpha=0.7, linewidth=1, axis="y")
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_xlabel("")
 ax.set_ylabel("")
-ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=14, pad=12)
+ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=14, pad=7)
 ```
 
 **Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`.
@@ -383,7 +383,7 @@ axes[1].set_ylabel("True Positive Rate")
 
 for ax in axes.flatten():
     ax.yaxis.set_tick_params(labelleft=True, which="major")
-    ax.tick_params(axis="both", which="both", length=0)
+    ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
     ax.grid(False)
 
 sns.despine(left=True, bottom=True)
