@@ -144,3 +144,183 @@ Curated small datasets with permissive licenses, downloaded via `data/fetch_data
 - **Rows:** 150
 - **Description:** Sepal and petal measurements for 3 iris species
 - **Patterns:** P6 (decision boundary — petal length vs petal width)
+
+### public/mpg.csv
+
+- **Source:** seaborn built-in dataset (UCI Auto MPG)
+- **License:** BSD
+- **Domain:** Automotive
+- **Rows:** 392
+- **Description:** Auto fuel efficiency with engine specs and country of origin
+- **Patterns:** P1 (horizontal bar), P2 (violin), P5 (lollipop), P6 (vertical bar), P7 (heatmap)
+
+### public/flights.csv
+
+- **Source:** seaborn built-in dataset (Box & Jenkins, 1970)
+- **License:** BSD
+- **Domain:** Aviation
+- **Rows:** 144
+- **Description:** Monthly airline passenger counts from 1949 to 1960
+- **Patterns:** P3 (time series), P7 (heatmap — month x year), P8 (multi-panel)
+
+### public/titanic.csv
+
+- **Source:** seaborn built-in dataset (Titanic passenger records)
+- **License:** BSD
+- **Domain:** Historical
+- **Rows:** 891
+- **Description:** Titanic passenger survival data with class, age, fare, and demographics
+- **Patterns:** P1 (horizontal bar), P2 (violin), P4 (PR/ROC), P6 (vertical bar)
+
+### public/geyser.csv
+
+- **Source:** seaborn built-in dataset (Old Faithful)
+- **License:** BSD
+- **Domain:** Geology
+- **Rows:** 272
+- **Description:** Old Faithful geyser eruption durations and waiting times
+- **Patterns:** P2 (violin), P4 (PR/ROC), P9 (decision boundary)
+
+### public/diamonds.csv
+
+- **Source:** seaborn built-in dataset (ggplot2 diamonds, subsetted to ~2,000 rows)
+- **License:** BSD
+- **Domain:** Gemology
+- **Rows:** ~2,000
+- **Description:** Diamond prices with cut, color, clarity, and physical measurements
+- **Patterns:** P1 (horizontal bar), P2 (violin), P5 (lollipop), P6 (vertical bar), P7 (heatmap)
+
+### public/dowjones.csv
+
+- **Source:** seaborn built-in dataset
+- **License:** BSD
+- **Domain:** Finance
+- **Rows:** 649
+- **Description:** Dow Jones Industrial Average closing prices
+- **Patterns:** P3 (time series)
+
+### public/glue.csv
+
+- **Source:** seaborn built-in dataset (GLUE benchmark)
+- **License:** BSD
+- **Domain:** ML/NLP
+- **Rows:** 64
+- **Description:** GLUE benchmark scores for NLP models across tasks
+- **Patterns:** P1 (horizontal bar), P5 (lollipop)
+
+### public/fmri.csv
+
+- **Source:** seaborn built-in dataset
+- **License:** BSD
+- **Domain:** Neuroscience
+- **Rows:** 1,064
+- **Description:** fMRI brain signal measurements by region and event type
+- **Patterns:** P3 (time series), P8 (multi-panel)
+
+### public/planets.csv
+
+- **Source:** seaborn built-in dataset (NASA Exoplanet Archive)
+- **License:** BSD
+- **Domain:** Astronomy
+- **Rows:** 1,035
+- **Description:** Confirmed exoplanet discoveries by method, year, and orbital parameters
+- **Patterns:** P1 (horizontal bar), P3 (time series)
+
+### public/taxis.csv
+
+- **Source:** seaborn built-in dataset (NYC TLC, subsetted to 1,000 rows)
+- **License:** BSD
+- **Domain:** Urban transport
+- **Rows:** 1,000
+- **Description:** NYC taxi ride fares, distances, tips, and pickup/dropoff details
+- **Patterns:** P1 (horizontal bar), P2 (violin), P6 (vertical bar), P7 (heatmap)
+
+### public/wine.csv
+
+- **Source:** UCI ML Repository (Wine dataset) via scikit-learn
+- **License:** CC-BY 4.0
+- **Domain:** Chemistry
+- **Rows:** 178
+- **Description:** Chemical analysis of wines from 3 Italian cultivars (13 features)
+- **Patterns:** P7 (heatmap — correlation), P9 (decision boundary)
+
+### public/diabetes.csv
+
+- **Source:** scikit-learn (Efron et al., 2004)
+- **License:** CC-BY 4.0
+- **Domain:** Medical
+- **Rows:** 442
+- **Description:** Diabetes disease progression with 10 clinical measurements
+- **Patterns:** P7 (heatmap — correlation)
+
+### public/seattle_weather.csv
+
+- **Source:** Vega Datasets (NOAA)
+- **License:** BSD-3
+- **Domain:** Climate
+- **Rows:** 1,461
+- **Description:** Seattle daily weather: precipitation, temperature, wind, conditions (2012-2015)
+- **Patterns:** P2 (violin), P3 (time series)
+
+### public/stocks.csv
+
+- **Source:** Vega Datasets (Yahoo Finance)
+- **License:** BSD-3
+- **Domain:** Finance
+- **Rows:** ~560
+- **Description:** Monthly stock prices for 5 tech companies (AAPL, AMZN, GOOG, IBM, MSFT)
+- **Patterns:** P3 (time series), P8 (multi-panel)
+
+### public/disasters.csv
+
+- **Source:** Vega Datasets (Our World in Data)
+- **License:** BSD-3
+- **Domain:** Humanitarian
+- **Rows:** ~800
+- **Description:** Global disaster deaths by type (drought, earthquake, flood, etc.) and year
+- **Patterns:** P1 (horizontal bar), P6 (vertical bar)
+
+### public/co2_concentration.csv
+
+- **Source:** Vega Datasets (Scripps CO2 Program)
+- **License:** BSD-3
+- **Domain:** Climate
+- **Rows:** ~740
+- **Description:** Atmospheric CO2 concentration at Mauna Loa (monthly measurements)
+- **Patterns:** P3 (time series)
+
+### public/mtcars.csv
+
+- **Source:** R datasets (Motor Trend, 1974)
+- **License:** Public domain
+- **Domain:** Automotive
+- **Rows:** 32
+- **Description:** Motor Trend 1974 car road test data (mpg, cylinders, displacement, hp, weight, etc.)
+- **Patterns:** P1 (horizontal bar), P7 (heatmap — correlation)
+
+### public/chickweight.csv
+
+- **Source:** R datasets (Crowder & Hand, 1990)
+- **License:** Public domain
+- **Domain:** Nutrition
+- **Rows:** 578
+- **Description:** Chick body weight growth over 21 days across 4 protein diets
+- **Patterns:** P2 (violin), P3 (time series), P8 (multi-panel)
+
+### public/world_happiness.csv
+
+- **Source:** World Happiness Report (via PhilippeCodes/World-Happiness-Report-Data-Analysis)
+- **License:** Public domain
+- **Domain:** Economics
+- **Rows:** ~153
+- **Description:** Country happiness scores with GDP, family, health, freedom, generosity, corruption factors
+- **Patterns:** P1 (horizontal bar), P5 (lollipop), P7 (heatmap), P8 (multi-panel)
+
+### public/country_stats.csv
+
+- **Source:** Gapminder 2007 via Plotly datasets
+- **License:** CC0
+- **Domain:** Geography
+- **Rows:** ~142
+- **Description:** Single-year (2007) country-level life expectancy, population, and GDP per capita
+- **Patterns:** P1 (horizontal bar), P5 (lollipop), P7 (heatmap)

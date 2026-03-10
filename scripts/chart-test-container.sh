@@ -13,9 +13,16 @@
 # directory (minus data/, __pycache__/, .venv/, .claude-config/ by default).
 # Use --full-archive to keep data/ in the archive (~15 MB extra per prompt).
 #
+# Prompt selection:
+#   Each pattern (P1–P9) has a pool of prompts using different datasets.
+#   By default, one prompt is randomly selected from each pool per run.
+#   Use --fixed to always select index 0 (the original default prompt).
+#
 # Usage:
-#   scripts/chart-test-container.sh                    # run all 9 test prompts
-#   scripts/chart-test-container.sh --quick             # run 5 prompts (bar, violin, vertical bar, heatmap, lollipop)
+#   scripts/chart-test-container.sh                    # run all 9 prompts (random from pools)
+#   scripts/chart-test-container.sh --quick             # run 5 prompts (random from pools)
+#   scripts/chart-test-container.sh --fixed             # use original default prompts (index 0)
+#   scripts/chart-test-container.sh --quick --fixed     # 5 prompts, original defaults
 #   scripts/chart-test-container.sh --full-archive      # keep data/ in workspace archives
 #   scripts/chart-test-container.sh --tag A "prompt"    # tag results dir for parallel runs
 #   scripts/chart-test-container.sh "horizontal bar chart of collision rates by state from data/raw/public/car_crashes.csv"
@@ -57,12 +64,14 @@ fi
 
 # --- Parse flags ---
 QUICK=false
+FIXED=false
 FULL_ARCHIVE=false
 TAG=""
 CUSTOM_PROMPT=""
 while [ $# -gt 0 ]; do
     case "$1" in
         --quick) QUICK=true; shift ;;
+        --fixed) FIXED=true; shift ;;
         --full-archive) FULL_ARCHIVE=true; shift ;;
         --tag) TAG="$2"; shift 2 ;;
         *) CUSTOM_PROMPT="$1"; shift ;;
@@ -77,38 +86,147 @@ else
 fi
 mkdir -p "$RESULTS_DIR"
 
-# --- Test prompts ---
-# Each prompt is a realistic, minimal chart request — the kind a user would type.
-# The skill should handle everything from here.
-DEFAULT_PROMPTS=(
+# --- Per-pattern prompt pools ---
+# Each pool's index 0 is the original default prompt (used with --fixed).
+# Additional entries exercise different datasets for variety across runs.
+
+# P1: Horizontal bar chart
+P1_POOL=(
     "horizontal bar chart of total collision rates by state from data/raw/public/car_crashes.csv — show top 10 states"
-    "violin plot of penguin body mass by species from data/raw/public/penguins.csv"
-    "time series of global temperature anomalies from data/raw/public/global_temp.csv — plot annual averages with a rolling mean"
-    "PR and ROC curves for breast cancer classification using data/raw/public/breast_cancer.csv — use the target column"
-    "lollipop chart comparing health spending per capita across countries from data/raw/public/healthexp.csv — show min/avg/max range"
-    "vertical bar chart of net electricity generation by source from data/raw/public/iowa_electricity.csv — compare the latest year"
-    "correlation heatmap of penguin measurements from data/raw/public/penguins.csv — annotate cells with values"
-    "3x2 grid of life expectancy trends for 6 countries from data/raw/public/gapminder.csv — one subplot per country"
-    "decision boundary plot for iris species classification using petal length vs petal width from data/raw/public/iris.csv"
+    "horizontal bar chart of average mpg by country of origin from data/raw/public/mpg.csv"
+    "horizontal bar chart of GDP per capita by continent from data/raw/public/gapminder.csv — use latest year, show continent averages"
+    "horizontal bar chart of average diamond price by cut quality from data/raw/public/diamonds.csv"
+    "horizontal bar chart of survival rate by passenger class from data/raw/public/titanic.csv"
+    "horizontal bar chart of total deaths by disaster type from data/raw/public/disasters.csv — show top 8 types"
+    "horizontal bar chart of planet count by discovery method from data/raw/public/planets.csv — show top 8 methods"
+    "horizontal bar chart of GDP per capita for top 15 countries from data/raw/public/country_stats.csv"
 )
 
-# --quick: run 5 of 9 prompts (horizontal bar, violin, vertical bar, heatmap, lollipop)
-QUICK_PROMPTS=(
-    "${DEFAULT_PROMPTS[0]}"
-    "${DEFAULT_PROMPTS[1]}"
-    "${DEFAULT_PROMPTS[5]}"
-    "${DEFAULT_PROMPTS[6]}"
-    "${DEFAULT_PROMPTS[4]}"
+# P2: Violin plot
+P2_POOL=(
+    "violin plot of penguin body mass by species from data/raw/public/penguins.csv"
+    "violin plot of mpg distribution by number of cylinders from data/raw/public/mpg.csv"
+    "violin plot of diamond price distribution by cut quality from data/raw/public/diamonds.csv"
+    "violin plot of passenger age distribution by survival status from data/raw/public/titanic.csv"
+    "violin plot of eruption duration by kind from data/raw/public/geyser.csv"
+    "violin plot of tool wear VB values by tool class from data/raw/ml-tool-wear/labels_with_tool_class.csv"
+    "violin plot of fare distribution by payment type from data/raw/public/taxis.csv"
+    "violin plot of chick weight by diet group from data/raw/public/chickweight.csv"
+    "violin plot of temperature distribution by weather type from data/raw/public/seattle_weather.csv — use temp_max column"
 )
+
+# P3: Time series
+P3_POOL=(
+    "time series of global temperature anomalies from data/raw/public/global_temp.csv — plot annual averages with a rolling mean"
+    "time series of monthly airline passengers from data/raw/public/flights.csv — show rolling 12-month mean"
+    "time series of birth percentage trends from data/raw/beautiful-plots/birth_percentage.csv — add rolling mean"
+    "time series of Dow Jones closing price from data/raw/public/dowjones.csv — add rolling average"
+    "time series of atmospheric CO2 concentration from data/raw/public/co2_concentration.csv — show trend line"
+    "time series of stock price over time for one symbol from data/raw/public/stocks.csv — pick AAPL"
+    "time series of exoplanet discoveries per year from data/raw/public/planets.csv — show cumulative count"
+)
+
+# P4: PR/ROC curves
+P4_POOL=(
+    "PR and ROC curves for breast cancer classification using data/raw/public/breast_cancer.csv — use the target column"
+    "PR and ROC curves for penguin species classification (Adelie vs others) using bill dimensions from data/raw/public/penguins.csv"
+    "PR and ROC curves for Titanic survival prediction using pclass, age, fare from data/raw/public/titanic.csv"
+    "PR and ROC curves classifying eruption kind from duration and waiting time in data/raw/public/geyser.csv"
+    "PR and ROC curves for wine cultivar classification (class 0 vs others) from data/raw/public/wine.csv"
+)
+
+# P5: Lollipop/dumbbell chart
+P5_POOL=(
+    "lollipop chart comparing health spending per capita across countries from data/raw/public/healthexp.csv — show min/avg/max range"
+    "lollipop chart of mpg range by origin from data/raw/public/mpg.csv — show min/avg/max"
+    "lollipop chart of diamond price range by color grade from data/raw/public/diamonds.csv"
+    "lollipop chart comparing classifier AUC from data/raw/beautiful-plots/best_results.csv — show min/avg/max range"
+    "lollipop chart of happiness score range by region from data/raw/public/world_happiness.csv"
+    "lollipop chart of life expectancy range by continent from data/raw/public/country_stats.csv"
+    "lollipop chart of model score range across NLP tasks from data/raw/public/glue.csv"
+)
+
+# P6: Vertical bar chart
+P6_POOL=(
+    "vertical bar chart of net electricity generation by source from data/raw/public/iowa_electricity.csv — compare the latest year"
+    "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv"
+    "vertical bar chart of average carat by clarity grade from data/raw/public/diamonds.csv"
+    "vertical bar chart of passenger count by embarkation town from data/raw/public/titanic.csv"
+    "vertical bar chart of deaths in latest decade by disaster type from data/raw/public/disasters.csv"
+    "vertical bar chart of average fare by pickup borough from data/raw/public/taxis.csv"
+    "vertical bar chart of correlation values by loss function from data/raw/weibull/femto_correlation_results.csv"
+)
+
+# P7: Heatmap
+P7_POOL=(
+    "correlation heatmap of penguin measurements from data/raw/public/penguins.csv — annotate cells with values"
+    "correlation heatmap of mpg, displacement, horsepower, weight, acceleration from data/raw/public/mpg.csv — annotate cells"
+    "correlation heatmap of carat, depth, table, price, x, y, z from data/raw/public/diamonds.csv — annotate cells"
+    "correlation heatmap of 13 chemical features from data/raw/public/wine.csv — annotate cells"
+    "heatmap of birth percentage by year and month from data/raw/beautiful-plots/birth_percentage.csv"
+    "correlation heatmap of total_bill, tip, and size from data/raw/public/tips.csv — annotate cells"
+    "heatmap of airline passengers by month and year from data/raw/public/flights.csv"
+    "correlation heatmap of 10 clinical features from data/raw/public/diabetes.csv — annotate cells"
+    "correlation heatmap of 11 performance metrics from data/raw/public/mtcars.csv — annotate cells"
+    "correlation heatmap of distance, fare, tip, tolls, total from data/raw/public/taxis.csv — annotate cells"
+)
+
+# P8: Multi-panel
+P8_POOL=(
+    "3x2 grid of life expectancy trends for 6 countries from data/raw/public/gapminder.csv — one subplot per country"
+    "3x2 grid of passenger trends from data/raw/public/flights.csv — one subplot per year (pick 6 years)"
+    "3x2 grid of health spending trends from data/raw/public/healthexp.csv — one subplot per country (pick 6)"
+    "multi-panel of stock price trends from data/raw/public/stocks.csv — one subplot per stock symbol"
+    "multi-panel of fMRI signal over time from data/raw/public/fmri.csv — one subplot per brain region and event"
+    "multi-panel of chick weight over time from data/raw/public/chickweight.csv — one subplot per diet"
+    "3x2 grid of happiness score by factor from data/raw/public/world_happiness.csv — one subplot per region (pick 6)"
+)
+
+# P9: Decision boundary
+P9_POOL=(
+    "decision boundary plot for iris species classification using petal length vs petal width from data/raw/public/iris.csv"
+    "decision boundary plot for wine cultivar classification using alcohol vs malic_acid from data/raw/public/wine.csv"
+    "decision boundary plot for breast cancer classification using mean radius vs mean texture from data/raw/public/breast_cancer.csv"
+    "decision boundary plot classifying eruption kind using duration vs waiting from data/raw/public/geyser.csv"
+    "decision boundary plot for penguin species using bill_length_mm vs bill_depth_mm from data/raw/public/penguins.csv"
+)
+
+# --- Prompt selection ---
+pick_prompt() {
+    local -n pool=$1
+    if [ "$FIXED" = true ] || [ "${#pool[@]}" -eq 1 ]; then
+        echo "${pool[0]}"
+    else
+        printf '%s\n' "${pool[@]}" | shuf -n 1
+    fi
+}
+
+ALL_POOLS=(P1_POOL P2_POOL P3_POOL P4_POOL P5_POOL P6_POOL P7_POOL P8_POOL P9_POOL)
+# --quick: P1, P2, P5, P6, P7
+QUICK_INDICES=(0 1 4 5 6)
 
 # Select prompts
 if [ -n "$CUSTOM_PROMPT" ]; then
     PROMPTS=("$CUSTOM_PROMPT")
 elif [ "$QUICK" = true ]; then
-    PROMPTS=("${QUICK_PROMPTS[@]}")
+    PROMPTS=()
+    for idx in "${QUICK_INDICES[@]}"; do
+        PROMPTS+=("$(pick_prompt "${ALL_POOLS[$idx]}")")
+    done
 else
-    PROMPTS=("${DEFAULT_PROMPTS[@]}")
+    PROMPTS=()
+    for pool_name in "${ALL_POOLS[@]}"; do
+        PROMPTS+=("$(pick_prompt "$pool_name")")
+    done
 fi
+
+# Log selected prompts
+echo ""
+echo "Selected prompts:"
+for i in "${!PROMPTS[@]}"; do
+    echo "  $((i + 1)). ${PROMPTS[$i]}"
+done
+echo ""
 
 # --- Run each prompt in a fresh clean room ---
 run_clean_room() {

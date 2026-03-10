@@ -44,7 +44,7 @@ data/
     beautiful-plots/    # Beautiful-Plots (birth %, classifier AUC)
     ml-tool-wear/       # Tool wear labels (167 rows)
     weibull/            # Weibull RUL experiments + HDF5 spectrograms
-    public/             # Curated public datasets (9 CSVs, ~300KB)
+    public/             # Curated public datasets (29 CSVs)
 
 docs/gallery/           # Before/after captures at each iteration
   TEMPLATE.md           # Template for new gallery entries
@@ -115,6 +115,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `26-full-suite-coverage` | P6/P7/P8 pattern rewrites for clean-room testability; all 9 prompts verified |
 | `27-p2-variation-analysis` | Parallel clean-room comparison (3x3 runs) to find and fix P2 under-specification |
 | `28-p3-variation-analysis` | P3 rewrite from ML-prediction specialist to general time series; 3-round convergence |
+| `29-dataset-variety` | Added 20 public datasets; per-pattern prompt pools with random selection in clean-room testing |
 
 ## Style Rules
 
@@ -132,8 +133,10 @@ All charts follow the aesthetic defined in `.claude/skills/matplotlib-chart/styl
 
 ```bash
 # Primary: Claude Code generates charts from minimal prompts (Docker required)
-scripts/chart-test-container.sh
-scripts/chart-test-container.sh --quick            # 3 prompts instead of 5
+scripts/chart-test-container.sh                    # all 9 prompts, random from pools
+scripts/chart-test-container.sh --quick            # 5 prompts, random from pools
+scripts/chart-test-container.sh --fixed            # all 9 prompts, original defaults
+scripts/chart-test-container.sh --quick --fixed    # 5 prompts, original defaults
 scripts/chart-test-container.sh --full-archive     # keep data/ in workspace archives
 
 # Static analysis (fast, no Docker)

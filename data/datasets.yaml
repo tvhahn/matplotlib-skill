@@ -193,3 +193,183 @@
   rows: 150
   patterns: [6]
   description: Iris flower measurements for 3 species (setosa, versicolor, virginica)
+
+- name: mpg
+  file: raw/public/mpg.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: automotive
+  rows: 392
+  patterns: [1, 2, 5, 6, 7]
+  description: Auto fuel efficiency with engine and origin attributes
+
+- name: flights
+  file: raw/public/flights.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: aviation
+  rows: 144
+  patterns: [3, 7, 8]
+  description: Monthly airline passenger counts (1949-1960)
+
+- name: titanic
+  file: raw/public/titanic.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: historical
+  rows: 891
+  patterns: [1, 2, 4, 6]
+  description: Titanic passenger survival data with demographics
+
+- name: geyser
+  file: raw/public/geyser.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: geology
+  rows: 272
+  patterns: [2, 4, 9]
+  description: Old Faithful geyser eruption durations and waiting times
+
+- name: diamonds
+  file: raw/public/diamonds.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: gemology
+  rows: 2000
+  patterns: [1, 2, 5, 6, 7]
+  description: Diamond prices and quality attributes (subsetted)
+
+- name: dowjones
+  file: raw/public/dowjones.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: finance
+  rows: 649
+  patterns: [3]
+  description: Dow Jones Industrial Average closing prices
+
+- name: glue
+  file: raw/public/glue.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: ml-nlp
+  rows: 64
+  patterns: [1, 5]
+  description: GLUE benchmark scores for NLP models
+
+- name: fmri
+  file: raw/public/fmri.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: neuroscience
+  rows: 1064
+  patterns: [3, 8]
+  description: fMRI brain signal measurements by region and event
+
+- name: planets
+  file: raw/public/planets.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: astronomy
+  rows: 1035
+  patterns: [1, 3]
+  description: Exoplanet discoveries by method and year
+
+- name: taxis
+  file: raw/public/taxis.csv
+  source: https://github.com/mwaskom/seaborn-data
+  license: BSD
+  domain: urban-transport
+  rows: 1000
+  patterns: [1, 2, 6, 7]
+  description: NYC taxi ride fares and trip details (subsetted)
+
+- name: wine
+  file: raw/public/wine.csv
+  source: https://archive.ics.uci.edu/dataset/109
+  license: CC-BY-4.0
+  domain: chemistry
+  rows: 178
+  patterns: [7, 9]
+  description: Chemical analysis of wines from 3 Italian cultivars
+
+- name: diabetes
+  file: raw/public/diabetes.csv
+  source: https://scikit-learn.org/
+  license: CC-BY-4.0
+  domain: medical
+  rows: 442
+  patterns: [7]
+  description: Diabetes progression clinical measurements
+
+- name: seattle_weather
+  file: raw/public/seattle_weather.csv
+  source: https://github.com/vega/vega-datasets
+  license: BSD-3
+  domain: climate
+  rows: 1461
+  patterns: [2, 3]
+  description: Seattle daily weather observations (2012-2015)
+
+- name: stocks
+  file: raw/public/stocks.csv
+  source: https://github.com/vega/vega-datasets
+  license: BSD-3
+  domain: finance
+  rows: 560
+  patterns: [3, 8]
+  description: Stock prices for 5 tech companies over time
+
+- name: disasters
+  file: raw/public/disasters.csv
+  source: https://github.com/vega/vega-datasets
+  license: BSD-3
+  domain: humanitarian
+  rows: 803
+  patterns: [1, 6]
+  description: Global disaster deaths by type and year
+
+- name: co2_concentration
+  file: raw/public/co2_concentration.csv
+  source: https://github.com/vega/vega-datasets
+  license: BSD-3
+  domain: climate
+  rows: 741
+  patterns: [3]
+  description: Atmospheric CO2 concentration measurements
+
+- name: mtcars
+  file: raw/public/mtcars.csv
+  source: https://vincentarelbundock.github.io/Rdatasets/
+  license: public-domain
+  domain: automotive
+  rows: 32
+  patterns: [1, 7]
+  description: Motor Trend 1974 car performance statistics
+
+- name: chickweight
+  file: raw/public/chickweight.csv
+  source: https://vincentarelbundock.github.io/Rdatasets/
+  license: public-domain
+  domain: nutrition
+  rows: 578
+  patterns: [2, 3, 8]
+  description: Chick weight growth by diet over time
+
+- name: world_happiness
+  file: raw/public/world_happiness.csv
+  source: World Happiness Report
+  license: public-domain
+  domain: economics
+  rows: 153
+  patterns: [1, 5, 7, 8]
+  description: World happiness scores with contributing factors by country
+
+- name: country_stats
+  file: raw/public/country_stats.csv
+  source: https://github.com/plotly/datasets
+  license: CC0
+  domain: geography
+  rows: 142
+  patterns: [1, 5, 7]
+  description: Gapminder 2007 cross-section of country development indicators

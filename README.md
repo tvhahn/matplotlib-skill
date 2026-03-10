@@ -31,7 +31,7 @@ The skill lives in `.claude/skills/matplotlib-chart/`, where Claude Code discove
 
 ## Datasets
 
-The skill ships with 19 datasets (10 from Tim's projects, 9 public references) in `data/raw/`. See [`data/SOURCES.md`](data/SOURCES.md) for full attribution and pattern mappings.
+The skill ships with 39 datasets (10 from Tim's projects, 29 public references) in `data/raw/`. See [`data/SOURCES.md`](data/SOURCES.md) for full attribution and pattern mappings.
 
 **Source Project Datasets**
 
@@ -55,6 +55,26 @@ The skill ships with 19 datasets (10 from Tim's projects, 9 public references) i
 | healthexp.csv | CC-BY | [OECD](https://data.oecd.org/healthres/health-spending.htm) | Health expenditure per capita by country/year (274 rows) |
 | iowa_electricity.csv | Public domain | [US EIA](https://www.eia.gov/) | Iowa electricity generation by source (51 rows) |
 | iris.csv | CC-BY 4.0 | [UCI ML Repository](https://archive.ics.uci.edu/dataset/53) | Fisher's iris flower measurements (150 rows) |
+| mpg.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Auto fuel efficiency with engine and origin (392 rows) |
+| flights.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Monthly airline passengers 1949-1960 (144 rows) |
+| titanic.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Titanic passenger survival data (891 rows) |
+| geyser.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Old Faithful eruption durations and waits (272 rows) |
+| diamonds.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Diamond prices and quality attributes (2,000 rows) |
+| dowjones.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Dow Jones closing prices (649 rows) |
+| glue.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | GLUE benchmark NLP model scores (64 rows) |
+| fmri.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | fMRI brain signals by region and event (1,064 rows) |
+| planets.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Exoplanet discoveries by method and year (1,035 rows) |
+| taxis.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | NYC taxi ride fares and trip details (1,000 rows) |
+| wine.csv | CC-BY 4.0 | [UCI ML Repository](https://archive.ics.uci.edu/dataset/109) | Chemical analysis of wines from 3 cultivars (178 rows) |
+| diabetes.csv | CC-BY 4.0 | [scikit-learn](https://scikit-learn.org/) | Diabetes progression clinical measurements (442 rows) |
+| seattle_weather.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Seattle daily weather observations (1,461 rows) |
+| stocks.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Stock prices for 5 tech companies (560 rows) |
+| disasters.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Global disaster deaths by type and year (803 rows) |
+| co2_concentration.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Atmospheric CO2 at Mauna Loa (741 rows) |
+| mtcars.csv | Public domain | [R Datasets](https://vincentarelbundock.github.io/Rdatasets/) | Motor Trend 1974 car performance (32 rows) |
+| chickweight.csv | Public domain | [R Datasets](https://vincentarelbundock.github.io/Rdatasets/) | Chick weight growth by diet (578 rows) |
+| world_happiness.csv | Public domain | [World Happiness Report](https://worldhappiness.report/) | Country happiness scores with factors (153 rows) |
+| country_stats.csv | CC0 | [Plotly datasets](https://github.com/plotly/datasets) | Gapminder 2007 country development snapshot (142 rows) |
 
 ## Gallery
 
