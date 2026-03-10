@@ -109,6 +109,9 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `20-spectrogram-prroc-title-padding` | Added `pad=7` to P7/P9 titles; added `grid(False)` to P7 subplots |
 | `21-title-fontsize-p3-p8` | Added explicit `fontsize=12` to P3 and P8 titles (bold-prefix convention) |
 | `22-dimgrey-tick-labels` | Added `labelcolor="dimgrey"` tick_params convention to style-reference, P1, P4 |
+| `23-dimgrey-tick-labels-p2-p3-p5` | Added `labelcolor="dimgrey"` to tick_params in P2, P3, P5; consolidated P5 split calls |
+| `24-dimgrey-tick-labels-p6-p7-p8` | Added `labelcolor="dimgrey"` to tick_params in P6, P7 (both subplots), P8 |
+| `25-dimgrey-tick-labels-p9-pad-consistency` | Completed `labelcolor="dimgrey"` rollout to P9; normalized P2 title pad to 7 |
 
 ## Style Rules
 
