@@ -230,7 +230,9 @@ Use `alpha=0.4` for scatter points, background lines, and other non-primary elem
 ax.scatter(x, y, alpha=0.4, c="grey", edgecolors="none", s=2)
 ```
 
-### Remove tick marks
+### Remove tick marks and soften tick labels
 ```python
-ax.tick_params(axis="both", which="both", length=0)
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ```
+
+The `labelcolor="dimgrey"` keeps tick labels consistent with annotations and legend text. Apply to all patterns.
