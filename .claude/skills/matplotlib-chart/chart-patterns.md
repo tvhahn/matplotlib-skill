@@ -478,11 +478,13 @@ sns.despine(left=True, bottom=True)
 
 **When to use:** Classification model evaluation, cross-validation performance.
 **Palette:** Cubehelix `pal[5]` for average, grey for k-folds, orange dashed for baseline.
+**Data:** Always use k-fold cross-validation (default 5-fold `StratifiedKFold`). Plot each fold as a grey line, then overlay the interpolated average. Never use a single train/test split.
+**Panel order:** (a) Precision-Recall first, (b) ROC second. Do not swap.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True, dpi=150)
+fig, axes = plt.subplots(1, 2, figsize=(12, 6), dpi=150)
 fig.tight_layout(pad=5.0)
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
@@ -496,13 +498,13 @@ axes[0].plot(recall_avg, precision_avg, label="Average model",
              color=pal[5], linewidth=2)
 
 axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
-             label="No skill model", color="orange", linewidth=2, zorder=0)
+             label="No skill", color="orange", linewidth=2, zorder=0)
 
 axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
-               labelcolor="dimgrey")
+               labelcolor="dimgrey", loc="upper right", fontsize=10)
 axes[0].set_title(r"$\bf{(a)}$" + " Precision-Recall Curve", loc="left", fontsize=12, pad=7)
-axes[0].set_xlabel("Recall")
-axes[0].set_ylabel("Precision")
+axes[0].set_xlabel("Recall", fontsize=12, labelpad=8, color="dimgrey")
+axes[0].set_ylabel("Precision", fontsize=12, labelpad=8, color="dimgrey")
 
 # ROC curve panel
 for i, (t, f) in enumerate(zip(tpr_array, fpr_array)):
@@ -516,17 +518,30 @@ axes[1].plot([0, 1], [0, 1], linestyle="--",
              label="No skill", color="orange", linewidth=2, zorder=0)
 
 axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
-               labelcolor="dimgrey")
+               labelcolor="dimgrey", loc="lower right", fontsize=10)
 axes[1].set_title(r"$\bf{(b)}$" + " ROC Curve", loc="left", fontsize=12, pad=7)
-axes[1].set_xlabel("False Positive Rate")
-axes[1].set_ylabel("True Positive Rate")
+axes[1].set_xlabel("False Positive Rate", fontsize=12, labelpad=8, color="dimgrey")
+axes[1].set_ylabel("True Positive Rate", fontsize=12, labelpad=8, color="dimgrey")
 
 for ax in axes.flatten():
-    ax.yaxis.set_tick_params(labelleft=True, which="major")
     ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
     ax.grid(False)
 
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Add AUC text annotations below each panel. Adjust `x_axis_n` for curve smoothing resolution.
+**Rules:**
+- Always use k-fold cross-validation (`StratifiedKFold(n_splits=5, shuffle=True, random_state=42)`) — never use a single train/test split. Each fold is a grey line; the average is `pal[5]`.
+- Panel order is fixed: **(a) PR first**, **(b) ROC second**. Do not swap.
+- Three line layers per panel: (1) grey k-fold lines (`alpha=0.5, linewidth=1`), (2) average line (`pal[5], linewidth=2`), (3) baseline (`"orange", linestyle="--", linewidth=2, zorder=0`).
+- Average line color is always `pal[5]` on both panels — do not use `pal[4]` or any other index.
+- Do not add `fill_between` shading under curves — the pattern uses lines only.
+- Do not add `sharex=True` or `sharey=True` to `plt.subplots` — PR axes (Recall/Precision) and ROC axes (FPR/TPR) are different.
+- Do not add `fig.suptitle` — the panel titles carry all context. If dataset/model info is needed, put it in the panel title suffix or omit.
+- Do not add freestanding `ax.text` metric annotations — include metric values (AP, AUC) in legend labels instead (e.g., `f"Average (AP = {ap:.3f})"`).
+- Do not add `ax.patch.set_edgecolor` / `ax.patch.set_linewidth` subplot borders — this pattern uses `sns.despine` only.
+- Legend: `loc="upper right"` for PR panel, `loc="lower right"` for ROC panel, `fontsize=10`.
+- Axis labels: `fontsize=12, labelpad=8, color="dimgrey"` on all four axis labels (xlabel + ylabel on both panels).
+- `tight_layout(pad=5.0)` — do not change the pad value.
+
+**Customize:** Add AUC/AP values in legend labels. Adjust number of folds. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.

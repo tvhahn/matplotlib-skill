@@ -122,6 +122,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `32-p8-variation-analysis` | P8 multi-panel: rewrite from RUL prediction to line+scatter trend template; single color, shared y-axis, 8 rules; 2-round convergence |
 | `33-p9-variation-analysis` | P9 decision boundary: DIVERGING_COLORBLIND mandate, prob dots not contourf, two outside legends, 7 rules; 2-round convergence |
 | `34-p1-variation-analysis` | P1 horizontal bar: added 10-item Rules section (Blues_d mandate, sns.barplot not ax.barh, no annotation prefixes/suffixes, set_xticks([]), fontsize=14); 3-round convergence 4/10 to 9/10 |
+| `35-p4-variation-analysis` | P4 PR/ROC: removed sharex/sharey, added 12-item Rules section (k-fold mandate, panel order, no fill_between/suptitle/ax.patch, axis label styling); 2-round convergence |
 
 ## Style Rules
 
