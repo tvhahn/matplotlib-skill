@@ -411,7 +411,7 @@ sns.despine(left=True, bottom=True, right=True)
 **When to use:** 2x2, 3x2, 3x3, or irregular layouts showing same metric across different datasets/conditions.
 **Layout:** Always use `gridspec.GridSpec(rows, cols)` — rows first. A "3x2 grid" means 3 rows × 2 columns.
 **Line color:** Use a single color `pal[5]` (darkest cubehelix) for the line across all panels — do not vary color per panel. All panels show the same metric, so color should be consistent.
-**Figsize:** `(14, 9)` for 3x2, `(14, 12)` for 3x3. Always use `dpi=150`.
+**Figsize:** `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Always use `dpi=150`.
 
 ```python
 from matplotlib import gridspec
@@ -461,16 +461,20 @@ sns.despine(left=True, bottom=True)
 ```
 
 **Rules:**
-- Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
-- Single line color `pal[5]` across all panels — do not use per-panel colors or per-group colors
-- Include scatter dots on data points (`s=40`, `edgecolors="white"`, `linewidths=0.8`) — do not use `fill_between`
-- Annotate first and last values per panel (`fontsize=8`, `color="dimgrey"`) — do not add "yrs" or unit suffixes to annotations
-- Share y-axis limits across all panels when showing the same metric (set `set_ylim` identically)
-- Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these labels
-- Suptitle: `fontsize=14`, centered above the grid — do not add `color="dimgrey"` to suptitle (keep default black for the main title)
-- `wspace=0.3, hspace=0.5` — adjust for readability but keep consistent spacing
+1. Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
+2. SINGLE line color `pal[5]` for ALL panels — never `pal[i]`, never per-panel/per-group colors. Every `ax.plot()` and `ax.scatter()` call must use `color=pal[5]`.
+3. Every panel MUST have `ax.scatter(...)` dots on data points (`s=40`, `edgecolors="white"`, `linewidths=0.8`, `zorder=4`). Do NOT use `fill_between`, SEM shading, area fills, error bands, or bar charts.
+4. Annotate BOTH first AND last values per panel with `ax.text(...)` — `fontsize=8`, `color="dimgrey"`. Format as plain number (`f"{val:.1f}"`) — no `$`, `%`, unit suffixes, or "Peak:" labels. No arrows or `ax.annotate()`.
+5. `ax.grid(False)` on every panel — do NOT add back any grid lines (no `yaxis.grid()`, no `xaxis.grid()`).
+6. Share y-axis limits across all panels: compute global min/max BEFORE the loop, then call `ax.set_ylim(y_global_min, y_global_max)` in every panel.
+7. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these labels.
+8. Suptitle: `fontsize=14`, centered above the grid — do not add `color="dimgrey"` to suptitle (keep default black for the main title).
+9. `gs.update(wspace=0.3, hspace=0.5)` — use these exact values.
+10. Figsize by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Do not invent other sizes.
+11. Do NOT use `ax.annotate()` with arrows, "Peak:" labels, or `axvline`/`axhline` reference lines. Only `ax.text()` for first/last annotations.
+12. Do NOT add per-event/per-category color schemes (e.g., blue for "cue", red for "stim"). All panels use `pal[5]`.
 
-**Customize:** Adjust GridSpec dimensions for different layouts (2x2, 3x3). For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
+**Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
 
 ---
 
