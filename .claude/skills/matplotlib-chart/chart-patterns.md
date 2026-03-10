@@ -526,6 +526,8 @@ axes[1].set_ylabel("True Positive Rate", fontsize=12, labelpad=8, color="dimgrey
 for ax in axes.flatten():
     ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
     ax.grid(False)
+    ax.patch.set_edgecolor("lightgrey")
+    ax.patch.set_linewidth(0.8)
 
 sns.despine(left=True, bottom=True)
 ```
@@ -539,7 +541,7 @@ sns.despine(left=True, bottom=True)
 - Do not add `sharex=True` or `sharey=True` to `plt.subplots` — PR axes (Recall/Precision) and ROC axes (FPR/TPR) are different.
 - Do not add `fig.suptitle` — the panel titles carry all context. If dataset/model info is needed, put it in the panel title suffix or omit.
 - Do not add freestanding `ax.text` metric annotations — include metric values (AP, AUC) in legend labels instead (e.g., `f"Average (AP = {ap:.3f})"`).
-- Do not add `ax.patch.set_edgecolor` / `ax.patch.set_linewidth` subplot borders — this pattern uses `sns.despine` only.
+- Add subplot outlines on both panels: `ax.patch.set_edgecolor("lightgrey")` and `ax.patch.set_linewidth(0.8)` — frames each panel visually (consistent with multi-panel pattern).
 - Legend: `loc="upper right"` for PR panel, `loc="lower right"` for ROC panel, `fontsize=10`.
 - Axis labels: `fontsize=12, labelpad=8, color="dimgrey"` on all four axis labels (xlabel + ylabel on both panels).
 - `tight_layout(pad=5.0)` — do not change the pad value.
