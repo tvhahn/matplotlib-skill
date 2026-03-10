@@ -106,6 +106,9 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `17-labelcolor-cleanup` | Replaced legend `get_texts()` loops with inline `labelcolor="dimgrey"` in P3, P5, P9 |
 | `18-labelcolor-complete` | Completed `labelcolor` migration for P6, P8; updated style-reference.md legend convention |
 | `19-title-consistency` | Normalized title `loc="left"` and `pad` across P1, P2, P4 for consistency |
+| `20-spectrogram-prroc-title-padding` | Added `pad=7` to P7/P9 titles; added `grid(False)` to P7 subplots |
+| `21-title-fontsize-p3-p8` | Added explicit `fontsize=12` to P3 and P8 titles (bold-prefix convention) |
+| `22-dimgrey-tick-labels` | Added `labelcolor="dimgrey"` tick_params convention to style-reference, P1, P4 |
 
 ## Style Rules
 
