@@ -387,23 +387,29 @@ sns.despine(left=True, bottom=True, right=True)
 
 ## 8. Multi-Panel Grid (GridSpec)
 
-**When to use:** 2x2, 3x3, or irregular layouts showing same metric across different datasets/conditions.
-**Layout:** GridSpec with shared formatting, enumerated panel labels.
+**When to use:** 2x2, 3x2, 3x3, or irregular layouts showing same metric across different datasets/conditions.
+**Layout:** Always use `gridspec.GridSpec(rows, cols)` — rows first. A "3x2 grid" means 3 rows × 2 columns.
+**Line color:** Use a single color `pal[5]` (darkest cubehelix) for the line across all panels — do not vary color per panel. All panels show the same metric, so color should be consistent.
+**Figsize:** `(14, 9)` for 3x2, `(14, 12)` for 3x3. Always use `dpi=150`.
 
 ```python
 from matplotlib import gridspec
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig = plt.figure(figsize=(14, 12), dpi=150)
-gs = gridspec.GridSpec(3, 3)
-axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(3)]
-gs.update(wspace=0.15, hspace=0.4)
+pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
-labels = [chr(ord('a') + i) for i in range(9)]
-titles = [f"Dataset {i+1}" for i in range(9)]
+fig = plt.figure(figsize=(14, 9), dpi=150)
+gs = gridspec.GridSpec(3, 2)
+axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(2)]
+gs.update(wspace=0.3, hspace=0.5)
+
+labels = [chr(ord('a') + i) for i in range(6)]
+titles = ["Dataset 1", "Dataset 2", "Dataset 3", "Dataset 4", "Dataset 5", "Dataset 6"]
 
 for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
+    row, col = divmod(i, 2)
+
     ax.grid(False)
     ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 
@@ -411,31 +417,39 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.patch.set_edgecolor("lightgrey")
     ax.patch.set_linewidth(0.8)
 
-    # Example: line + scatter per panel (adapt to your data)
-    ax.plot(x_data, y_true, color="#4575b4", linewidth=1, label="True")
-    ax.scatter(x_data, y_pred, alpha=0.4, c="grey", s=2, edgecolors="none", label="Predicted")
-    ax.plot(x_data, y_rolling, color="#d73027", linewidth=1.5, label="Rolling Avg")
+    # Line + scatter per panel (same color across all panels)
+    ax.plot(x_data, y_data, color=pal[5], linewidth=2, zorder=3)
+    ax.scatter(x_data, y_data, color=pal[5], s=40, zorder=4,
+               edgecolors="white", linewidths=0.8)
 
-    # metric annotation box
-    ax.text(0.97, 0.95, f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}",
-            transform=ax.transAxes, fontsize=8, color="dimgrey",
-            va="top", ha="right",
-            bbox={"facecolor": "gray", "alpha": 0.0, "pad": 4})
+    # Annotate first and last values
+    ax.text(x_first, y_first, f"{y_first:.1f}", fontsize=8,
+            color="dimgrey", ha="right", va="center")
+    ax.text(x_last, y_last, f"{y_last:.1f}", fontsize=8,
+            color="dimgrey", ha="left", va="center")
 
-    ax.set_title(r"$\bf{(" + label + r")}$" + f" {title}", loc="left", fontsize=12, pad=7)
+    ax.set_title(r"$\bf{(" + label + r")}$" + f"  {title}", loc="left", fontsize=11, pad=7)
 
-    if i == 0:
-        ax.set_xlabel("X Label")
-        ax.set_ylabel("Y Label")
-        ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white",
-                 framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey")
-    else:
-        ax.set_yticklabels([])
+    # Axis labels: left column gets y-label, bottom row gets x-label
+    if col == 0:
+        ax.set_ylabel("Y Label", fontsize=9, labelpad=6, color="dimgrey")
+    if row == 2:
+        ax.set_xlabel("X Label", fontsize=9, labelpad=6, color="dimgrey")
 
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Adjust GridSpec dimensions. Only label axes on the first panel (i==0). Use `gs.update(wspace=, hspace=)` for spacing. Remove `ax.patch.set_edgecolor/linewidth` lines if panel borders are not desired.
+**Rules:**
+- Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
+- Single line color `pal[5]` across all panels — do not use per-panel colors or per-group colors
+- Include scatter dots on data points (`s=40`, `edgecolors="white"`, `linewidths=0.8`) — do not use `fill_between`
+- Annotate first and last values per panel (`fontsize=8`, `color="dimgrey"`) — do not add "yrs" or unit suffixes to annotations
+- Share y-axis limits across all panels when showing the same metric (set `set_ylim` identically)
+- Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these labels
+- Suptitle: `fontsize=14`, centered above the grid — do not add `color="dimgrey"` to suptitle (keep default black for the main title)
+- `wspace=0.3, hspace=0.5` — adjust for readability but keep consistent spacing
+
+**Customize:** Adjust GridSpec dimensions for different layouts (2x2, 3x3). For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
 
 ---
 
