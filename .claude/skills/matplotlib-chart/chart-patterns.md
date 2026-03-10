@@ -61,7 +61,7 @@ for i, p in enumerate(ax.patches):
 
 sns.despine(left=True, bottom=True)
 ax.grid(alpha=0.7, linewidth=1, axis="y")
-ax.tick_params(axis="both", which="both", length=0)
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_xlabel("")
 ax.set_ylabel("")
 ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=14, pad=12)
@@ -81,7 +81,7 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 ax.grid(False)
-ax.tick_params(axis="both", which="both", length=0)
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 
 ax.plot(y_true_sorted, label="True Values", alpha=1, color="#4575b4", linewidth=1, zorder=0)
 
@@ -193,8 +193,8 @@ for i in range(df.shape[0]):
 
 ax.grid(False)
 sns.despine(left=True, bottom=True)
-ax.tick_params(axis="both", which="both", length=0)
-ax.tick_params(axis="x", pad=20, labelsize="x-large", labelcolor="dimgrey")
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
+ax.tick_params(axis="x", pad=20, labelsize="x-large")
 ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 
 ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
