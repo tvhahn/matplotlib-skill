@@ -22,7 +22,7 @@ for p in ax.patches:
     _x = p.get_x() + p.get_width() + space
     _y = p.get_y() + p.get_height() / 2
     value = p.get_width()
-    ax.text(_x, _y, f"{value:.1f}%", ha="left", va="center",
+    ax.text(_x, _y, f"{value:.1f}", ha="left", va="center",
             weight="semibold", size=10, color="dimgrey")
 
 ax.set_ylabel("")
@@ -35,7 +35,19 @@ ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey). Add `ax.tick_params(axis="y", labelsize=16)` to increase label size.
+**Rules:**
+- Always use `sns.barplot` — never use `ax.barh()` directly. Pass `palette="Blues_d"` to `sns.barplot`.
+- Always use `palette="Blues_d"` — never substitute cubehelix, rocket, or single-color palettes. The Blues_d gradient distinguishes ranked bars.
+- Figsize `(4, 7)` is the default for 8-15 bars. For fewer bars (3-5), use `(6, 4)`. Always keep `dpi=150`.
+- Annotation format is just the number with no prefixes or suffixes: `f"{value:.1f}"` for decimals, `f"{value:,.0f}"` for large integers. Never prepend `$` or append `%`, `" mpg"`, `" USD"`, or any other unit — the title provides context.
+- Annotation styling is fixed: `weight="semibold", size=10, color="dimgrey"`. Do not vary size.
+- `set_xlabel("")` — do not add an x-axis label; value labels on bar ends make it redundant.
+- `set_ylabel("")` — category names on the y-axis are self-explanatory.
+- `set_xticks([])` — always hide x-axis ticks; the bar-end labels carry the values.
+- Title: `fontsize=14, loc="left", pad=7` — do not use fontsize=12 or 13.
+- Do not add a separate `tick_params(axis="y", labelsize=...)` call — let `font_scale=1.0` control y-tick label size.
+
+**Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey).
 
 ---
 
