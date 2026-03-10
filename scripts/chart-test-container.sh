@@ -17,9 +17,10 @@
 #   scripts/chart-test-container.sh                    # run all 9 test prompts
 #   scripts/chart-test-container.sh --quick             # run 5 prompts (bar, violin, vertical bar, heatmap, lollipop)
 #   scripts/chart-test-container.sh --full-archive      # keep data/ in workspace archives
+#   scripts/chart-test-container.sh --tag A "prompt"    # tag results dir for parallel runs
 #   scripts/chart-test-container.sh "horizontal bar chart of collision rates by state from data/raw/public/car_crashes.csv"
 #
-# Results are saved to logs/clean-room/YYYY-MM-DD_HH.MM/
+# Results are saved to logs/clean-room/YYYY-MM-DD_HH.MM/ (or YYYY-MM-DD_HH.MM-TAG/ with --tag)
 
 set -euo pipefail
 
@@ -27,8 +28,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%H.%M")
-RESULTS_DIR="$REPO_DIR/logs/clean-room/$TIMESTAMP"
-mkdir -p "$RESULTS_DIR"
 
 # --- Resolve devcontainer image + host path (for DooD) ---
 CONTAINER_ID=$(docker ps -qf "name=matplotlib-chart-skill" 2>/dev/null | head -1)
@@ -59,14 +58,24 @@ fi
 # --- Parse flags ---
 QUICK=false
 FULL_ARCHIVE=false
+TAG=""
 CUSTOM_PROMPT=""
 while [ $# -gt 0 ]; do
     case "$1" in
         --quick) QUICK=true; shift ;;
         --full-archive) FULL_ARCHIVE=true; shift ;;
+        --tag) TAG="$2"; shift 2 ;;
         *) CUSTOM_PROMPT="$1"; shift ;;
     esac
 done
+
+# --- Build results directory (after flags parsed so TAG is available) ---
+if [ -n "$TAG" ]; then
+    RESULTS_DIR="$REPO_DIR/logs/clean-room/${TIMESTAMP}-${TAG}"
+else
+    RESULTS_DIR="$REPO_DIR/logs/clean-room/$TIMESTAMP"
+fi
+mkdir -p "$RESULTS_DIR"
 
 # --- Test prompts ---
 # Each prompt is a realistic, minimal chart request — the kind a user would type.
@@ -114,7 +123,7 @@ run_clean_room() {
     echo "=========================================="
 
     # Build clean room inside workspace (host-visible for DooD)
-    local CLEAN_ROOM_NAME=".clean-room-run-$run_id"
+    local CLEAN_ROOM_NAME=".clean-room-run-${TAG:+${TAG}-}${run_id}"
     local TMPDIR="$REPO_DIR/$CLEAN_ROOM_NAME"
     local HOST_TMPDIR="$HOST_REPO_DIR/$CLEAN_ROOM_NAME"
 
@@ -203,7 +212,7 @@ echo "=========================================="
 ls -la "$RESULTS_DIR/"
 
 # Symlink latest run for convenience
-ln -sfn "$TIMESTAMP" "$REPO_DIR/logs/clean-room/latest"
+ln -sfn "$(basename "$RESULTS_DIR")" "$REPO_DIR/logs/clean-room/latest"
 
 # Disk usage summary
 echo ""

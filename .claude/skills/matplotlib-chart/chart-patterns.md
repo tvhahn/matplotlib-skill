@@ -41,33 +41,38 @@ sns.despine(left=True, bottom=True)
 
 ## 2. Vertical Bar Chart
 
-**When to use:** Correlations, scored rankings, model comparisons.
-**Palette:** `rocket` for sequential, diverging colorblind palette for pos/neg values.
+**When to use:** Comparisons across categories, ranked values, model scores.
+**Palette:** `"rocket"` for ≥5 bars (sequential ranking). For ≤4 categorical bars, slice `DIVERGING_COLORBLIND`: `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Do not invent semantic colors — always use these exact hex values.
+**Bar order:** Sort by value descending so the tallest bar is on the left.
+**Data:** Always read from the CSV — never hardcode values from the file.
+**API:** Always use `sns.barplot` — never use `ax.bar` directly.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
-sns.barplot(x="category", y="value", hue="category", data=df, palette="rocket", legend=False, ax=ax)
+df_sorted = df.sort_values("value", ascending=False)
 
-for i, p in enumerate(ax.patches):
-    space = abs(df["value"].max()) * 0.1
+sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette="rocket", legend=False, ax=ax)
+
+for p in ax.patches:
     value = p.get_height()
-    _y = p.get_y() + p.get_height() + space
+    space = df_sorted["value"].max() * 0.02
     _x = p.get_x() + p.get_width() / 2
-    ax.text(_x, _y, f"{value:.2f}", ha="center", va="center",
+    _y = p.get_y() + value + space
+    ax.text(_x, _y, f"{value:,.0f}", ha="center", va="bottom",
             weight="semibold", size=12, color="dimgrey")
 
 sns.despine(left=True, bottom=True)
 ax.grid(alpha=0.7, linewidth=1, axis="y")
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_xlabel("")
-ax.set_ylabel("")
-ax.set_title(r"$\bf{(a)}$" + " Chart Title", loc="left", fontsize=14, pad=7)
+ax.set_ylabel("Y-Axis Label", fontsize=13, labelpad=10, color="dimgrey")
+ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 ```
 
-**Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`.
+**Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For decimal values, use `f"{value:.2f}"` instead of `f"{value:,.0f}"`.
 
 ---
 

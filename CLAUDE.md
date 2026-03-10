@@ -113,6 +113,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `24-dimgrey-tick-labels-p6-p7-p8` | Added `labelcolor="dimgrey"` to tick_params in P6, P7 (both subplots), P8 |
 | `25-dimgrey-tick-labels-p9-pad-consistency` | Completed `labelcolor="dimgrey"` rollout to P9; normalized P2 title pad to 7 |
 | `26-full-suite-coverage` | P6/P7/P8 pattern rewrites for clean-room testability; all 9 prompts verified |
+| `27-p2-variation-analysis` | Parallel clean-room comparison (3x3 runs) to find and fix P2 under-specification |
 
 ## Style Rules
 
