@@ -115,6 +115,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `26-full-suite-coverage` | P6/P7/P8 pattern rewrites for clean-room testability; all 9 prompts verified |
 | `27-p2-variation-analysis` | Parallel clean-room comparison (3x3 runs) to find and fix P2 under-specification |
 | `28-p3-variation-analysis` | P3 rewrite from ML-prediction specialist to general time series; 3-round convergence |
+| `29-p7-variation-analysis` | P7 correlation heatmap: rocket to RdBu_r diverging palette; 2-round convergence |
 | `29-dataset-variety` | Added 20 public datasets; per-pattern prompt pools with random selection in clean-room testing |
 
 ## Style Rules

@@ -48,7 +48,13 @@ palette="Blues_d"
 ```python
 palette="rocket"
 ```
-**Use for:** Vertical bar charts showing correlations or ranked scores.
+**Use for:** Vertical bar charts showing ranked scores. Not for correlation heatmaps (use `RdBu_r` instead).
+
+### RdBu_r
+```python
+cmap="RdBu_r"
+```
+**Use for:** Correlation heatmaps. Diverging palette — positive correlations show red/warm, negative show blue/cool. Always pair with `vmin=-1, vmax=1, center=0`.
 
 ### INFERNO
 ```python

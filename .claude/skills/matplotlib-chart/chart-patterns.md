@@ -299,7 +299,7 @@ sns.despine(left=True, bottom=True)
 ## 7. Heatmap / Spectrogram
 
 **When to use:** Correlation matrices, frequency-time plots, spectrograms, pcolormesh data.
-**Palette:** `rocket` for correlation heatmaps, `inferno` for spectrograms.
+**Palette:** `RdBu_r` for correlation heatmaps (diverging — positive/negative need distinct colors), `inferno` for spectrograms.
 
 ### Correlation Heatmap
 
@@ -308,16 +308,31 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
 
-corr = df.select_dtypes("number").corr()
+# Select only meaningful numeric columns — exclude IDs, years, indices
+num_cols = [c for c in df.select_dtypes("number").columns
+            if c.lower() not in ("year", "id", "index")]
+corr = df[num_cols].corr()
 
-sns.heatmap(corr, annot=True, fmt=".2f", cmap="rocket", ax=ax,
+sns.heatmap(corr, annot=True, fmt=".2f", cmap="RdBu_r", ax=ax,
+            vmin=-1, vmax=1, center=0,
             linewidths=0.5, linecolor="white", square=True,
-            cbar_kws={"shrink": 0.8})
+            cbar_kws={"shrink": 0.8},
+            annot_kws={"size": 11, "weight": "medium"})
 
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
 ax.set_title("Correlation Matrix", fontsize=14, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
+
+**Rules:**
+- Always use `cmap="RdBu_r"` with `vmin=-1, vmax=1, center=0` for correlation matrices — never use sequential palettes (rocket, inferno) for correlation data
+- Use `annot_kws={"size": 11, "weight": "medium"}` — do not set annotation `color`; let seaborn auto-contrast (dark text on light cells, white on dark cells)
+- Use `cbar_kws={"shrink": 0.8}` — do not add a colorbar label
+- Rotate x-tick labels 30° with `ha="right"` for readability
+- Filter out non-measurement columns (year, id, index) before computing `.corr()`
+- Show full matrix by default — do not mask the triangle unless the user requests it
+- Do not add `color="dimgrey"` to the title — only annotations and tick labels use dimgrey
 
 ### Spectrogram (pcolormesh)
 
