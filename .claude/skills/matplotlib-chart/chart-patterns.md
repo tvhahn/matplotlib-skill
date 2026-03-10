@@ -211,27 +211,44 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
 **Palette:** Colorblind diverging (`#d73027`, `#4575b4`, `#fc8d59`).
 
 ```python
+from sklearn.neighbors import KNeighborsClassifier
+from matplotlib.lines import Line2D
+
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 redish = "#d73027"
 blueish = "#4575b4"
 orangeish = "#fc8d59"
-colormap = np.array([redish, blueish, orangeish])
+colors = [redish, blueish, orangeish]
+class_names = ["Class 0", "Class 1", "Class 2"]
+
+# --- fit classifier ---
+clf = KNeighborsClassifier(n_neighbors=15)
+clf.fit(X, y)
+
+# --- mesh grid for decision surface ---
+h = 0.02  # step size
+x_min, x_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
+y_min, y_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
+xx0, xx1 = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+mesh_points = np.c_[xx0.ravel(), xx1.ravel()]
+yy_hat = clf.predict(mesh_points)
+yy_prob = clf.predict_proba(mesh_points).max(axis=1)
 
 fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
 
-# probability dots (mesh grid predictions)
-ax.scatter(xx[:, 0], xx[:, 1], c=colormap[yy_hat], alpha=0.4,
-           s=40 * yy_size**3, linewidths=0)
+# probability dots (sized by confidence)
+colormap = np.array(colors)
+ax.scatter(mesh_points[:, 0], mesh_points[:, 1], c=colormap[yy_hat],
+           alpha=0.3, s=40 * yy_prob**3, linewidths=0)
 
 # contour lines at decision boundaries
-ax.contour(x0_range, x1_range,
-           np.reshape(yy_hat, (xx0.shape[0], -1)),
-           levels=3, linewidths=1,
-           colors=[redish, blueish, blueish, orangeish])
+ax.contour(xx0, xx1, yy_hat.reshape(xx0.shape),
+           levels=len(class_names) - 1, linewidths=1,
+           colors=colors[:len(class_names)])
 
 # true data points
-ax.scatter(x[:, 0], x[:, 1], c=colormap[y], s=50,
+ax.scatter(X[:, 0], X[:, 1], c=colormap[y], s=50,
            zorder=3, linewidths=0.7, edgecolor="k")
 
 ax.set_ylabel(r"$x_1$")
@@ -241,25 +258,55 @@ ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
+# class legend
+class_handles = [Line2D([0], [0], marker="o", color="w", markerfacecolor=c,
+                        markersize=8, markeredgecolor="k", markeredgewidth=0.7,
+                        label=n) for c, n in zip(colors, class_names)]
 legend1 = ax.legend(handles=class_handles, loc="center",
                     bbox_to_anchor=(1.05, 0.35), frameon=True, facecolor="white",
-                    framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="class")
+                    framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="Class")
+
+# probability legend
+prob_sizes = [0.4, 0.7, 1.0]
+prob_labels = ["Low", "Med", "High"]
+prob_handles = [Line2D([0], [0], marker="o", color="w", markerfacecolor="grey",
+                       markersize=s * 10, label=l) for s, l in zip(prob_sizes, prob_labels)]
 ax.legend(handles=prob_handles, loc="center",
           bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
-          framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="prob")
+          framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="Prob")
 ax.add_artist(legend1)
 
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Build legend handles with `matplotlib.lines.Line2D`. Adjust `PROB_DOT_SCALE` and `PROB_DOT_SCALE_POWER` to control probability dot sizing.
+**Customize:** Swap `KNeighborsClassifier` for any sklearn classifier. Adjust `h` for mesh resolution. Use `clf.predict_proba` for probability-sized dots. For 2-class problems, remove `orangeish` from the palette.
 
 ---
 
 ## 7. Heatmap / Spectrogram
 
-**When to use:** Frequency-time plots, spectrograms, correlation matrices, pcolormesh data.
-**Palette:** `inferno` for spectrograms, `rocket` for correlation heatmaps.
+**When to use:** Correlation matrices, frequency-time plots, spectrograms, pcolormesh data.
+**Palette:** `rocket` for correlation heatmaps, `inferno` for spectrograms.
+
+### Correlation Heatmap
+
+```python
+sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
+
+fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
+
+corr = df.select_dtypes("number").corr()
+
+sns.heatmap(corr, annot=True, fmt=".2f", cmap="rocket", ax=ax,
+            linewidths=0.5, linecolor="white", square=True,
+            cbar_kws={"shrink": 0.8})
+
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
+ax.set_title("Correlation Matrix", fontsize=14, loc="left", pad=7)
+sns.despine(left=True, bottom=True)
+```
+
+### Spectrogram (pcolormesh)
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -285,7 +332,7 @@ ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12, pad=7)
 sns.despine(left=True, bottom=True, right=True)
 ```
 
-**Customize:** Adjust `vmax` to control color scaling. For spectrograms with dark backgrounds, use white text for panel labels. For correlation heatmaps, use `sns.heatmap()` with `cmap="rocket"`.
+**Customize:** For the heatmap, use `mask=np.triu(np.ones_like(corr, dtype=bool))` to show only the lower triangle. Adjust `vmax` on spectrograms to control color scaling. For spectrograms with dark backgrounds, use white text for panel labels.
 
 ---
 
@@ -315,7 +362,16 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.patch.set_edgecolor("lightgrey")
     ax.patch.set_linewidth(0.8)
 
-    # ... plot data on ax ...
+    # Example: line + scatter per panel (adapt to your data)
+    ax.plot(x_data, y_true, color="#4575b4", linewidth=1, label="True")
+    ax.scatter(x_data, y_pred, alpha=0.4, c="grey", s=2, edgecolors="none", label="Predicted")
+    ax.plot(x_data, y_rolling, color="#d73027", linewidth=1.5, label="Rolling Avg")
+
+    # metric annotation box
+    ax.text(0.97, 0.95, f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}",
+            transform=ax.transAxes, fontsize=8, color="dimgrey",
+            va="top", ha="right",
+            bbox={"facecolor": "gray", "alpha": 0.0, "pad": 4})
 
     ax.set_title(r"$\bf{(" + label + r")}$" + f" {title}", loc="left", fontsize=12, pad=7)
 
