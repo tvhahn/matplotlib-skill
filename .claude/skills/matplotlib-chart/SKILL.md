@@ -133,21 +133,57 @@ When user says "quick plot" or "exploratory":
 - Skip PDF output
 - Smaller figsize if appropriate
 
-# Phase 5 -- Run & Verify
+# Phase 5 -- Run & Verify (max 2 visual rounds)
 
-After generating the code:
+After generating the code, verify in three stages: code compliance, visual quality review, and (if needed) visual confirmation. Hard cap: **2 visual inspection rounds**. Do not iterate beyond that.
 
-1. **Run the script** with `uv run <script_name>.py` via Bash. Default is 150 DPI.
-2. **Read the generated PNG** using the Read tool (which supports image analysis) to visually inspect the output.
-3. **Verification checklist** -- confirm each item passes:
-   1. Count visible spines -- expected: 0
-   2. Check grid lines -- expected: none unless single-axis deliberately enabled
-   3. Read legend -- confirm white background with light grey border (`frameon=True`)
-   4. Check annotation text color -- should be grey, not black
-   5. For multi-panel: verify bold (a)/(b)/(c) labels present
-   6. Check for default matplotlib styling leaking through (default blue, visible spines)
-   7. Verify text is readable and not overlapping
-4. **If something looks wrong**, fix the code and re-run
-5. **Final render:** If user requested publication quality, set `dpi=300` and run one final time
-6. **Report to the user:** what was generated, the file paths, and any observations about the output
-7. **Ask if refinements are needed** (colors, sizing, annotations, layout adjustments)
+## Stage A — Code Compliance Scan (before running)
+
+Review the generated code and confirm these boilerplate items are present. Fix any omissions before running.
+
+1. `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")`
+2. `sns.despine(left=True, bottom=True)`
+3. `dpi=150` (or `dpi=300` only if user explicitly requested publication quality)
+4. Legend kwargs (if a legend is present): `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"`
+5. `color="dimgrey"` on annotation text
+6. `labelcolor="dimgrey"` on `tick_params`
+
+These are more reliably verified in code than in a rendered image. Fix anything missing, then run.
+
+## Stage B — Visual Quality Review (Round 1)
+
+**Run the script** with `uv run <script_name>.py`, then **read the generated PNG** using the Read tool.
+
+Follow the **enumerate-before-evaluate** protocol — list what you see before making judgments:
+
+1. **Enumerate visible elements:** List the title text, axis labels, legend entries, annotations, and data encodings (bars, lines, points, etc.) you observe. Note anything expected but absent.
+2. **Semantic fidelity:** Does the chart show what the user asked for? Does the title match the content? Are the correct columns/variables plotted?
+3. **Data integrity:** Are axis ranges appropriate? Any truncated elements? Bar charts starting at zero? For ML evaluation charts, are reference lines (diagonal, baseline) present?
+4. **Design Principles check** — verify the 6 principles that are assessable from a rendered image:
+   - P1 (Show the data): Are actual data values visible, or hidden behind aggregation?
+   - P3 (Position over color): Is the primary comparison encoded in position?
+   - P6 (Annotate the insight): Is there at least one annotation that states a finding beyond axis labels?
+   - P7 (Encode meaning twice): Are data series distinguishable by more than color alone?
+   - P8 (Panel consistency): For multi-panel charts, are scales and styles consistent across panels?
+   - P9 (No arithmetic): Can the reader extract values directly without mental subtraction?
+5. **Layout and readability:** Text overlap or truncation? Excessive whitespace or cramped elements? Annotations positioned near the data they describe?
+6. **Chart-type rules:** If the chart matches a pattern in `chart-patterns.md` that has a **Rules** section, verify the rendered output satisfies those rules.
+7. **Name one improvement** you would make, even if minor. If nothing comes to mind, re-examine annotation placement, whitespace usage, and color distinguishability.
+
+If any issue in items 2–6 requires a code change, fix the code and re-run → proceed to Stage C.
+
+## Stage C — Visual Confirmation (Round 2, only if Stage B required changes)
+
+Read the updated PNG. Confirm:
+
+1. All Stage B issues are resolved
+2. No new issues were introduced by the fixes
+3. Aesthetic elements remain consistent with `style-reference.md`
+
+**If issues remain after Stage C:** do NOT iterate further. Report the remaining issues to the user and ask whether to regenerate from scratch or accept as-is.
+
+## Final — Report & Handoff
+
+1. **Publication render:** If user requested publication quality, set `dpi=300` and run one final time
+2. **Report to the user:** what was generated, the file paths, and any observations about the output (including Stage B item 7 — the one improvement you identified)
+3. **Ask if refinements are needed** (colors, sizing, annotations, layout adjustments)
