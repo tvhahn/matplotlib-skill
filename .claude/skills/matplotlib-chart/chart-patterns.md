@@ -111,7 +111,7 @@ ax.set_xlabel("Time")
 ax.set_ylabel("Value")
 ax.legend(loc="lower right", fontsize=10, frameon=True, facecolor="white",
          framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey")
-ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", pad=7)
+ax.set_title(r"$\bf{(a)}$" + " Prediction Results", loc="left", fontsize=12, pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
@@ -317,7 +317,7 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
 
     # ... plot data on ax ...
 
-    ax.set_title(r"$\bf{(" + label + r")}$" + f" {title}", loc="left", pad=7)
+    ax.set_title(r"$\bf{(" + label + r")}$" + f" {title}", loc="left", fontsize=12, pad=7)
 
     if i == 0:
         ax.set_xlabel("X Label")
