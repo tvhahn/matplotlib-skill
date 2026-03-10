@@ -118,6 +118,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `29-p7-variation-analysis` | P7 correlation heatmap: rocket to RdBu_r diverging palette; 2-round convergence |
 | `29-dataset-variety` | Added 20 public datasets; per-pattern prompt pools with random selection in clean-room testing |
 | `30-p5-variation-analysis` | P5 lollipop: concrete sizes replacing `"x-large"`, legend loc fix, 10-item Rules section; 3-round convergence |
+| `31-p6-variation-analysis` | P6 vertical bar: palette slice order, annotation format (no unit suffix), x-axis label rules; 2-round convergence |
 
 ## Style Rules
 

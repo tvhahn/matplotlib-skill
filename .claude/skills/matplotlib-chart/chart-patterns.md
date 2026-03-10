@@ -72,7 +72,13 @@ ax.set_ylabel("Y-Axis Label", fontsize=13, labelpad=10, color="dimgrey")
 ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 ```
 
-**Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For decimal values, use `f"{value:.2f}"` instead of `f"{value:,.0f}"`.
+**Rules:**
+- Palette slice order is left-to-right: for 3 bars use `["#d73027", "#fc8d59", "#fee090"]`, for 4 use all four. Do not rearrange, skip, or substitute colors.
+- Annotation format is just the number: `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals. Do not append unit suffixes (e.g., " MWh", " K") — units belong in the y-axis label.
+- `set_xlabel("")` — do not add an x-axis label; category names on the x-axis are self-explanatory
+- Do not manually adjust `set_ylim` — let matplotlib auto-scale; `bbox_inches="tight"` handles clipping
+
+**Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For ≥5 bars, switch palette to `"rocket"`.
 
 ---
 
