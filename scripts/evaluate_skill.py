@@ -228,6 +228,7 @@ def check_renders(figures_dir: Path) -> list[dict]:
         ("03", "time_series"),
         ("04", "violin_strip"),
         ("05", "lollipop"),
+        ("06", "decision_boundary"),
         ("07", "heatmap"),
         ("08", "multi_panel"),
         ("09", "pr_roc"),

@@ -14,8 +14,8 @@
 # Use --full-archive to keep data/ in the archive (~15 MB extra per prompt).
 #
 # Usage:
-#   scripts/chart-test-container.sh                    # run all 5 test prompts
-#   scripts/chart-test-container.sh --quick             # run 3 prompts (bar, violin, lollipop)
+#   scripts/chart-test-container.sh                    # run all 9 test prompts
+#   scripts/chart-test-container.sh --quick             # run 5 prompts (bar, violin, vertical bar, heatmap, lollipop)
 #   scripts/chart-test-container.sh --full-archive      # keep data/ in workspace archives
 #   scripts/chart-test-container.sh "horizontal bar chart of collision rates by state from data/raw/public/car_crashes.csv"
 #
@@ -77,12 +77,18 @@ DEFAULT_PROMPTS=(
     "time series of global temperature anomalies from data/raw/public/global_temp.csv — plot annual averages with a rolling mean"
     "PR and ROC curves for breast cancer classification using data/raw/public/breast_cancer.csv — use the target column"
     "lollipop chart comparing health spending per capita across countries from data/raw/public/healthexp.csv — show min/avg/max range"
+    "vertical bar chart of net electricity generation by source from data/raw/public/iowa_electricity.csv — compare the latest year"
+    "correlation heatmap of penguin measurements from data/raw/public/penguins.csv — annotate cells with values"
+    "3x2 grid of life expectancy trends for 6 countries from data/raw/public/gapminder.csv — one subplot per country"
+    "decision boundary plot for iris species classification using petal length vs petal width from data/raw/public/iris.csv"
 )
 
-# --quick: run 3 of 5 prompts (horizontal bar, violin, lollipop)
+# --quick: run 5 of 9 prompts (horizontal bar, violin, vertical bar, heatmap, lollipop)
 QUICK_PROMPTS=(
     "${DEFAULT_PROMPTS[0]}"
     "${DEFAULT_PROMPTS[1]}"
+    "${DEFAULT_PROMPTS[5]}"
+    "${DEFAULT_PROMPTS[6]}"
     "${DEFAULT_PROMPTS[4]}"
 )
 
