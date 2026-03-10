@@ -469,7 +469,7 @@ sns.despine(left=True, bottom=True)
 6. Share y-axis limits across all panels: compute global min/max BEFORE the loop, then call `ax.set_ylim(y_global_min, y_global_max)` in every panel.
 7. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these labels.
 8. Suptitle: `fontsize=14`, centered above the grid — do not add `color="dimgrey"` to suptitle (keep default black for the main title).
-9. `gs.update(wspace=0.3, hspace=0.5)` — use these exact values.
+9. `gs.update(wspace=0.3, hspace=0.5)` — these are starting defaults. Adjust during Phase 5 visual review if gaps between panels or between suptitle and panels look excessive.
 10. Figsize by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Do not invent other sizes.
 11. Do NOT use `ax.annotate()` with arrows, "Peak:" labels, or `axvline`/`axhline` reference lines. Only `ax.text()` for first/last annotations.
 12. Do NOT add per-event/per-category color schemes (e.g., blue for "cue", red for "stim"). All panels use `pal[5]`.

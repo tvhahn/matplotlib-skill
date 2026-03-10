@@ -166,7 +166,7 @@ Follow the **enumerate-before-evaluate** protocol — list what you see before m
    - P7 (Encode meaning twice): Are data series distinguishable by more than color alone?
    - P8 (Panel consistency): For multi-panel charts, are scales and styles consistent across panels?
    - P9 (No arithmetic): Can the reader extract values directly without mental subtraction?
-5. **Layout and readability:** Text overlap or truncation? Excessive whitespace or cramped elements? Annotations positioned near the data they describe?
+5. **Layout and readability:** Text overlap or truncation? Excessive whitespace or cramped elements? Annotations positioned near the data they describe? For multi-panel grids: are gaps between subplots and between suptitle and panels proportional to the content? Reduce `wspace`/`hspace` or `tight_layout(pad=...)` if spacing looks excessive.
 6. **Chart-type rules:** If the chart matches a pattern in `chart-patterns.md` that has a **Rules** section, verify the rendered output satisfies those rules.
 7. **Name one improvement** you would make, even if minor. If nothing comes to mind, re-examine annotation placement, whitespace usage, and color distinguishability.
 
