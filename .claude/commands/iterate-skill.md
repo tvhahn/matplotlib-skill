@@ -64,6 +64,10 @@ Select **1-2 areas** for improvement. If a focus area was provided in arguments,
 4. Code quality issues (deprecated API calls, unclear variable names)
 5. Visual polish and refinements
 
+If a pattern shows high visual divergence across recent runs or inconsistent
+verdicts, consider running `/variation-analysis PN` for targeted convergence
+instead of ad-hoc fixes.
+
 Do NOT:
 - Delete existing patterns
 - Change `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")` — this is immutable
