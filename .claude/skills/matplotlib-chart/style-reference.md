@@ -137,7 +137,7 @@ the axes background patch, not the spine objects.
 | Time series (3x3 grid) | (14, 12) | Large square |
 | Spectrogram (1x2) | (11, 4) | Wide, short |
 | PR/ROC curves (1x2) | (12, 6) | Wide, moderate height |
-| Lollipop chart | (10, 8) | Moderate |
+| Lollipop chart | (10, 6) | Moderate |
 | Decision boundary | (8, 6) | Moderate with aspect=1 |
 | Simple single panel | (10, 6) | General default |
 

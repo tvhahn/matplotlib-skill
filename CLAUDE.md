@@ -117,6 +117,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `28-p3-variation-analysis` | P3 rewrite from ML-prediction specialist to general time series; 3-round convergence |
 | `29-p7-variation-analysis` | P7 correlation heatmap: rocket to RdBu_r diverging palette; 2-round convergence |
 | `29-dataset-variety` | Added 20 public datasets; per-pattern prompt pools with random selection in clean-room testing |
+| `30-p5-variation-analysis` | P5 lollipop: concrete sizes replacing `"x-large"`, legend loc fix, 10-item Rules section; 3-round convergence |
 
 ## Style Rules
 
@@ -166,7 +167,18 @@ Use `/iterate-skill` to run a single evaluation-improvement-documentation cycle.
 3. Applies changes, verifies via `scripts/chart-test-container.sh --quick` (Docker clean room)
 4. Creates a gallery entry from clean-room results and atomic commit
 
-Guardrails: max 3 iterations without human feedback, no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
+Use `/variation-analysis PN` to run targeted convergence analysis on a single pattern. The command:
+
+1. Runs 3 parallel clean rooms with the same prompt (Round 1: tags A, B, C)
+2. Compares generated code across ~10 dimensions to find divergence
+3. Fixes under-specified dimensions in `chart-patterns.md`
+4. Validates fixes with 3 more parallel runs (Round 2: D, E, F)
+5. Confirms convergence with 3 final runs (Round 3: G, H, I)
+6. Creates a gallery entry with 9 PNGs + convergence tables
+
+Use `/iterate-skill` when the question is "what should I improve?" and `/variation-analysis` when the question is "why does this pattern diverge?"
+
+Guardrails: max 3 iterations/rounds without human feedback, no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
 
 ## Plan Verification — MANDATORY
 
