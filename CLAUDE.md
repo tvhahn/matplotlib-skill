@@ -120,6 +120,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `30-p5-variation-analysis` | P5 lollipop: concrete sizes replacing `"x-large"`, legend loc fix, 10-item Rules section; 3-round convergence |
 | `31-p6-variation-analysis` | P6 vertical bar: palette slice order, annotation format (no unit suffix), x-axis label rules; 2-round convergence |
 | `32-p8-variation-analysis` | P8 multi-panel: rewrite from RUL prediction to line+scatter trend template; single color, shared y-axis, 8 rules; 2-round convergence |
+| `33-p9-variation-analysis` | P9 decision boundary: DIVERGING_COLORBLIND mandate, prob dots not contourf, two outside legends, 7 rules; 2-round convergence |
 
 ## Style Rules
 

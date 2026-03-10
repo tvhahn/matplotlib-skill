@@ -313,7 +313,16 @@ ax.add_artist(legend1)
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Swap `KNeighborsClassifier` for any sklearn classifier. Adjust `h` for mesh resolution. Use `clf.predict_proba` for probability-sized dots. For 2-class problems, remove `orangeish` from the palette.
+**Rules:**
+- Colors must be DIVERGING_COLORBLIND: `["#d73027", "#4575b4", "#fc8d59"]` — do not substitute Tableau, seaborn, or custom color palettes
+- Background must use probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — do not use `contourf` filled regions
+- Classifier: `KNeighborsClassifier(n_neighbors=15)` unless the user specifies a different classifier or k value
+- Two separate legends positioned outside the plot with `bbox_to_anchor=(1.05, ...)`: class legend (lower) and confidence legend (upper). Use `ax.add_artist(legend1)` to keep both visible.
+- `set_aspect(1)` for square-ish proportions — do not use `set_aspect("auto")`
+- Title: `fontsize=14`, `loc="left"`, `pad=7` — single line, no multiline titles
+- Contour lines: solid (default), not dashed
+
+**Customize:** Swap `KNeighborsClassifier` for any sklearn classifier. Adjust `h` for mesh resolution. For 2-class problems, remove `orangeish` from the palette.
 
 ---
 
