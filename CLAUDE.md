@@ -170,18 +170,22 @@ Use `/iterate-skill` to run a single evaluation-improvement-documentation cycle.
 3. Applies changes, verifies via `scripts/chart-test-container.sh --quick` (Docker clean room)
 4. Creates a gallery entry from clean-room results and atomic commit
 
-Use `/variation-analysis PN` to run targeted convergence analysis on a single pattern. The command:
+Use `/variation-analysis PN` to run targeted convergence analysis on a single pattern with **dataset variety**. Each parallel run uses a different prompt from the pool, so convergence is tested across both structural dimensions and different datasets. Configurable rounds (`--rounds N`, default 3, max 5). The command:
 
-1. Runs 3 parallel clean rooms with the same prompt (Round 1: tags A, B, C)
-2. Compares generated code across ~10 dimensions to find divergence
-3. Fixes under-specified dimensions in `chart-patterns.md`
-4. Validates fixes with 3 more parallel runs (Round 2: D, E, F)
-5. Confirms convergence with 3 final runs (Round 3: G, H, I)
-6. Creates a gallery entry with 9 PNGs + convergence tables
+1. Selects 3 different prompts from the pattern's pool per round
+2. Runs 3 parallel clean rooms with different datasets (Round 1: tags A, B, C)
+3. Compares generated code across structural dimensions (excludes data-handling, which naturally differs)
+4. Fixes under-specified dimensions in `chart-patterns.md`
+5. Validates with subsequent rounds until convergence or round limit
+6. Creates a gallery entry with PNGs + convergence tables + "Prompts Used" mapping
 
-Use `/iterate-skill` when the question is "what should I improve?" and `/variation-analysis` when the question is "why does this pattern diverge?"
+Use `/variation-analysis-single PN` for the original single-dataset behavior — all parallel runs use the same prompt. Useful when iterating on a specific dataset (e.g., `--prompt "lollipop chart of happiness score..."`).
 
-Guardrails: max 3 iterations/rounds without human feedback, no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
+Use `/variation-analysis-all [P1,P3,P5] [--rounds N]` to run variation analysis across multiple patterns. Each pattern is handled by a dedicated Agent subagent in its own context window, solving the context accumulation problem. Each subagent runs the full workflow (rounds, fixes, gallery entry, commit) and returns a one-line summary. Use this for batch analysis across all 9 patterns.
+
+Use `/iterate-skill` when the question is "what should I improve?", `/variation-analysis` when the question is "why does this pattern diverge?", and `/variation-analysis-all` to sweep all patterns autonomously.
+
+Guardrails: max rounds configurable per pattern (default 3, max 5), no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
 
 ## Plan Verification — MANDATORY
 
