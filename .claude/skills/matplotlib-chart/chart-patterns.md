@@ -270,15 +270,17 @@ ax[0].pcolormesh(time_axis, freq_axis, data, cmap="inferno",
                  vmax=vmax_val, shading="auto")
 ax[0].set_ylabel("Frequency (Hz)")
 ax[0].set_xlabel("Runtime (days)")
+ax[0].grid(False)
 ax[0].tick_params(axis="both", which="both", length=0)
-ax[0].set_title(r"$\bf{(a)}$" + " Spectrogram", loc="left", fontsize=12)
+ax[0].set_title(r"$\bf{(a)}$" + " Spectrogram", loc="left", fontsize=12, pad=7)
 
 ax[1].pcolormesh(time_axis, bins, binned_data, cmap="inferno",
                  vmax=vmax_val2, shading="auto")
 ax[1].set_xlabel("Runtime (days)")
 ax[1].set_ylabel("Frequency Bin")
+ax[1].grid(False)
 ax[1].tick_params(axis="both", which="both", length=0)
-ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12)
+ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12, pad=7)
 
 sns.despine(left=True, bottom=True, right=True)
 ```
@@ -358,7 +360,7 @@ axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
 
 axes[0].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
                labelcolor="dimgrey")
-axes[0].set_title(r"$\bf{(a)}$" + " Precision-Recall Curve", loc="left", fontsize=12)
+axes[0].set_title(r"$\bf{(a)}$" + " Precision-Recall Curve", loc="left", fontsize=12, pad=7)
 axes[0].set_xlabel("Recall")
 axes[0].set_ylabel("Precision")
 
@@ -375,7 +377,7 @@ axes[1].plot([0, 1], [0, 1], linestyle="--",
 
 axes[1].legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
                labelcolor="dimgrey")
-axes[1].set_title(r"$\bf{(b)}$" + " ROC Curve", loc="left", fontsize=12)
+axes[1].set_title(r"$\bf{(b)}$" + " ROC Curve", loc="left", fontsize=12, pad=7)
 axes[1].set_xlabel("False Positive Rate")
 axes[1].set_ylabel("True Positive Rate")
 
