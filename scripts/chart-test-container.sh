@@ -89,6 +89,7 @@ mkdir -p "$RESULTS_DIR"
 # --- Per-pattern prompt pools ---
 # Each pool's index 0 is the original default prompt (used with --fixed).
 # Additional entries exercise different datasets for variety across runs.
+# Pool numbering matches chart-patterns.md pattern numbering.
 
 # P1: Horizontal bar chart
 P1_POOL=(
@@ -102,8 +103,30 @@ P1_POOL=(
     "horizontal bar chart of GDP per capita for top 15 countries from data/raw/public/country_stats.csv"
 )
 
-# P2: Violin plot
+# P2: Vertical bar chart
 P2_POOL=(
+    "vertical bar chart of net electricity generation by source from data/raw/public/iowa_electricity.csv — compare the latest year"
+    "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv"
+    "vertical bar chart of average carat by clarity grade from data/raw/public/diamonds.csv"
+    "vertical bar chart of passenger count by embarkation town from data/raw/public/titanic.csv"
+    "vertical bar chart of deaths in latest decade by disaster type from data/raw/public/disasters.csv"
+    "vertical bar chart of average fare by pickup borough from data/raw/public/taxis.csv"
+    "vertical bar chart of correlation values by loss function from data/raw/weibull/femto_correlation_results.csv"
+)
+
+# P3: Time series (pre-computed: year, value, rolling)
+P3_POOL=(
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/global_temp.csv — columns are year, value, rolling"
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/flights.csv — columns are year, value, rolling"
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/birth_percentage.csv — columns are year, value, rolling"
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/dowjones.csv — columns are year, value, rolling"
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/co2_concentration.csv — columns are year, value, rolling"
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/stocks.csv — columns are year, value, rolling"
+    "time series bar chart with rolling mean from data/raw/precomputed/p3/planets.csv — columns are year, value, rolling"
+)
+
+# P4: Violin + Strip plot
+P4_POOL=(
     "violin plot of penguin body mass by species from data/raw/public/penguins.csv"
     "violin plot of mpg distribution by number of cylinders from data/raw/public/mpg.csv"
     "violin plot of diamond price distribution by cut quality from data/raw/public/diamonds.csv"
@@ -115,60 +138,38 @@ P2_POOL=(
     "violin plot of temperature distribution by weather type from data/raw/public/seattle_weather.csv — use temp_max column"
 )
 
-# P3: Time series
-P3_POOL=(
-    "time series of global temperature anomalies from data/raw/public/global_temp.csv — plot annual averages with a rolling mean"
-    "time series of monthly airline passengers from data/raw/public/flights.csv — show rolling 12-month mean"
-    "time series of birth percentage trends from data/raw/beautiful-plots/birth_percentage.csv — add rolling mean"
-    "time series of Dow Jones closing price from data/raw/public/dowjones.csv — add rolling average"
-    "time series of atmospheric CO2 concentration from data/raw/public/co2_concentration.csv — show trend line"
-    "time series of stock price over time for one symbol from data/raw/public/stocks.csv — pick AAPL"
-    "time series of exoplanet discoveries per year from data/raw/public/planets.csv — show cumulative count"
-)
-
-# P4: PR/ROC curves
-P4_POOL=(
-    "PR and ROC curves for breast cancer classification using data/raw/public/breast_cancer.csv — use the target column"
-    "PR and ROC curves for penguin species classification (Adelie vs others) using bill dimensions from data/raw/public/penguins.csv"
-    "PR and ROC curves for Titanic survival prediction using pclass, age, fare from data/raw/public/titanic.csv"
-    "PR and ROC curves classifying eruption kind from duration and waiting time in data/raw/public/geyser.csv"
-    "PR and ROC curves for wine cultivar classification (class 0 vs others) from data/raw/public/wine.csv"
-)
-
-# P5: Lollipop/dumbbell chart
+# P5: Lollipop/dumbbell chart (pre-computed: name, min, max, avg)
 P5_POOL=(
-    "lollipop chart comparing health spending per capita across countries from data/raw/public/healthexp.csv — show min/avg/max range"
-    "lollipop chart of mpg range by origin from data/raw/public/mpg.csv — show min/avg/max"
-    "lollipop chart of diamond price range by color grade from data/raw/public/diamonds.csv"
-    "lollipop chart comparing classifier AUC from data/raw/beautiful-plots/best_results.csv — show min/avg/max range"
-    "lollipop chart of happiness score range by region from data/raw/public/world_happiness.csv"
-    "lollipop chart of life expectancy range by continent from data/raw/public/country_stats.csv"
-    "lollipop chart of model score range across NLP tasks from data/raw/public/glue.csv"
+    "lollipop chart of health spending range by country from data/raw/precomputed/p5/healthexp.csv — columns are name, min, max, avg"
+    "lollipop chart of mpg range by origin from data/raw/precomputed/p5/mpg.csv — columns are name, min, max, avg"
+    "lollipop chart of diamond price range by color grade from data/raw/precomputed/p5/diamonds.csv — columns are name, min, max, avg"
+    "lollipop chart of classifier AUC range from data/raw/precomputed/p5/best_results.csv — columns are name, min, max, avg"
+    "lollipop chart of happiness score range by region from data/raw/precomputed/p5/world_happiness.csv — columns are name, min, max, avg"
+    "lollipop chart of life expectancy range by continent from data/raw/precomputed/p5/country_stats.csv — columns are name, min, max, avg"
+    "lollipop chart of model score range across NLP tasks from data/raw/precomputed/p5/glue.csv — columns are name, min, max, avg"
 )
 
-# P6: Vertical bar chart
+# P6: Decision boundary (pre-computed NPZ with mesh grid + predictions)
 P6_POOL=(
-    "vertical bar chart of net electricity generation by source from data/raw/public/iowa_electricity.csv — compare the latest year"
-    "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv"
-    "vertical bar chart of average carat by clarity grade from data/raw/public/diamonds.csv"
-    "vertical bar chart of passenger count by embarkation town from data/raw/public/titanic.csv"
-    "vertical bar chart of deaths in latest decade by disaster type from data/raw/public/disasters.csv"
-    "vertical bar chart of average fare by pickup borough from data/raw/public/taxis.csv"
-    "vertical bar chart of correlation values by loss function from data/raw/weibull/femto_correlation_results.csv"
+    "decision boundary plot from data/raw/precomputed/p6/iris.npz — load with np.load, arrays: mesh_x0, mesh_x1, yy_hat, yy_prob, X, y, class_names"
+    "decision boundary plot from data/raw/precomputed/p6/wine.npz — load with np.load, arrays: mesh_x0, mesh_x1, yy_hat, yy_prob, X, y, class_names"
+    "decision boundary plot from data/raw/precomputed/p6/breast_cancer.npz — load with np.load, arrays: mesh_x0, mesh_x1, yy_hat, yy_prob, X, y, class_names"
+    "decision boundary plot from data/raw/precomputed/p6/geyser.npz — load with np.load, arrays: mesh_x0, mesh_x1, yy_hat, yy_prob, X, y, class_names"
+    "decision boundary plot from data/raw/precomputed/p6/penguins.npz — load with np.load, arrays: mesh_x0, mesh_x1, yy_hat, yy_prob, X, y, class_names"
 )
 
-# P7: Heatmap
+# P7: Heatmap (pre-computed correlation matrix / pivot table CSV)
 P7_POOL=(
-    "correlation heatmap of penguin measurements from data/raw/public/penguins.csv — annotate cells with values"
-    "correlation heatmap of mpg, displacement, horsepower, weight, acceleration from data/raw/public/mpg.csv — annotate cells"
-    "correlation heatmap of carat, depth, table, price, x, y, z from data/raw/public/diamonds.csv — annotate cells"
-    "correlation heatmap of 13 chemical features from data/raw/public/wine.csv — annotate cells"
-    "heatmap of birth percentage by year and month from data/raw/beautiful-plots/birth_percentage.csv"
-    "correlation heatmap of total_bill, tip, and size from data/raw/public/tips.csv — annotate cells"
-    "heatmap of airline passengers by month and year from data/raw/public/flights.csv"
-    "correlation heatmap of 10 clinical features from data/raw/public/diabetes.csv — annotate cells"
-    "correlation heatmap of 11 performance metrics from data/raw/public/mtcars.csv — annotate cells"
-    "correlation heatmap of distance, fare, tip, tolls, total from data/raw/public/taxis.csv — annotate cells"
+    "correlation heatmap from data/raw/precomputed/p7/penguins.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "correlation heatmap from data/raw/precomputed/p7/mpg.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "correlation heatmap from data/raw/precomputed/p7/diamonds.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "correlation heatmap from data/raw/precomputed/p7/wine.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "heatmap from data/raw/precomputed/p7/birth_percentage.csv — pre-computed pivot table, load with pd.read_csv(index_col=0)"
+    "correlation heatmap from data/raw/precomputed/p7/tips.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "heatmap from data/raw/precomputed/p7/flights.csv — pre-computed pivot table, load with pd.read_csv(index_col=0)"
+    "correlation heatmap from data/raw/precomputed/p7/diabetes.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "correlation heatmap from data/raw/precomputed/p7/mtcars.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+    "correlation heatmap from data/raw/precomputed/p7/taxis.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
 )
 
 # P8: Multi-panel
@@ -182,13 +183,13 @@ P8_POOL=(
     "3x2 grid of happiness score by factor from data/raw/public/world_happiness.csv — one subplot per region (pick 6)"
 )
 
-# P9: Decision boundary
+# P9: PR/ROC curves (pre-computed NPZ with fold curves + averages)
 P9_POOL=(
-    "decision boundary plot for iris species classification using petal length vs petal width from data/raw/public/iris.csv"
-    "decision boundary plot for wine cultivar classification using alcohol vs malic_acid from data/raw/public/wine.csv"
-    "decision boundary plot for breast cancer classification using mean radius vs mean texture from data/raw/public/breast_cancer.csv"
-    "decision boundary plot classifying eruption kind using duration vs waiting from data/raw/public/geyser.csv"
-    "decision boundary plot for penguin species using bill_length_mm vs bill_depth_mm from data/raw/public/penguins.csv"
+    "PR and ROC curves from data/raw/precomputed/p9/breast_cancer.npz — load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline"
+    "PR and ROC curves from data/raw/precomputed/p9/penguins.npz — load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline"
+    "PR and ROC curves from data/raw/precomputed/p9/titanic.npz — load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline"
+    "PR and ROC curves from data/raw/precomputed/p9/geyser.npz — load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline"
+    "PR and ROC curves from data/raw/precomputed/p9/wine.npz — load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline"
 )
 
 # --- Prompt selection ---
@@ -202,7 +203,7 @@ pick_prompt() {
 }
 
 ALL_POOLS=(P1_POOL P2_POOL P3_POOL P4_POOL P5_POOL P6_POOL P7_POOL P8_POOL P9_POOL)
-# --quick: P1, P2, P5, P6, P7
+# --quick: P1, P2, P5, P6, P7 (indices into ALL_POOLS)
 QUICK_INDICES=(0 1 4 5 6)
 
 # Select prompts
