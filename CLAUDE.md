@@ -197,7 +197,7 @@ Use `/autoresearch <tag>` to run an autonomous skill improvement loop inspired b
 
 **How it works:**
 1. Creates branch `autoresearch/<tag>` (or resumes if it exists)
-2. Computes baseline composite scores for all 9 patterns (compliance × convergence × visual)
+2. Computes baseline composite scores for all 9 patterns (compliance × convergence × visual × refinement)
 3. Picks the lowest-scoring pattern and proposes a small, specific change
 4. Evaluates via 3 parallel clean rooms + static analysis + visual rubric
 5. Keeps improvements (branch advances), reverts regressions (`git reset --hard HEAD~1`)
@@ -208,10 +208,11 @@ Use `/autoresearch <tag>` to run an autonomous skill improvement loop inspired b
 - `results.tsv` — append-only experiment log (gitignored), enables resume across sessions
 - `.claude/commands/autoresearch.md` — the command itself
 
-**Composite scoring:** Each pattern gets three layer scores:
+**Composite scoring:** Each pattern gets four layer scores:
 - **Compliance** (0/1): `evaluate_skill.py --json --pattern N`
 - **Convergence** (0–1): 3 parallel clean rooms → structural dimension comparison
-- **Visual** (0–1): 5-check binary rubric × 3 PNGs
+- **Visual** (0–1): 10-check graded rubric (0/1/2 per check) × 3 PNGs, with red-flag caps
+- **Refinement** (0–1): 5 binary code-quality checks across the 3 generated scripts
 
 **Circuit breakers:** 10 consecutive discards → next pattern; Docker failure → halt; all above threshold → patrol mode; 50+ experiments → warn about context window
 

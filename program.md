@@ -24,9 +24,10 @@ Last updated: 2026-03-14.
 
 ## Success Criteria
 
-- **Minimum composite threshold:** 0.85 (compliance × convergence × visual)
-- **Target:** all 9 patterns above 0.85; stretch goal 0.95
+- **Minimum composite threshold:** 0.60 (compliance × convergence × visual × refinement)
+- **Target:** all 9 patterns above 0.60; stretch goal 0.80
 - **Compliance must be 1.0** — fix compliance failures before optimizing other layers
+- **Note:** Threshold lowered from 0.85 to 0.60 to account for the harder 4-layer scoring (graded visual rubric + refinement layer). A "good" pattern typically scores ~0.45–0.55 under the new system.
 
 ## Exploration Strategies
 
