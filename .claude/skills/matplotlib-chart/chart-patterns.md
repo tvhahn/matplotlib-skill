@@ -326,15 +326,17 @@ sns.despine(left=True, bottom=True)
 ```
 
 **Rules:**
-- Colors must be DIVERGING_COLORBLIND: `["#d73027", "#4575b4", "#fc8d59"]` — do not substitute Tableau, seaborn, or custom color palettes
-- Background must use probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — do not use `contourf` filled regions
-- Classifier: `KNeighborsClassifier(n_neighbors=15)` unless the user specifies a different classifier or k value
-- Two separate legends positioned outside the plot with `bbox_to_anchor=(1.05, ...)`: class legend (lower) and confidence legend (upper). Use `ax.add_artist(legend1)` to keep both visible.
-- `set_aspect(1)` for square-ish proportions — do not use `set_aspect("auto")`
-- Title: `fontsize=14`, `loc="left"`, `pad=7` — single line, no multiline titles
-- Contour lines: solid (default), not dashed
+1. Colors must be DIVERGING_COLORBLIND: `["#d73027", "#4575b4", "#fc8d59"]` — do not substitute Tableau, seaborn, or custom color palettes. For 2-class problems, use `["#d73027", "#4575b4"]` (drop orangeish only).
+2. Background must use probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — do not use `contourf` or `pcolormesh` filled regions. This applies to ALL cases including binary classification.
+3. Classifier: `KNeighborsClassifier(n_neighbors=15)` unless the user specifies a different classifier or k value. Always use `predict_proba()` for confidence sizing.
+4. Two separate legends positioned outside the plot with `bbox_to_anchor=(1.05, ...)`: class legend at `(1.05, 0.35)` and confidence legend at `(1.05, 0.65)`. Use `ax.add_artist(legend1)` to keep both visible. This dual-legend layout is mandatory even for 2-class problems.
+5. `figsize=(8, 6)` — do not change to (9, 6) or other sizes.
+6. `set_aspect(1)` for square-ish proportions — do not use `set_aspect("auto")`.
+7. Title: `fontsize=14`, `loc="left"`, `pad=7` — single line, no multiline titles. Do not use fontsize=13.
+8. Contour lines: solid (default), not dashed.
+9. Axis labels: use `r"$x_0$"` and `r"$x_1$"` or descriptive feature names — not both.
 
-**Customize:** Swap `KNeighborsClassifier` for any sklearn classifier. Adjust `h` for mesh resolution. For 2-class problems, remove `orangeish` from the palette.
+**Customize:** Swap `KNeighborsClassifier` for any sklearn classifier. Adjust `h` for mesh resolution.
 
 ---
 
