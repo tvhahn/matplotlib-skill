@@ -146,6 +146,17 @@ ax.grid(False)
 sns.despine(left=True, bottom=True)
 ```
 
+**Rules:**
+1. Always use `ax.bar()` as the primary data layer — never use `ax.plot()`, `ax.scatter()`, or `fill_between` for the main data. Bars are the pattern's signature.
+2. Color bars relative to a reference value (mean of the series): `"#d73027"` for values ≥ reference, `"#4575b4"` for values < reference. Even if all values are positive (e.g., passenger counts), compute the series mean and color above/below it.
+3. Rolling mean line must use `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)` — never hardcode a color like `"navy"` or `"black"`.
+4. `figsize=(12, 6)` — do not change to (10, 6) or other sizes.
+5. Exactly 3 legend items using custom handles: `Patch(facecolor="#d73027", alpha=0.55)`, `Patch(facecolor="#4575b4", alpha=0.55)`, `Line2D([0], [0], color=pal[5], linewidth=2.5)`. Do not use `ax.plot(..., label=...)` — build handles explicitly.
+6. Legend: `loc="upper left"`, `fontsize=10`, standard frame styling. Do not move to other positions.
+7. `ax.axhline(y=reference, ...)` baseline — use `color="lightgrey", linewidth=0.8, zorder=1`. For anomaly data the reference is 0; for other data use the series mean.
+8. Bar styling: `alpha=0.55`, `width=0.9`, `zorder=2` — do not vary these.
+9. Do not add `ax.annotate()` arrows or data point labels unless the user explicitly requests them.
+
 **Customize:** Adjust rolling window size (default 10). For predicted-vs-actual, replace bars with `ax.plot()` for true values (`#4575b4`, linewidth=1) and `ax.scatter()` for predictions (grey, alpha=0.4, s=2), compute rolling on predictions via `pd.rolling()`, and add RMSE/R² annotation box. Use `ax.annotate()` with `arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8)` for notable data points.
 
 ---
