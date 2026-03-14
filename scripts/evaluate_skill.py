@@ -287,6 +287,10 @@ def main():
         default=FIGURES_DIR,
         help="Directory containing rendered PNGs",
     )
+    parser.add_argument(
+        "--pattern", type=str, default=None,
+        help="Only check a specific pattern number (e.g., '1' for P1)"
+    )
     args = parser.parse_args()
 
     if not CHART_PATTERNS.exists():
@@ -295,6 +299,12 @@ def main():
 
     content = CHART_PATTERNS.read_text()
     blocks = extract_pattern_blocks(content)
+
+    if args.pattern:
+        blocks = {k: v for k, v in blocks.items() if k == args.pattern}
+        if not blocks:
+            print(f"ERROR: Pattern {args.pattern} not found")
+            sys.exit(1)
 
     if not blocks:
         print("ERROR: No pattern blocks found in chart-patterns.md")

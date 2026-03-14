@@ -191,6 +191,37 @@ Use `/iterate-skill` when the question is "what should I improve?", `/variation-
 
 Guardrails: max rounds configurable per pattern (default 3, max 5), no pattern deletions, style invariants (`sns.set_theme` and `sns.despine`) are immutable.
 
+## Autoresearch
+
+Use `/autoresearch <tag>` to run an autonomous skill improvement loop inspired by Karpathy's autoresearch. The command runs indefinitely (until interrupted or all patterns exceed the threshold), modifying `chart-patterns.md`, evaluating via a composite metric, keeping improvements, and reverting regressions.
+
+**How it works:**
+1. Creates branch `autoresearch/<tag>` (or resumes if it exists)
+2. Computes baseline composite scores for all 9 patterns (compliance × convergence × visual)
+3. Picks the lowest-scoring pattern and proposes a small, specific change
+4. Evaluates via 3 parallel clean rooms + static analysis + visual rubric
+5. Keeps improvements (branch advances), reverts regressions (`git reset --hard HEAD~1`)
+6. Loops back to step 3
+
+**Key files:**
+- `program.md` — human-authored research priorities, read each iteration
+- `results.tsv` — append-only experiment log (gitignored), enables resume across sessions
+- `.claude/commands/autoresearch.md` — the command itself
+
+**Composite scoring:** Each pattern gets three layer scores:
+- **Compliance** (0/1): `evaluate_skill.py --json --pattern N`
+- **Convergence** (0–1): 3 parallel clean rooms → structural dimension comparison
+- **Visual** (0–1): 5-check binary rubric × 3 PNGs
+
+**Circuit breakers:** 10 consecutive discards → next pattern; Docker failure → halt; all above threshold → patrol mode; 50+ experiments → warn about context window
+
+**Reviewing results:** `git log autoresearch/<tag>` shows kept improvements. `results.tsv` has the full experiment history including discards.
+
+**Relationship to other commands:**
+- `/iterate-skill` — human-triggered single cycle with gallery entries
+- `/variation-analysis` — targeted convergence analysis on one pattern
+- `/autoresearch` — fully autonomous loop, no gallery entries, git history IS the documentation
+
 ## Plan Verification — MANDATORY
 
 **When implementing a plan that includes a "Verification" section, you MUST execute every verification step before considering the work complete.** This is non-negotiable. Do not skip verification because the code "looks right" or because you "just wrote it." Run the commands, check the output, and confirm each expected result. If a verification step fails, fix the issue and re-verify. Unverified work is unfinished work.

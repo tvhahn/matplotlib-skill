@@ -91,3 +91,4 @@ scratch/
 docker-compose.override.yml
 output/*
 !output/README.md
+results.tsv
