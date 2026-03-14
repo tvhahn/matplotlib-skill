@@ -56,7 +56,6 @@ sns.despine(left=True, bottom=True)
 **When to use:** Comparisons across categories, ranked values, model scores.
 **Palette:** `"rocket"` for ≥5 bars (sequential ranking). For ≤4 categorical bars, slice `DIVERGING_COLORBLIND`: `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Do not invent semantic colors — always use these exact hex values.
 **Bar order:** Sort by value descending so the tallest bar is on the left.
-**Data:** Always read from the CSV — never hardcode values from the file.
 **API:** Always use `sns.barplot` — never use `ax.bar` directly.
 
 ```python
@@ -98,7 +97,6 @@ ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 
 **When to use:** Time series visualization with annual/periodic aggregation and smoothing trend line. Also suitable for predicted vs actual (see Customize).
 **Palette:** `#4575b4` (blue) for negative/below-average values, `#d73027` (red) for positive/above-average values. Rolling line: cubehelix `pal[5]`.
-**Data:** Expects a CSV with columns: `year`, `value`, `rolling` (pre-computed annual aggregation + rolling mean). Load with `pd.read_csv()` — do not compute groupby/rolling.
 **Figsize:** `(12, 6)` for single-panel time series.
 **API:** Always use `ax.bar()` for the main data — never use `ax.scatter()`, `fill_between`, colorbars, or line-only variants for the primary layer.
 **Annotations:** Do not add data point annotations unless the user explicitly requests them.
@@ -201,7 +199,6 @@ sns.despine(left=True, bottom=True)
 
 **When to use:** Showing min/max/avg ranges, model comparison across k-folds.
 **Palette:** Cubehelix for dots, grey for connecting lines, dimgrey for text.
-**Data:** Expects a CSV with columns: `name`, `min`, `max`, `avg` (sorted by avg ascending). Load with `pd.read_csv()` — do not compute groupby/agg.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -265,7 +262,6 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
 
 **When to use:** Classification visualization, probability maps, cluster visualization.
 **Palette:** Colorblind diverging (`#d73027`, `#4575b4`, `#fc8d59`).
-**Data:** Expects a pre-computed NPZ file with arrays: `mesh_x0`, `mesh_x1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names`. Load with `np.load(allow_pickle=True)` — do not import sklearn or fit models.
 
 ```python
 from matplotlib.lines import Line2D
@@ -277,12 +273,6 @@ blueish = "#4575b4"
 orangeish = "#fc8d59"
 colors = [redish, blueish, orangeish]
 
-# --- load pre-computed decision boundary data ---
-data = np.load("path/to/decision_boundary.npz", allow_pickle=True)
-xx0, xx1 = data["mesh_x0"], data["mesh_x1"]
-yy_hat, yy_prob = data["yy_hat"], data["yy_prob"]
-X, y = data["X"], data["y"]
-class_names = data["class_names"].tolist()
 mesh_points = np.c_[xx0.ravel(), xx1.ravel()]
 
 fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
@@ -332,7 +322,7 @@ sns.despine(left=True, bottom=True)
 **Rules:**
 1. Colors must be DIVERGING_COLORBLIND: `["#d73027", "#4575b4", "#fc8d59"]` — do not substitute Tableau, seaborn, or custom color palettes. For 2-class problems, use `["#d73027", "#4575b4"]` (drop orangeish only).
 2. Background must use probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — do not use `contourf` or `pcolormesh` filled regions. This applies to ALL cases including binary classification.
-3. Data comes pre-computed in NPZ files. Do not import sklearn or fit classifiers — load the NPZ and plot directly.
+3. Do not import sklearn or fit classifiers — assume `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.
 4. Two separate legends positioned outside the plot with `bbox_to_anchor=(1.05, ...)`: class legend at `(1.05, 0.35)` and confidence legend at `(1.05, 0.65)`. Use `ax.add_artist(legend1)` to keep both visible. This dual-legend layout is mandatory even for 2-class problems.
 5. `figsize=(8, 6)` — do not change to (9, 6) or other sizes.
 6. `set_aspect(1)` for square-ish proportions — do not use `set_aspect("auto")`.
@@ -340,7 +330,7 @@ sns.despine(left=True, bottom=True)
 8. Contour lines: solid (default), not dashed.
 9. Axis labels: use `r"$x_0$"` and `r"$x_1$"` or descriptive feature names — not both.
 
-**Customize:** Swap the NPZ file path to use a different pre-computed dataset. The NPZ must contain arrays: `mesh_x0`, `mesh_x1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names`.
+**Customize:** Assumes `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.
 
 ---
 
@@ -349,17 +339,12 @@ sns.despine(left=True, bottom=True)
 **When to use:** Correlation matrices, frequency-time plots, spectrograms, pcolormesh data.
 **Palette:** `RdBu_r` for correlation heatmaps (diverging — positive/negative need distinct colors), `inferno` for spectrograms.
 
-**Data:** Expects a pre-computed correlation matrix CSV (with column names as index) or pivot table CSV. Load with `pd.read_csv(path, index_col=0)` — do not compute `.corr()`.
-
 ### Correlation Heatmap
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
 fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
-
-# Load pre-computed correlation matrix
-corr = pd.read_csv("path/to/correlation_matrix.csv", index_col=0)
 
 sns.heatmap(corr, annot=True, fmt=".2f", cmap="RdBu_r", ax=ax,
             vmin=-1, vmax=1, center=0,
@@ -378,7 +363,7 @@ sns.despine(left=True, bottom=True)
 - Use `annot_kws={"size": 11, "weight": "medium"}` — do not set annotation `color`; let seaborn auto-contrast (dark text on light cells, white on dark cells)
 - Use `cbar_kws={"shrink": 0.8}` — do not add a colorbar label
 - Rotate x-tick labels 30° with `ha="right"` for readability
-- Load pre-computed correlation matrix CSV with `pd.read_csv(path, index_col=0)` — do not compute `.corr()` on raw data
+- Assume `corr` (a DataFrame) is already in memory — do not compute `.corr()` on raw data
 - Show full matrix by default — do not mask the triangle unless the user requests it
 - Do not add `color="dimgrey"` to the title — only annotations and tick labels use dimgrey
 
@@ -488,30 +473,16 @@ sns.despine(left=True, bottom=True)
 
 **When to use:** Classification model evaluation, cross-validation performance.
 **Palette:** Cubehelix `pal[5]` for average, grey for k-folds, orange dashed for baseline.
-**Data:** Expects a pre-computed NPZ file with arrays: `precision_array`, `recall_array`, `tpr_array`, `fpr_array`, `precision_avg`, `recall_avg`, `tpr_avg`, `fpr_avg`, `baseline`. Load with `np.load()` — do not import sklearn or run cross-validation.
 **Panel order:** (a) Precision-Recall first, (b) ROC second. Do not swap.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
-
-# Load pre-computed PR/ROC curve data
-data = np.load("path/to/pr_roc_curves.npz")
-precision_array = data["precision_array"]
-recall_array = data["recall_array"]
-tpr_array = data["tpr_array"]
-fpr_array = data["fpr_array"]
-precision_avg = data["precision_avg"]
-recall_avg = data["recall_avg"]
-tpr_avg = data["tpr_avg"]
-fpr_avg = data["fpr_avg"]
-baseline = data["baseline"][0]
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 6), dpi=150)
 fig.tight_layout(pad=5.0)
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
-# axes[0] = PR curve panel (always first), axes[1] = ROC curve panel (always second)
 for i, (p, r) in enumerate(zip(precision_array, recall_array)):
     label = "k-fold models" if i == len(precision_array) - 1 else None
     axes[0].plot(r, p, color="grey", alpha=0.5, linewidth=1, label=label)
@@ -555,7 +526,7 @@ sns.despine(left=True, bottom=True)
 ```
 
 **Rules:**
-- Load pre-computed NPZ file — do not import sklearn or run cross-validation. Each fold is a grey line; the average is `pal[5]`.
+- Do not import sklearn or run cross-validation — assume `precision_array`, `recall_array`, `tpr_array`, `fpr_array`, `precision_avg`, `recall_avg`, `tpr_avg`, `fpr_avg`, `baseline` are already in memory. Each fold is a grey line; the average is `pal[5]`.
 - Panel order is fixed: **(a) PR first**, **(b) ROC second**. Do not swap.
 - Three line layers per panel: (1) grey k-fold lines (`color="grey", alpha=0.5, linewidth=1`), (2) average line (`pal[5], linewidth=2`), (3) baseline (`"orange", linestyle="--", linewidth=2, zorder=0`). Use exactly `alpha=0.5` for fold lines — not 0.3 or 0.4.
 - Average line color is always `pal[5]` on both panels — do not use `pal[4]` or any other index.
@@ -570,4 +541,4 @@ sns.despine(left=True, bottom=True)
 - Average line label must start with `"Average"` — e.g., `f"Average (AP = {ap:.3f})"`. Do not use the model/classifier name as the label.
 - Baseline: always use `ax.plot([0, 1], [baseline, baseline], ...)` for PR and `ax.plot([0, 1], [0, 1], ...)` for ROC. Do not use `axhline`.
 - Do not add explicit axis limits (`set_xlim`, `set_ylim`) — let matplotlib auto-scale.
-**Customize:** Add AUC/AP values in legend labels. Swap the NPZ file path to use a different pre-computed dataset. The NPZ must contain arrays: `precision_array`, `recall_array`, `tpr_array`, `fpr_array`, `precision_avg`, `recall_avg`, `tpr_avg`, `fpr_avg`, `baseline`. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
+**Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
