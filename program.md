@@ -39,6 +39,7 @@ When improving a pattern, try these approaches in order:
 5. **Layout constraints** — pin figsize, wspace, hspace as *defaults* with guidance on when to scale
 6. **Annotation templates** — provide exact f-string format for data labels
 7. **Rule softening** — change "do not change X" to "default X; adapt if data requires". Use when a rigid rule causes convergence on test data but would fail on novel data (e.g., fixed figsize that truncates labels on wider datasets).
+8. **Informativeness preservation** — never remove annotations, axis labels, or contextual elements solely to improve convergence. If runs disagree on whether to include a label, the fix is to mandate inclusion (not ban it). A chart that's consistently uninformative is worse than one that's inconsistently informative.
 
 ## When Stuck
 

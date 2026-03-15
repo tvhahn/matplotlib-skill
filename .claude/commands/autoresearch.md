@@ -108,7 +108,7 @@ Read the 3 generated `.py` files. Compare across two tiers of dimensions (exclud
 Score = `structural_matching / structural_total` (only structural dimensions count for convergence). Log adaptive dimension variation as informational — divergence here is expected and healthy.
 
 ### Layer 3 — Visual Quality
-Read the 3 PNGs. For each PNG, apply this 10-check **graded** rubric (0 / 1 / 2 per check):
+Read the 3 PNGs. For each PNG, apply this 12-check **graded** rubric (0 / 1 / 2 per check):
 
 | Check | 0 | 1 | 2 |
 |-------|---|---|---|
@@ -123,6 +123,9 @@ Read the 3 PNGs. For each PNG, apply this 10-check **graded** rubric (0 / 1 / 2 
 | 9. **Data-ink ratio** | Chartjunk (unnecessary borders, shadows, fills) | Mostly clean, one unnecessary element | Minimal non-data ink, every mark carries information |
 | 10. **Publication readiness** | Would need significant rework for a blog post | Minor issues (one font inconsistency, slightly off spacing) | Ready to publish without changes |
 | 11. **Data-appropriate adaptation** | Makes inappropriate data-driven choices (wrong scale, misleading) | Follows defaults blindly even when data warrants adaptation | Makes sensible data-driven choices (moved legend to avoid occlusion, scaled figsize for data volume) |
+| 12. **Informativeness** | Missing critical context (no axis label for numeric data, no units, key values unlabeled) | Partial context (axis label present but vague, or some values unlabeled) | Reader can fully interpret the chart without external context (units clear, key values labeled, axis labels descriptive) |
+
+**Note:** Check 12 evaluates against chart communication standards, NOT against the pattern spec. A pattern cannot opt out of informativeness by removing labels from its spec.
 
 **Red flag cap:** If ANY of these are present in a PNG, that PNG's raw score is **halved**:
 - Overlapping text (any text element obscured by another)
@@ -130,7 +133,7 @@ Read the 3 PNGs. For each PNG, apply this 10-check **graded** rubric (0 / 1 / 2 
 - Default matplotlib legend (no custom frame styling visible)
 - Visible axis spines (despine not applied or overridden)
 
-Score = `total_points / 66` (11 checks × 2 max × 3 PNGs). A "pretty good" chart typically scores 15–18/22 per PNG (visual ≈ 0.70–0.80), leaving meaningful headroom for improvement.
+Score = `total_points / 72` (12 checks × 2 max × 3 PNGs). A "pretty good" chart typically scores 16–20/24 per PNG (visual ≈ 0.70–0.80), leaving meaningful headroom for improvement.
 
 ### Layer 4 — Refinement (code quality)
 Read all 3 generated `.py` files and score 5 binary checks:
@@ -147,7 +150,7 @@ Score = `checks_passed / 5`.
 
 ### Composite Score
 ```
-composite = compliance × (0.4 × convergence + 0.3 × visual + 0.3 × refinement)
+composite = compliance × (0.25 × convergence + 0.45 × visual + 0.25 × refinement)
 ```
 
 ### Log Baseline
@@ -218,7 +221,7 @@ wait
 Read 3 `.py` files → compare 5 structural dimensions → `structural_matching / 5` (log adaptive dimension variation as informational)
 
 ### Layer 3 — Visual Quality
-Read 3 PNGs → apply 11-check graded rubric (0/1/2 per check) to each → `total_points / 66`
+Read 3 PNGs → apply 12-check graded rubric (0/1/2 per check) to each → `total_points / 72`
 Apply red flag caps if any PNG has overlapping text, clipped content, visible spines, or default legend.
 
 ### Layer 4 — Refinement
@@ -226,7 +229,7 @@ Read 3 `.py` files → score 5 binary code-quality checks → `passed / 5`
 
 ### Composite
 ```
-composite = compliance × (0.4 × convergence + 0.3 × visual + 0.3 × refinement)
+composite = compliance × (0.25 × convergence + 0.45 × visual + 0.25 × refinement)
 ```
 
 ---

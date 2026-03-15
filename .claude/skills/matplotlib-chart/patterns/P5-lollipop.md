@@ -34,11 +34,20 @@ for i in range(df.shape[0]):
             ha="center", va="bottom", size=10,
             color="dimgrey", weight="medium")
 
+# min/max value annotations (below each dot, smaller text)
+for i in range(df.shape[0]):
+    ax.text(x=df["min"].iloc[i], y=i - 0.15, s=f'{df["min"].iloc[i]:,.0f}',
+            ha="center", va="top", size=8.5,
+            color="dimgrey", weight="normal")
+    ax.text(x=df["max"].iloc[i], y=i - 0.15, s=f'{df["max"].iloc[i]:,.0f}',
+            ha="center", va="top", size=8.5,
+            color="dimgrey", weight="normal")
+
 ax.grid(False)
 sns.despine(left=True, bottom=True)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_ylabel("")
-ax.set_xlabel("")
+ax.set_xlabel("X-Axis Label", fontsize=12, labelpad=8, color="dimgrey")
 ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 
 ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
@@ -48,7 +57,7 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
 **Rules:**
 1. Palette: always define `pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)`, then `darkblue = pal[5]` and `lightblue = pal[2]`. Use `darkblue` for min/max dots and `lightblue` for avg dots. Do not substitute amber, orange, colormap-mapped values, or any other colors.
 2. Three separate `ax.scatter()` calls required: one for min dots (`color=darkblue`), one for max dots (`color=darkblue`), one for avg dots (`color=lightblue`). Do not combine min/max into one scatter, do not omit min/max dots, do not use a colormap.
-3. Only annotate avg values centered above each dot (`y=i + 0.15`, `ha="center"`, `va="bottom"`). Do NOT add `ax.text()` for min or max values — the dots alone communicate the range. Only add min/max labels if the user explicitly says "label min/max" or "annotate min and max".
+3. Annotate all three values per row: avg centered above (`y=i + 0.15`, `size=10`, `weight="medium"`), min and max centered below (`y=i - 0.15`, `size=8.5`, `weight="normal"`). All annotations `color="dimgrey"`. Omit min/max labels only if the user explicitly says "clean" or "minimal".
 4. `grid(False)` — no x-grid or y-grid.
 5. DOT_SIZE = 150 for all dots; do not change the dot size.
 6. Connecting lines: `lw=4`, `alpha=0.4`, `color="grey"`, `zorder=0` — only one `hlines` call (min to max range); do not add extra lollipop sticks from zero.
@@ -58,5 +67,6 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
 10. Format string adapts to data: use `f'{value:,.0f}'` for large numbers/currency, `f'{value:.2f}'` for decimals.
 11. Title: `fontsize=14`, `loc="left"`, `pad=7` — do not change these values.
 12. Do not add `axvline` baselines, subtitle text annotations, `fig.text()` overlays, or other decorative elements not shown in the pattern code.
+13. Always set a descriptive x-axis label: `ax.set_xlabel("Label", fontsize=12, labelpad=8, color="dimgrey")`. The label should describe the measurement (e.g., "Score", "AUC", "Spending (USD)"). Do not use `set_xlabel("")`.
 
 **Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
