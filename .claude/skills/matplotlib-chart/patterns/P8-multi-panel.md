@@ -16,6 +16,12 @@ fig = plt.figure(figsize=(14, 9), dpi=150)
 gs = gridspec.GridSpec(3, 2)
 axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(2)]
 gs.update(wspace=0.3, hspace=0.5)
+fig.suptitle("Main Title", fontsize=14, y=0.98)
+
+# Shared y-axis: compute global limits BEFORE the loop
+y_global_min = all_values.min()
+y_global_max = all_values.max()
+y_pad = (y_global_max - y_global_min) * 0.1
 
 labels = [chr(ord('a') + i) for i in range(6)]
 titles = ["Dataset 1", "Dataset 2", "Dataset 3", "Dataset 4", "Dataset 5", "Dataset 6"]
@@ -41,6 +47,7 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.text(x_last, y_last, f"{y_last:.1f}", fontsize=8,
             color="dimgrey", ha="left", va="center")
 
+    ax.set_ylim(y_global_min - y_pad, y_global_max + y_pad)
     ax.set_title(r"$\bf{(" + label + r")}$" + f"  {title}", loc="left", fontsize=11, pad=7)
 
     # Axis labels: left column gets y-label, bottom row gets x-label
@@ -65,5 +72,7 @@ sns.despine(left=True, bottom=True)
 10. Figsize by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Do not invent other sizes.
 11. Do NOT use `ax.annotate()` with arrows, "Peak:" labels, or `axvline`/`axhline` reference lines. Only `ax.text()` for first/last annotations.
 12. Do NOT add per-event/per-category color schemes (e.g., blue for "cue", red for "stim"). All panels use `pal[5]`.
+13. ALWAYS use `gridspec.GridSpec` — never `plt.subplots()` or `fig.add_subplot()`. This pattern requires GridSpec for all layouts.
+14. When N items don't fit a standard grid, round up: 3-4 items → 2x2, 5-6 items → 3x2, 7-9 items → 3x3. Leave extra panels empty (hide with `ax.set_visible(False)`).
 
 **Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
