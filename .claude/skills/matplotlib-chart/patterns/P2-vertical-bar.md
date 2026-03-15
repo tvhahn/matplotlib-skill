@@ -12,7 +12,11 @@ fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
 df_sorted = df.sort_values("value", ascending=False)
 
-sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette="rocket", legend=False, ax=ax)
+# Palette selection: DIVERGING_COLORBLIND for ≤4 bars, "rocket" for ≥5
+n_bars = df_sorted.shape[0]
+pal = ["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n_bars] if n_bars <= 4 else "rocket"
+
+sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette=pal, legend=False, ax=ax)
 
 for p in ax.patches:
     value = p.get_height()
@@ -43,5 +47,6 @@ ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 10. `figsize=(10, 6)` — default; widen to `(12, 6)` for >8 bars if labels would overlap.
 11. Always use `dpi=150` in both `plt.subplots(dpi=150)` and `plt.savefig(dpi=150)`. Never use dpi=300 unless the user explicitly requests publication quality.
 12. Always read data from the CSV file — never hardcode data values as inline DataFrames or dictionaries.
+13. Do not add `ax.annotate()` arrows, editorial insight text, or italic annotations. The bar-end value labels (Rule 4) are the only annotations. Add commentary only if the user explicitly requests it.
 
 **Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For ≥5 bars, switch palette to `"rocket"`.

@@ -135,6 +135,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `36-p4-variation-analysis` | P4 PR/ROC: added 4 rules (Average label prefix, no axhline, no axis limits, k-fold mandatory default), explicit alpha=0.5; 3-round convergence |
 | `37-p8-variation-analysis` | P8 multi-panel: 12 numbered rules (pal[5] mandate, no fill_between/SEM/area, exact wspace/hspace, 2x2 figsize, no per-event colors); 3-round convergence |
 | `38-autoresearch-overnight-v3` | Autoresearch loop: 13 experiments across all 9 patterns; average composite 0.82→0.96; key insight: Customize sections teaching HOW to diverge cause divergence |
+| `39-autoresearch-overnight-v4` | Autoresearch loop: 10 experiments across P1–P5/P8; average composite 0.90→0.93; key wins: dropna rules, code-level palette conditionals, edge-case clarifications |
 
 ## Style Rules
 
