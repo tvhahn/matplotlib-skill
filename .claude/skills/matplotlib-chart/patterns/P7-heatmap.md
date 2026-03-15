@@ -23,13 +23,18 @@ sns.despine(left=True, bottom=True)
 ```
 
 **Rules:**
-- Always use `cmap="RdBu_r"` with `vmin=-1, vmax=1, center=0` for correlation matrices — never use sequential palettes (rocket, inferno) for correlation data
-- Use `annot_kws={"size": 11, "weight": "medium"}` — do not set annotation `color`; let seaborn auto-contrast (dark text on light cells, white on dark cells)
-- Use `cbar_kws={"shrink": 0.8}` — do not add a colorbar label
-- Rotate x-tick labels 30° with `ha="right"` for readability
-- Assume `corr` (a DataFrame) is already in memory — do not compute `.corr()` on raw data
-- Show full matrix by default — do not mask the triangle unless the user requests it
-- Do not add `color="dimgrey"` to the title — only annotations and tick labels use dimgrey
+1. `cmap="RdBu_r"` with `vmin=-1, vmax=1, center=0` for correlation matrices. For non-correlation heatmaps (pivot tables), use `cmap="rocket"` without vmin/vmax/center.
+2. `annot=True, fmt=".2f"` — always annotate cells. Use `annot_kws={"size": 11, "weight": "medium"}`. Do not set annotation `color` — let seaborn auto-contrast.
+3. `linewidths=0.5, linecolor="white"` — always add white cell borders.
+4. `square=True` — always use square cells for correlation matrices.
+5. `cbar_kws={"shrink": 0.8}` — do not add a colorbar label.
+6. `figsize=(8, 6)` — do not change.
+7. `ax.set_title("Title", fontsize=14, loc="left", pad=7)` — do not add `color="dimgrey"` to the title.
+8. `ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")` — always rotate x-labels.
+9. `ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")` — remove tick marks.
+10. Data is pre-computed: load with `pd.read_csv(path, index_col=0)`. Do not compute `.corr()`.
+11. Show full matrix by default — do not mask the triangle unless the user requests it.
+12. `ax.grid(False)` is NOT needed for sns.heatmap — seaborn handles this. Do not add it.
 
 ### Spectrogram (pcolormesh)
 
