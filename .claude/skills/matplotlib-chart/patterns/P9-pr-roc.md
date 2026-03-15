@@ -16,7 +16,7 @@ for i, (p, r) in enumerate(zip(precision_array, recall_array)):
     label = "k-fold models" if i == len(precision_array) - 1 else None
     axes[0].plot(r, p, color="grey", alpha=0.5, linewidth=1, label=label)
 
-axes[0].plot(recall_avg, precision_avg, label="Average model",
+axes[0].plot(recall_avg, precision_avg, label="Average",
              color=pal[5], linewidth=2)
 
 axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
@@ -33,7 +33,7 @@ for i, (t, f) in enumerate(zip(tpr_array, fpr_array)):
     label = "k-fold models" if i == len(tpr_array) - 1 else None
     axes[1].plot(f, t, color="grey", alpha=0.5, linewidth=1, label=label)
 
-axes[1].plot(fpr_avg, tpr_avg, label="Average of k-folds",
+axes[1].plot(fpr_avg, tpr_avg, label="Average",
              color=pal[5], linewidth=2)
 
 axes[1].plot([0, 1], [0, 1], linestyle="--",
@@ -67,7 +67,7 @@ sns.despine(left=True, bottom=True)
 - Legend: `loc="upper right"` for PR panel, `loc="lower right"` for ROC panel, `fontsize=10`.
 - Axis labels: `fontsize=12, labelpad=8, color="dimgrey"` on all four axis labels (xlabel + ylabel on both panels).
 - `tight_layout(pad=5.0)` — do not change the pad value.
-- Average line label must start with `"Average"` — e.g., `f"Average (AP = {ap:.3f})"`. Do not use the model/classifier name as the label.
+- Legend labels are fixed: `"k-fold models"` for fold lines (only on last fold), `"Average"` for average (append metric in parens if available, e.g., `f"Average (AP = {ap:.3f})"`), `"No skill"` for baseline. Do not use classifier/model names as labels.
 - Baseline: always use `ax.plot([0, 1], [baseline, baseline], ...)` for PR and `ax.plot([0, 1], [0, 1], ...)` for ROC. Do not use `axhline`.
 - Do not add explicit axis limits (`set_xlim`, `set_ylim`) — let matplotlib auto-scale.
 **Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
