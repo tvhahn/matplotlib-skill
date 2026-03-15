@@ -41,5 +41,6 @@ sns.despine(left=True, bottom=True)
 - Do not add a separate `tick_params(axis="y", labelsize=...)` call — let `font_scale=1.0` control y-tick label size.
 - Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data (e.g., `data/raw/...`).
 - Always read data from the CSV file — never hardcode data as inline DataFrames or dictionaries.
+- After loading CSV data, apply `df.dropna()` or `df.dropna(subset=[...])` to remove rows with missing values in key columns before plotting. This prevents silent NaN-related plotting errors.
 
 **Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey).
