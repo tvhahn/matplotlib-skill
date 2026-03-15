@@ -46,15 +46,17 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
 ```
 
 **Rules:**
-- Only annotate avg values centered above each dot (`y=i + 0.15`, `ha="center"`, `va="bottom"`) — do not annotate min/max values unless the user explicitly requests it
-- `grid(False)` — no x-grid or y-grid
-- DOT_SIZE = 150 for all dots; do not change the dot size
-- Connecting lines: `lw=4`, `alpha=0.4`, `color="grey"`, `zorder=0` — only one `hlines` call (min to max range); do not add extra lollipop sticks from zero
-- Exactly 2 legend items: "Average" (lightblue) and "Min/Max" (darkblue) — do not add a Range line handle
-- Legend: `loc="lower right"`, `fontsize=11` — do not use `bbox_to_anchor` unless the chart is very dense
-- Annotation size: `size=10` — do not use string sizes like `"x-large"`
-- Format string adapts to data: use `f'{value:,.0f}'` for large numbers/currency, `f'{value:.2f}'` for decimals
-- Title: `fontsize=14`, `loc="left"`, `pad=7` — do not change these values
-- Do not add `axvline` baselines, subtitle text annotations, or other decorative elements not shown in the pattern code
+1. Palette: always define `pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)`, then `darkblue = pal[5]` and `lightblue = pal[2]`. Use `darkblue` for min/max dots and `lightblue` for avg dots. Do not substitute amber, orange, colormap-mapped values, or any other colors.
+2. Three separate `ax.scatter()` calls required: one for min dots (`color=darkblue`), one for max dots (`color=darkblue`), one for avg dots (`color=lightblue`). Do not combine min/max into one scatter, do not omit min/max dots, do not use a colormap.
+3. Only annotate avg values centered above each dot (`y=i + 0.15`, `ha="center"`, `va="bottom"`) — do not annotate min/max values unless the user explicitly requests it.
+4. `grid(False)` — no x-grid or y-grid.
+5. DOT_SIZE = 150 for all dots; do not change the dot size.
+6. Connecting lines: `lw=4`, `alpha=0.4`, `color="grey"`, `zorder=0` — only one `hlines` call (min to max range); do not add extra lollipop sticks from zero.
+7. Exactly 2 legend items: "Average" (`lightblue`) and "Min/Max" (`darkblue`) — do not add a Range line handle.
+8. Legend: `loc="lower right"`, `fontsize=11` — do not use `bbox_to_anchor` unless the chart is very dense.
+9. Annotation size: `size=10` — do not use string sizes like `"x-large"`.
+10. Format string adapts to data: use `f'{value:,.0f}'` for large numbers/currency, `f'{value:.2f}'` for decimals.
+11. Title: `fontsize=14`, `loc="left"`, `pad=7` — do not change these values.
+12. Do not add `axvline` baselines, subtitle text annotations, `fig.text()` overlays, or other decorative elements not shown in the pattern code.
 
 **Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin. For min/max value labels, add `ax.text()` calls at `y=i - 0.15` with `va="top"`, `size=8.5`.
