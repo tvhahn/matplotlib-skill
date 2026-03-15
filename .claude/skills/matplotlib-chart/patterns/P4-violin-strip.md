@@ -31,4 +31,14 @@ ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left", pad
 sns.despine(left=True, bottom=True)
 ```
 
-**Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths. For vertical orientation, swap x/y and set `orient="v"`. Keep `color="white"` on violins — the white-fill-with-black-dots aesthetic is distinctive; only use colored fills when the user explicitly requests it.
+**Rules:**
+1. Always use horizontal orientation (`orient="h"`, `x="value_col"`, `y="category_col"`). Never use vertical orientation unless the user explicitly says "vertical".
+2. `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is mandatory. Never use colored fills, per-category palettes, or hue-based coloring.
+3. `ax.grid(axis="x", alpha=0.7, linewidth=1)` — exact params. Always `axis="x"` for horizontal.
+4. Do NOT add median markers, colored overlays, box plots, legends, or `ax.annotate()` arrows unless the user explicitly requests them. The strip dots ARE the data visualization.
+5. Title: `fontsize=12, loc="left", pad=7` with bold-prefix `r"$\bf{(a)}$"`. Do not use fontsize=14.
+6. `figsize=(12, 5)` default. Use `dpi=150`. Scale height only for 8+ categories.
+7. Violin params are fixed: `density_norm="width", inner=None, linewidth=2, saturation=1, cut=0, width=0.8, zorder=0`.
+8. Strip params: `size=6, jitter=0.2, linewidth=0.5, marker="o", edgecolor=None, alpha=0.1, zorder=4`.
+
+**Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
