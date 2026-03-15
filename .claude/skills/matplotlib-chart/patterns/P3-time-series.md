@@ -52,13 +52,13 @@ sns.despine(left=True, bottom=True)
 1. Always use `ax.bar()` as the primary data layer — never use `ax.plot()`, `ax.scatter()`, or `fill_between` for the main data. Bars are the pattern's signature.
 2. Color bars relative to a reference value (mean of the series): `"#d73027"` for values ≥ reference, `"#4575b4"` for values < reference. Even if all values are positive (e.g., passenger counts), compute the series mean and color above/below it.
 3. Rolling mean line must use `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)` — never hardcode a color like `"navy"` or `"black"`.
-4. `figsize=(12, 6)` — do not change to (10, 6) or other sizes.
-5. Exactly 3 legend items using custom handles: `Patch(facecolor="#d73027", alpha=0.55)`, `Patch(facecolor="#4575b4", alpha=0.55)`, `Line2D([0], [0], color=pal[5], linewidth=2.5)`. Do not use `ax.plot(..., label=...)` — build handles explicitly. Labels: `"Above average"`, `"Below average"`, `"Rolling mean"`.
-6. Legend: `loc="upper left"`, `fontsize=10`, standard frame styling. Do not move to other positions.
-7. Reference value: always compute `reference = df["value"].mean()`. Use for bar coloring (Rule 2) and baseline: `ax.axhline(y=reference, color="lightgrey", linewidth=0.8, zorder=1)`. No special cases — always use the mean.
+4. `figsize=(12, 6)` — default for single-panel time series.
+5. Exactly 3 legend items using custom handles: `Patch(facecolor="#d73027", alpha=0.55)`, `Patch(facecolor="#4575b4", alpha=0.55)`, `Line2D([0], [0], color=pal[5], linewidth=2.5)`. Do not use `ax.plot(..., label=...)` — build handles explicitly. Default labels: `"Above average"`, `"Below average"`, `"Rolling mean"` — adapt labels to the data domain if context requires (e.g., "Above baseline" for anomaly data).
+6. Legend: prefer `loc="upper left"`, `fontsize=10`, standard frame styling. Move to another corner if upper-left occludes data.
+7. Reference value: default to `reference = df["value"].mean()`. Use for bar coloring (Rule 2) and baseline: `ax.axhline(y=reference, color="lightgrey", linewidth=0.8, zorder=1)`. Use 0 for anomaly/deviation data; use median for heavily skewed distributions.
 8. Bar styling: `alpha=0.55`, `width=0.9`, `zorder=2` — do not vary these.
 9. Do not add `ax.annotate()` arrows or data point labels unless the user explicitly requests them.
 10. When the data provides a pre-computed `rolling` column, use it directly — do not recompute rolling with `pd.Series.rolling()`.
-11. Title: `fontsize=14`, `loc="left"`, `pad=7` — do not change these values.
+11. Title: `fontsize=14`, `loc="left"`, `pad=7` — defaults; keep `loc="left"`.
 
 **Customize:** Adjust rolling window size (default 10). For predicted-vs-actual, replace bars with `ax.plot()` for true values (`#4575b4`, linewidth=1) and `ax.scatter()` for predictions (grey, alpha=0.4, s=2), compute rolling on predictions via `pd.rolling()`, and add RMSE/R² annotation box. Use `ax.annotate()` with `arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8)` for notable data points.

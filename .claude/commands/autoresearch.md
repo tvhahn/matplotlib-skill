@@ -89,19 +89,23 @@ scripts/chart-test-container.sh --tag P${N}-base-C "<prompt_C>" &
 wait
 ```
 
-Read the 3 generated `.py` files. Compare across 10 structural dimensions (excluding data-handling):
-1. API calls (seaborn/matplotlib functions)
-2. Palette/cmap choice
-3. Figsize and aspect ratio
-4. Annotation styling (format, color, size, weight)
-5. Legend/colorbar configuration
-6. Title format (fontsize, loc, pad)
-7. Tick styling (tick_params arguments)
-8. Grid configuration
-9. DPI and save conventions
-10. Pattern-specific (masking, line styles, etc.)
+Read the 3 generated `.py` files. Compare across two tiers of dimensions (excluding data-handling):
 
-Score = `dimensions_matching / dimensions_total`
+**Structural dimensions (must match — define the pattern's identity):**
+1. API calls (seaborn/matplotlib functions used)
+2. Palette/cmap family (e.g., "rocket", "RdBu_r", cubehelix)
+3. DPI and save conventions (PDF+PNG, dpi=150, bbox_inches)
+4. Grid on/off and despine configuration
+5. Core pattern structure (e.g., bars+rolling line for P3, k-fold+average for P9)
+
+**Adaptive dimensions (may vary based on data — healthy flexibility):**
+6. Figsize scaling (may increase for more data points/categories)
+7. Legend position (may move to avoid occlusion)
+8. Annotation format (decimal places may adapt to value range)
+9. Exact parameter values (fontsize, labelpad, alpha within ±2 of spec)
+10. Pattern-specific adaptations (rotation, axis limits, label text)
+
+Score = `structural_matching / structural_total` (only structural dimensions count for convergence). Log adaptive dimension variation as informational — divergence here is expected and healthy.
 
 ### Layer 3 — Visual Quality
 Read the 3 PNGs. For each PNG, apply this 10-check **graded** rubric (0 / 1 / 2 per check):
@@ -118,6 +122,7 @@ Read the 3 PNGs. For each PNG, apply this 10-check **graded** rubric (0 / 1 / 2 
 | 8. **Grid/spine cleanliness** | Visible spines or wrong grid config | Despined but grid alpha/axis wrong | Clean: despined, grid per pattern spec, no extra noise |
 | 9. **Data-ink ratio** | Chartjunk (unnecessary borders, shadows, fills) | Mostly clean, one unnecessary element | Minimal non-data ink, every mark carries information |
 | 10. **Publication readiness** | Would need significant rework for a blog post | Minor issues (one font inconsistency, slightly off spacing) | Ready to publish without changes |
+| 11. **Data-appropriate adaptation** | Makes inappropriate data-driven choices (wrong scale, misleading) | Follows defaults blindly even when data warrants adaptation | Makes sensible data-driven choices (moved legend to avoid occlusion, scaled figsize for data volume) |
 
 **Red flag cap:** If ANY of these are present in a PNG, that PNG's raw score is **halved**:
 - Overlapping text (any text element obscured by another)
@@ -125,7 +130,7 @@ Read the 3 PNGs. For each PNG, apply this 10-check **graded** rubric (0 / 1 / 2 
 - Default matplotlib legend (no custom frame styling visible)
 - Visible axis spines (despine not applied or overridden)
 
-Score = `total_points / 60` (10 checks × 2 max × 3 PNGs). A "pretty good" chart typically scores 14–16/20 per PNG (visual ≈ 0.70–0.80), leaving meaningful headroom for improvement.
+Score = `total_points / 66` (11 checks × 2 max × 3 PNGs). A "pretty good" chart typically scores 15–18/22 per PNG (visual ≈ 0.70–0.80), leaving meaningful headroom for improvement.
 
 ### Layer 4 — Refinement (code quality)
 Read all 3 generated `.py` files and score 5 binary checks:
@@ -142,7 +147,7 @@ Score = `checks_passed / 5`.
 
 ### Composite Score
 ```
-composite = compliance × convergence × visual × refinement
+composite = compliance × (0.4 × convergence + 0.3 × visual + 0.3 × refinement)
 ```
 
 ### Log Baseline
@@ -173,12 +178,13 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 3. Read this pattern's experiment history from `results.tsv` (filter to matching pattern rows).
 4. Identify the weakest layer and focus there:
    - `compliance < 1.0` → fix compliance first (highest leverage)
-   - `convergence` is lowest → tighten rules, pin parameters
+   - `convergence` is lowest → tighten rules on **structural** dimensions only
    - `visual` is lowest → adjust layout, sizing, annotations
    - `refinement` is lowest → add defensive coding guidance, save convention rules
 5. Propose a **specific, small change** — one dimension at a time.
    - Concrete: exact parameter values, explicit code, "do/don't" rules.
    - Avoid vague guidance — it doesn't reduce divergence.
+   - **Before adding a new rule**, check whether the divergence is **harmful** (wrong visual output, broken API) or **adaptive** (reasonable data-driven variation like legend repositioning). Only add rules to prevent harmful divergence. If 2 of 3 runs make the same choice and the result looks correct, the pattern is already well-specified — do not add a rule to force the third run to match.
 
 ---
 
@@ -209,10 +215,10 @@ scripts/chart-test-container.sh --tag exp${EXP}-C "<prompt_3>" &
 wait
 ```
 
-Read 3 `.py` files → compare 10 structural dimensions → `dims_matching / dims_total`
+Read 3 `.py` files → compare 5 structural dimensions → `structural_matching / 5` (log adaptive dimension variation as informational)
 
 ### Layer 3 — Visual Quality
-Read 3 PNGs → apply 10-check graded rubric (0/1/2 per check) to each → `total_points / 60`
+Read 3 PNGs → apply 11-check graded rubric (0/1/2 per check) to each → `total_points / 66`
 Apply red flag caps if any PNG has overlapping text, clipped content, visible spines, or default legend.
 
 ### Layer 4 — Refinement
@@ -220,7 +226,7 @@ Read 3 `.py` files → score 5 binary code-quality checks → `passed / 5`
 
 ### Composite
 ```
-composite = compliance × convergence × visual × refinement
+composite = compliance × (0.4 × convergence + 0.3 × visual + 0.3 × refinement)
 ```
 
 ---

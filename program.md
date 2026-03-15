@@ -32,12 +32,13 @@ Last updated: 2026-03-14.
 ## Exploration Strategies
 
 When improving a pattern, try these approaches in order:
-1. **Rule tightening** — add explicit "do/don't" rules to reduce ambiguity
+1. **Rule tightening** — add explicit "do/don't" rules to reduce ambiguity on *structural* dimensions (API, palette family, despine). Avoid tightening *adaptive* dimensions (figsize, legend position, annotation format).
 2. **Code simplification** — fewer lines = less room for divergence
-3. **Parameter pinning** — replace vague descriptions with exact values (fontsize=14, alpha=0.5)
+3. **Parameter pinning** — replace vague descriptions with exact values (fontsize=14, alpha=0.5). Use "default" language — not "do not change" — to allow data-driven adaptation.
 4. **Palette refinement** — ensure palette name + slice indices are explicit
-5. **Layout constraints** — pin figsize, wspace, hspace to exact values
+5. **Layout constraints** — pin figsize, wspace, hspace as *defaults* with guidance on when to scale
 6. **Annotation templates** — provide exact f-string format for data labels
+7. **Rule softening** — change "do not change X" to "default X; adapt if data requires". Use when a rigid rule causes convergence on test data but would fail on novel data (e.g., fixed figsize that truncates labels on wider datasets).
 
 ## When Stuck
 

@@ -67,7 +67,7 @@ sns.despine(left=True, bottom=True)
 - Legend: `loc="upper right"` for PR panel, `loc="lower right"` for ROC panel, `fontsize=10`.
 - Axis labels: `fontsize=12, labelpad=8, color="dimgrey"` on all four axis labels (xlabel + ylabel on both panels).
 - `tight_layout(pad=5.0)` — do not change the pad value.
-- Legend labels are fixed: `"k-fold models"` for fold lines (only on last fold), `"Average"` for average (append metric in parens if available, e.g., `f"Average (AP = {ap:.3f})"`), `"No skill"` for baseline. Do not use classifier/model names as labels.
+- Default legend labels: `"k-fold models"` for fold lines (only on last fold), `"Average"` for average (append metric in parens if available, e.g., `f"Average (AP = {ap:.3f})"`), `"No skill"` for baseline. Adapt if context requires (e.g., single model without CV — use model name instead of "k-fold models").
 - Baseline: always use `ax.plot([0, 1], [baseline, baseline], ...)` for PR and `ax.plot([0, 1], [0, 1], ...)` for ROC. Do not use `axhline`.
 - Do not add explicit axis limits (`set_xlim`, `set_ylim`) — let matplotlib auto-scale.
 **Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
