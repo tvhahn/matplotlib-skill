@@ -31,9 +31,15 @@ ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 ```
 
 **Rules:**
-- Palette slice order is left-to-right: for 3 bars use `["#d73027", "#fc8d59", "#fee090"]`, for 4 use all four. Do not rearrange, skip, or substitute colors.
-- Annotation format is just the number: `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals. Do not append unit suffixes (e.g., " MWh", " K") — units belong in the y-axis label.
-- `set_xlabel("")` — do not add an x-axis label; category names on the x-axis are self-explanatory
-- Do not manually adjust `set_ylim` — let matplotlib auto-scale; `bbox_inches="tight"` handles clipping
+1. Always use `sns.barplot(x=..., y=..., hue=..., data=..., palette=..., legend=False, ax=ax)` — never `ax.bar()`. The `hue` parameter must match the `x` column, and `legend=False` is mandatory.
+2. Sort data descending by value before plotting: `df_sorted = df.sort_values("value_col", ascending=False)`.
+3. Palette: `"rocket"` for ≥5 bars. For ≤4 bars use `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Slice order is left-to-right — do not rearrange, skip, or substitute.
+4. Annotation: loop `ax.patches`, format as `f"{value:,.0f}"` for integers or `f"{value:.2f}"` for decimals. `weight="semibold"`, `size=12`, `color="dimgrey"`, `ha="center"`, `va="bottom"`. Do NOT append unit suffixes — units belong in the y-axis label only.
+5. Grid: `ax.grid(alpha=0.7, linewidth=1, axis="y")` — exact parameters. No x-axis grid.
+6. `ax.set_xlabel("")` — do not add an x-axis label; category names are self-explanatory.
+7. `ax.set_ylabel("Label", fontsize=13, labelpad=10, color="dimgrey")` — always include y-axis label with these exact params.
+8. `ax.set_title("Title", loc="left", fontsize=14, pad=7)` — do not change loc, fontsize, or pad.
+9. Do not manually adjust `set_ylim` — let matplotlib auto-scale.
+10. `figsize=(10, 6)` — do not change.
 
 **Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For ≥5 bars, switch palette to `"rocket"`.
