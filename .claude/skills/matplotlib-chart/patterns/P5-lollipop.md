@@ -54,19 +54,22 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
          labelcolor="dimgrey", loc="lower right", fontsize=11)
 ```
 
-**Rules:**
-1. Palette: always define `pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)`, then `darkblue = pal[5]` and `lightblue = pal[2]`. Use `darkblue` for min/max dots and `lightblue` for avg dots. Do not substitute amber, orange, colormap-mapped values, or any other colors.
-2. Three separate `ax.scatter()` calls required: one for min dots (`color=darkblue`), one for max dots (`color=darkblue`), one for avg dots (`color=lightblue`). Do not combine min/max into one scatter, do not omit min/max dots, do not use a colormap.
-3. Annotate all three values per row: avg centered above (`y=i + 0.15`, `size=10`, `weight="medium"`), min and max centered below (`y=i - 0.15`, `size=8.5`, `weight="normal"`). All annotations `color="dimgrey"`. Omit min/max labels only if the user explicitly says "clean" or "minimal".
-4. `grid(False)` — no x-grid or y-grid.
-5. DOT_SIZE = 150 for all dots; do not change the dot size.
-6. Connecting lines: `lw=4`, `alpha=0.4`, `color="grey"`, `zorder=0` — only one `hlines` call (min to max range); do not add extra lollipop sticks from zero.
-7. Exactly 2 legend items: "Average" (`lightblue`) and "Min/Max" (`darkblue`) — do not add a Range line handle.
-8. Legend: `loc="lower right"`, `fontsize=11` — do not use `bbox_to_anchor` unless the chart is very dense.
-9. Annotation size: `size=10` — do not use string sizes like `"x-large"`.
-10. Format string adapts to data: use `f'{value:,.0f}'` for large numbers/currency, `f'{value:.2f}'` for decimals.
-11. Title: `fontsize=14`, `loc="left"`, `pad=7` — do not change these values.
-12. Do not add `axvline` baselines, subtitle text annotations, `fig.text()` overlays, or other decorative elements not shown in the pattern code.
-13. Always set a descriptive x-axis label: `ax.set_xlabel("Label", fontsize=12, labelpad=8, color="dimgrey")`. The label should describe the measurement (e.g., "Score", "AUC", "Spending (USD)"). Do not use `set_xlabel("")`.
+**Rules (identity):**
+- Palette: define `pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)`, then `darkblue = pal[5]` and `lightblue = pal[2]`. All min/max dots use `darkblue`, all avg dots use `lightblue` — do not use per-item gradient coloring, colormaps, or data-mapped colors.
+- Three separate `ax.scatter()` calls: one for min dots, one for max dots, one for avg dots. Do not combine, use loops per item, or use a colormap.
+- Annotate all three values per row: avg above, min/max below. All annotations `color="dimgrey"`.
+- Connecting lines: `ax.hlines()` from min to max — do not add extra lollipop sticks from zero.
+- Exactly 2 legend items: "Average" and "Min/Max".
+- Set a descriptive x-axis label — do not leave it empty.
+- Always read data from the CSV file — never hardcode data as inline arrays, lists, or DataFrames.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+
+**Adapt when:**
+- Scale `DOT_SIZE` with figure size or data density (100-200 range).
+- Add unit prefixes (e.g., `$`) when values are currency or otherwise ambiguous without units.
+- Adjust annotation `size` proportionally if figure is compact or labels overlap.
+- Use `f'{value:.2f}'` for decimal data, `f'{value:,.0f}'` for large integers.
+- Move legend to avoid occlusion if data extends into the lower-right corner.
+- Omit min/max labels if the user says "clean" or "minimal".
 
 **Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
