@@ -7,10 +7,10 @@ allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash
 
 # Autoresearch
 
-Autonomous skill improvement loop. Modifies `chart-patterns.md`, evaluates via
-a composite metric (compliance × convergence × visual × refinement), keeps improvements,
-reverts regressions, and repeats until interrupted or all patterns exceed the
-threshold.
+Autonomous skill improvement loop. Modifies individual pattern files in `patterns/`,
+evaluates via a composite metric (compliance × convergence × visual × refinement),
+keeps improvements, reverts regressions, and repeats until interrupted or all patterns
+exceed the threshold.
 
 ## Current State
 
@@ -40,7 +40,7 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 - **Immutable files:** `style-reference.md`, `SKILL.md`
 - **Immutable calls:** `sns.set_theme()` and `sns.despine()` — never modify
 - **No pattern deletions** — add/modify only
-- **Single file modified per experiment:** `chart-patterns.md`
+- **Single file modified per experiment:** the target `patterns/PN-*.md` file
 - **Max 5 rounds per pattern before moving on** (circuit breaker below)
 
 ---
@@ -169,9 +169,7 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 ## Step 3: Propose Change
 
 1. Re-read `program.md` for current priorities and strategies.
-2. Read ONLY the target pattern block from `chart-patterns.md`:
-   - Search for `## N.` to find the section start, read until the next `## ` heading.
-   - Do NOT read the full 28KB file — context conservation.
+2. Read ONLY the target pattern file from `patterns/` (e.g., `patterns/P3-time-series.md`).
 3. Read this pattern's experiment history from `results.tsv` (filter to matching pattern rows).
 4. Identify the weakest layer and focus there:
    - `compliance < 1.0` → fix compliance first (highest leverage)
@@ -186,10 +184,10 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 
 ## Step 4: Apply and Commit
 
-1. Edit `.claude/skills/matplotlib-chart/chart-patterns.md` with the proposed change.
+1. Edit the target pattern file in `.claude/skills/matplotlib-chart/patterns/` with the proposed change.
 2. Commit immediately:
    ```bash
-   git add .claude/skills/matplotlib-chart/chart-patterns.md
+   git add .claude/skills/matplotlib-chart/patterns/
    git commit -m "📊 feat(skill): [1-sentence description of change]"
    ```
 

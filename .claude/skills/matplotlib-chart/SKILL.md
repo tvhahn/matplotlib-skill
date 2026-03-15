@@ -11,9 +11,22 @@ You are an expert Python data visualization developer. You are opinionated about
 
 You produce clean, self-contained matplotlib/seaborn code. Every chart you generate follows the conventions in these reference files:
 - **Style specification:** `${CLAUDE_SKILL_DIR}/style-reference.md`
-- **Chart patterns:** `${CLAUDE_SKILL_DIR}/chart-patterns.md`
+- **Chart patterns:** Individual files in `${CLAUDE_SKILL_DIR}/patterns/` — see index below
 
-Read both files before generating any code. Adapt the closest chart pattern to the user's data while following every style rule.
+Read the style spec before generating any code. Then identify the closest matching
+pattern from the index and read ONLY that pattern file.
+
+| Pattern | File | When to use |
+|---------|------|-------------|
+| P1 | `patterns/P1-horizontal-bar.md` | Ranked percentages, category comparisons |
+| P2 | `patterns/P2-vertical-bar.md` | Comparisons across categories, ranked values |
+| P3 | `patterns/P3-time-series.md` | Time series with rolling average |
+| P4 | `patterns/P4-violin-strip.md` | Distribution comparisons |
+| P5 | `patterns/P5-lollipop.md` | Min/max/avg ranges, model comparison |
+| P6 | `patterns/P6-decision-boundary.md` | Classification boundaries, probability maps |
+| P7 | `patterns/P7-heatmap.md` | Correlation matrices, spectrograms |
+| P8 | `patterns/P8-multi-panel.md` | Multi-panel grid layouts (2x2, 3x2, 3x3) |
+| P9 | `patterns/P9-pr-roc.md` | PR/ROC classification evaluation curves |
 
 # Design Philosophy
 
@@ -62,9 +75,9 @@ Override any default if the user explicitly requests it (e.g., "use a red color 
 
 # Phase 3 -- Generate Code
 
-Read `${CLAUDE_SKILL_DIR}/style-reference.md` and `${CLAUDE_SKILL_DIR}/chart-patterns.md` for the full style spec and code examples.
+Read `${CLAUDE_SKILL_DIR}/style-reference.md` for the full style spec. Then read the matching pattern file from the index table above.
 
-Select the closest pattern from `chart-patterns.md` and adapt it to the user's data. Every generated chart MUST include:
+Adapt the closest pattern to the user's data. Every generated chart MUST include:
 
 1. **Style setup block** (always inlined, never imported):
    ```python
@@ -167,7 +180,7 @@ Follow the **enumerate-before-evaluate** protocol — list what you see before m
    - P8 (Panel consistency): For multi-panel charts, are scales and styles consistent across panels?
    - P9 (No arithmetic): Can the reader extract values directly without mental subtraction?
 5. **Layout and readability:** Text overlap or truncation? Excessive whitespace or cramped elements? Annotations positioned near the data they describe? For multi-panel grids: are gaps between subplots and between suptitle and panels proportional to the content? Reduce `wspace`/`hspace` or `tight_layout(pad=...)` if spacing looks excessive.
-6. **Chart-type rules:** If the chart matches a pattern in `chart-patterns.md` that has a **Rules** section, verify the rendered output satisfies those rules.
+6. **Chart-type rules:** If the chart matches a pattern file that has a **Rules** section, verify the rendered output satisfies those rules.
 7. **Name one improvement** you would make, even if minor. If nothing comes to mind, re-examine annotation placement, whitespace usage, and color distinguishability.
 
 If any issue in items 2–6 requires a code change, fix the code and re-run → proceed to Stage C.

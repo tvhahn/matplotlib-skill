@@ -38,7 +38,7 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 1. Parse arguments: pattern list (default all 9), `--rounds N` (default 3, max 5)
 
 2. Read these files to provide context to subagents:
-   - `.claude/skills/matplotlib-chart/chart-patterns.md` — current pattern code
+   - `.claude/skills/matplotlib-chart/patterns/` — current pattern files
    - `.claude/skills/matplotlib-chart/style-reference.md` — palette/layout conventions
    - `scripts/chart-test-container.sh` — to extract prompt pools per pattern
 
@@ -59,7 +59,7 @@ For each pattern in the list, sequentially:
 
 #### 2a. Extract context for this pattern
 
-- Extract the specific pattern's code block from `chart-patterns.md`
+- Read the specific pattern file from `patterns/` (e.g., `patterns/P2-vertical-bar.md`)
 - Extract the pattern's prompt pool array from `chart-test-container.sh`
   (e.g., for P2, extract the `P2_POOL=(...)` array)
 
@@ -78,7 +78,7 @@ Spawn an Agent (general-purpose) with a prompt containing:
      - Compare across **structural dimensions only** (exclude data-handling since prompts differ):
        API calls, palette/cmap, figsize, annotation styling, legend config, title format,
        tick styling, grid config, DPI/save, pattern-specific dims
-     - If converged: stop rounds early. If diverged: fix chart-patterns.md, continue.
+     - If converged: stop rounds early. If diverged: fix the pattern file in `patterns/`, continue.
    - Create gallery entry `docs/gallery/NN-pX-variation-analysis/`:
      - Copy representative PNGs (round1-A.png, round1-B.png, etc.)
      - Write README.md with: What Changed, Why, Prompts Used (table of tag→prompt),
@@ -86,7 +86,7 @@ Spawn an Agent (general-purpose) with a prompt containing:
    - Update CLAUDE.md gallery table
    - Commit: `📊 feat(skill): tighten PX via parallel clean-room variation analysis`
 
-3. **Current pattern code** (copy-pasted from chart-patterns.md)
+3. **Current pattern code** (copy-pasted from the pattern file)
 
 4. **Prompt pool** (copy-pasted from chart-test-container.sh)
 
@@ -104,7 +104,7 @@ When the subagent returns, record its summary in the results table.
 
 #### 2d. Refresh context
 
-Re-read `chart-patterns.md` to get any modifications the subagent made
+Re-read the pattern files in `patterns/` to get any modifications the subagent made
 (so the next subagent has accurate context).
 
 #### 2e. Advance gallery number

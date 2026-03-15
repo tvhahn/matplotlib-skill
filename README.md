@@ -8,7 +8,7 @@ A Claude Code skill that generates publication-quality matplotlib/seaborn charts
 .claude/skills/matplotlib-chart/  # Source of truth for skill files
   SKILL.md                 # Persona, workflow, code generation rules
   style-reference.md       # Full style spec (palettes, sizing, conventions)
-  chart-patterns.md        # 9 code patterns by chart type
+  patterns/                # 9 code patterns by chart type (one file per pattern)
 
 docs/gallery/              # Before/after captures at each iteration
   TEMPLATE.md              # Blog capture template

@@ -6,8 +6,8 @@
 # ///
 """Automated evaluation of the matplotlib-chart skill for style compliance.
 
-Checks chart-patterns.md against the style rules defined in CLAUDE.md and
-style-reference.md. Can be run standalone or called from the iterate-skill
+Checks pattern files in patterns/ against the style rules defined in CLAUDE.md
+and style-reference.md. Can be run standalone or called from the iterate-skill
 workflow.
 
 Usage:
@@ -37,7 +37,7 @@ def _find_repo_root():
 
 REPO_ROOT = _find_repo_root()
 SKILL_DIR = REPO_ROOT / ".claude" / "skills" / "matplotlib-chart"
-CHART_PATTERNS = SKILL_DIR / "chart-patterns.md"
+PATTERNS_DIR = SKILL_DIR / "patterns"
 FIGURES_DIR = REPO_ROOT / "scratch" / "figures"
 
 EXPECTED_THEME = 'sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")'
@@ -49,18 +49,12 @@ ANNOTATION_COLOR = "dimgrey"
 _CODE_BLOCK_RE = re.compile(r"```python\n(.*?)```", re.DOTALL)
 
 
-def extract_pattern_blocks(content: str) -> dict[str, str]:
-    """Split chart-patterns.md into numbered pattern blocks."""
+def extract_pattern_blocks(patterns_dir: Path) -> dict[str, str]:
+    """Load numbered pattern blocks from individual files in patterns/."""
     blocks = {}
-    pattern = re.compile(r"^## (\d+)\.\s+(.+)$", re.MULTILINE)
-    matches = list(pattern.finditer(content))
-
-    for i, match in enumerate(matches):
-        num = match.group(1)
-        start = match.start()
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(content)
-        blocks[num] = content[start:end]
-
+    for fpath in sorted(patterns_dir.glob("P*.md")):
+        num = fpath.stem.split("-")[0][1:]  # "P1" -> "1"
+        blocks[num] = fpath.read_text()
     return blocks
 
 
@@ -293,12 +287,11 @@ def main():
     )
     args = parser.parse_args()
 
-    if not CHART_PATTERNS.exists():
-        print(f"ERROR: {CHART_PATTERNS} not found")
+    if not PATTERNS_DIR.exists():
+        print(f"ERROR: {PATTERNS_DIR} not found")
         sys.exit(1)
 
-    content = CHART_PATTERNS.read_text()
-    blocks = extract_pattern_blocks(content)
+    blocks = extract_pattern_blocks(PATTERNS_DIR)
 
     if args.pattern:
         blocks = {k: v for k, v in blocks.items() if k == args.pattern}
@@ -307,14 +300,16 @@ def main():
             sys.exit(1)
 
     if not blocks:
-        print("ERROR: No pattern blocks found in chart-patterns.md")
+        print("ERROR: No pattern files found in patterns/")
         sys.exit(1)
+
+    all_content = "\n".join(blocks.values())
 
     all_results = []
     all_results.extend(check_theme_calls(blocks))
     all_results.extend(check_despine(blocks))
     all_results.extend(check_dpi(blocks))
-    all_results.extend(check_deprecated(content))
+    all_results.extend(check_deprecated(all_content))
     all_results.extend(check_legend_styling(blocks))
     all_results.extend(check_annotation_color(blocks))
 

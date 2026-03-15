@@ -33,7 +33,16 @@ This repo doubles as the evidence base for a blog article about iteratively buil
 .claude/skills/matplotlib-chart/
   SKILL.md              # Persona, 5-phase workflow, code generation rules
   style-reference.md    # Full style spec (palettes, sizing, save conventions)
-  chart-patterns.md     # 9 self-contained code patterns by chart type
+  patterns/             # 9 self-contained code patterns by chart type
+    P1-horizontal-bar.md
+    P2-vertical-bar.md
+    P3-time-series.md
+    P4-violin-strip.md
+    P5-lollipop.md
+    P6-decision-boundary.md
+    P7-heatmap.md
+    P8-multi-panel.md
+    P9-pr-roc.md
 
 data/
   datasets.yaml         # Manifest of all datasets (source project + public)
@@ -57,8 +66,8 @@ logs/clean-room/            # Archived clean-room runs (gitignored)
 
 scripts/
   chart-test-container.sh # Primary verification — Claude Code generates charts in Docker clean room
-  evaluate_skill.py       # Static analysis — checks chart-patterns.md for style compliance
-  test_chart_patterns.py  # Optional syntax check — directly runs chart-patterns.md code blocks
+  evaluate_skill.py       # Static analysis — checks pattern files for style compliance
+  test_chart_patterns.py  # Optional syntax check — directly runs pattern file code blocks
 ```
 
 ## Skill Discovery
@@ -151,7 +160,7 @@ scripts/chart-test-container.sh --full-archive     # keep data/ in workspace arc
 # Static analysis (fast, no Docker)
 uv run scripts/evaluate_skill.py --check-renders
 
-# Optional: syntax check of chart-patterns.md code blocks
+# Optional: syntax check of pattern file code blocks
 uv run scripts/test_chart_patterns.py
 ```
 
@@ -159,10 +168,10 @@ Quick consistency checks:
 
 ```bash
 # All sns.set_theme calls should be identical
-grep 'sns.set_theme' .claude/skills/matplotlib-chart/chart-patterns.md
+grep 'sns.set_theme' .claude/skills/matplotlib-chart/patterns/*.md
 
 # All patterns should use dpi=150
-grep 'dpi=' .claude/skills/matplotlib-chart/chart-patterns.md
+grep 'dpi=' .claude/skills/matplotlib-chart/patterns/*.md
 ```
 
 ## Autonomous Iteration
@@ -179,7 +188,7 @@ Use `/variation-analysis PN` to run targeted convergence analysis on a single pa
 1. Selects 3 different prompts from the pattern's pool per round
 2. Runs 3 parallel clean rooms with different datasets (Round 1: tags A, B, C)
 3. Compares generated code across structural dimensions (excludes data-handling, which naturally differs)
-4. Fixes under-specified dimensions in `chart-patterns.md`
+4. Fixes under-specified dimensions in the pattern file
 5. Validates with subsequent rounds until convergence or round limit
 6. Creates a gallery entry with PNGs + convergence tables + "Prompts Used" mapping
 
@@ -193,7 +202,7 @@ Guardrails: max rounds configurable per pattern (default 3, max 5), no pattern d
 
 ## Autoresearch
 
-Use `/autoresearch <tag>` to run an autonomous skill improvement loop inspired by Karpathy's autoresearch. The command runs indefinitely (until interrupted or all patterns exceed the threshold), modifying `chart-patterns.md`, evaluating via a composite metric, keeping improvements, and reverting regressions.
+Use `/autoresearch <tag>` to run an autonomous skill improvement loop inspired by Karpathy's autoresearch. The command runs indefinitely (until interrupted or all patterns exceed the threshold), modifying individual pattern files, evaluating via a composite metric, keeping improvements, and reverting regressions.
 
 **How it works:**
 1. Creates branch `autoresearch/<tag>` (or resumes if it exists)
@@ -229,7 +238,7 @@ Use `/autoresearch <tag>` to run an autonomous skill improvement loop inspired b
 
 ## Future Work
 
-Deferred patterns not yet in `chart-patterns.md`:
+Deferred patterns not yet in `patterns/`:
 - Scatter plot (standalone, not decision-boundary)
 - Grouped bar chart
 - `fill_between` area chart

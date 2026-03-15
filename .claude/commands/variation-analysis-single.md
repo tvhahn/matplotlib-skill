@@ -23,7 +23,7 @@ between rounds until the pattern converges.
 ## Current State
 
 **Current pattern code:**
-!`ls .claude/skills/matplotlib-chart/chart-patterns.md`
+!`ls .claude/skills/matplotlib-chart/patterns/`
 
 **Current gallery entries:**
 !`ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -5 || echo "None"`
@@ -51,7 +51,7 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
    - P1: horizontal bar, P2: violin, P3: time series, P4: PR/ROC
    - P5: lollipop/dumbbell, P6: vertical bar, P7: heatmap, P8: multi-panel, P9: decision boundary
 
-2. Read the current pattern code from `.claude/skills/matplotlib-chart/chart-patterns.md`
+2. Read the current pattern code from the matching file in `.claude/skills/matplotlib-chart/patterns/`
 
 3. Read `.claude/skills/matplotlib-chart/style-reference.md` for palette/layout conventions
 
@@ -100,7 +100,7 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 ### Step 3: Apply Round 1 Fixes
 
-1. Edit `.claude/skills/matplotlib-chart/chart-patterns.md` to tighten the pattern on divergent dimensions
+1. Edit the pattern file in `.claude/skills/matplotlib-chart/patterns/` to tighten the pattern on divergent dimensions
 
 2. Edit `.claude/skills/matplotlib-chart/style-reference.md` if palette or layout conventions change
 
@@ -125,7 +125,7 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 5. If converged on all structural dimensions (cosmetic variation is acceptable), proceed to
    Round 3 for final verification. If structural divergence remains, apply additional fixes
-   to `chart-patterns.md` before Round 3.
+   to the pattern file before Round 3.
 
 ### Step 5: Round 3 — Final Verification (tags G, H, I)
 

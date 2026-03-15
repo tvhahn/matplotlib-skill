@@ -49,7 +49,7 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 1. Read the skill files:
    - `.claude/skills/matplotlib-chart/SKILL.md`
    - `.claude/skills/matplotlib-chart/style-reference.md`
-   - `.claude/skills/matplotlib-chart/chart-patterns.md`
+   - The pattern files in `.claude/skills/matplotlib-chart/patterns/`
 
 2. Review the injected evaluation score above — note any failures or style compliance gaps.
 
@@ -82,7 +82,7 @@ Write the proposed changes BEFORE making them. Create a structured evaluation:
 ## Proposed Changes
 | Pattern | File | Change | Confidence |
 |---------|------|--------|------------|
-| P3 | chart-patterns.md | Added rolling window annotation | High |
+| P3 | patterns/P3-time-series.md | Added rolling window annotation | High |
 ```
 
 ### Step 4: Apply Changes

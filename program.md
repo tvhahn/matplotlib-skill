@@ -20,7 +20,7 @@ Last updated: 2026-03-14.
 - **Immutable files:** `style-reference.md` (start conservative — loosen later if needed)
 - **Immutable style calls:** `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")` and `sns.despine(left=True, bottom=True)` — never modify
 - **No pattern deletions** — add/modify only
-- **Single file scope:** only `chart-patterns.md` is modified per experiment
+- **Single file scope:** only the target `patterns/PN-*.md` file is modified per experiment
 
 ## Success Criteria
 

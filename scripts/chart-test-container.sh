@@ -89,7 +89,7 @@ mkdir -p "$RESULTS_DIR"
 # --- Per-pattern prompt pools ---
 # Each pool's index 0 is the original default prompt (used with --fixed).
 # Additional entries exercise different datasets for variety across runs.
-# Pool numbering matches chart-patterns.md pattern numbering.
+# Pool numbering matches patterns/P*.md pattern numbering.
 
 # P1: Horizontal bar chart
 P1_POOL=(

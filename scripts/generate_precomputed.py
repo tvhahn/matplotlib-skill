@@ -2,7 +2,7 @@
 """Generate pre-computed datasets for chart patterns.
 
 Each chart pattern that currently embeds computation (aggregation, ML models,
-correlation matrices) gets pre-computed outputs so chart-patterns.md contains
+correlation matrices) gets pre-computed outputs so the pattern files contain
 only visualization code.
 
 Output: data/raw/precomputed/{p3,p5,p6,p7,p9}/<dataset>.{csv,npz}
