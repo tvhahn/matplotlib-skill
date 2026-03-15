@@ -39,5 +39,7 @@ sns.despine(left=True, bottom=True)
 - `set_xticks([])` — always hide x-axis ticks; the bar-end labels carry the values.
 - Title: `fontsize=14, loc="left", pad=7` — do not use fontsize=12 or 13.
 - Do not add a separate `tick_params(axis="y", labelsize=...)` call — let `font_scale=1.0` control y-tick label size.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data (e.g., `data/raw/...`).
+- Always read data from the CSV file — never hardcode data as inline DataFrames or dictionaries.
 
 **Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey).
