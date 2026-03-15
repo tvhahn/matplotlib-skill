@@ -41,5 +41,7 @@ ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 8. `ax.set_title("Title", loc="left", fontsize=14, pad=7)` — defaults; keep `loc="left"`.
 9. Do not manually adjust `set_ylim` — let matplotlib auto-scale.
 10. `figsize=(10, 6)` — default; widen to `(12, 6)` for >8 bars if labels would overlap.
+11. Always use `dpi=150` in both `plt.subplots(dpi=150)` and `plt.savefig(dpi=150)`. Never use dpi=300 unless the user explicitly requests publication quality.
+12. Always read data from the CSV file — never hardcode data values as inline DataFrames or dictionaries.
 
 **Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For ≥5 bars, switch palette to `"rocket"`.
