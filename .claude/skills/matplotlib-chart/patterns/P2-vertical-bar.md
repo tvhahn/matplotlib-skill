@@ -1,9 +1,8 @@
 # Vertical Bar Chart
 
 **When to use:** Comparisons across categories, ranked values, model scores.
-**Palette:** `"rocket"` for ≥5 bars (sequential ranking). For ≤4 categorical bars, slice `DIVERGING_COLORBLIND`: `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Do not invent semantic colors — always use these exact hex values.
+**Palette:** `"rocket"` for ≥5 bars (sequential ranking). For ≤4 categorical bars, slice `DIVERGING_COLORBLIND`: `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`.
 **Bar order:** Sort by value descending so the tallest bar is on the left.
-**API:** Always use `sns.barplot` — never use `ax.bar` directly.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -34,19 +33,19 @@ ax.set_ylabel("Y-Axis Label", fontsize=13, labelpad=10, color="dimgrey")
 ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 ```
 
-**Rules:**
-1. Always use `sns.barplot(x=..., y=..., hue=..., data=..., palette=..., legend=False, ax=ax)` — never `ax.bar()`. The `hue` parameter must match the `x` column, and `legend=False` is mandatory.
-2. Sort data descending by value before plotting: `df_sorted = df.sort_values("value_col", ascending=False)`.
-3. Palette: `"rocket"` for ≥5 bars. For ≤4 bars use `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Slice order is left-to-right — do not rearrange, skip, or substitute.
-4. Annotation: loop `ax.patches`, format as `f"{value:,.0f}"` for integers or `f"{value:.2f}"` for decimals. `weight="semibold"`, `size=12`, `color="dimgrey"`, `ha="center"`, `va="bottom"`. Do NOT append unit suffixes — units belong in the y-axis label only.
-5. Grid: `ax.grid(alpha=0.7, linewidth=1, axis="y")` — exact parameters. No x-axis grid.
-6. `ax.set_xlabel("")` — do not add an x-axis label; category names are self-explanatory.
-7. `ax.set_ylabel("Label", fontsize=13, labelpad=10, color="dimgrey")` — defaults; adjust ±2 on fontsize/labelpad if label length requires it.
-8. `ax.set_title("Title", loc="left", fontsize=14, pad=7)` — defaults; keep `loc="left"`.
-9. Do not manually adjust `set_ylim` — let matplotlib auto-scale.
-10. `figsize=(10, 6)` — default; widen to `(12, 6)` for >8 bars if labels would overlap.
-11. Always use `dpi=150` in both `plt.subplots(dpi=150)` and `plt.savefig(dpi=150)`. Never use dpi=300 unless the user explicitly requests publication quality.
-12. Always read data from the CSV file — never hardcode data values as inline DataFrames or dictionaries.
-13. Do not add `ax.annotate()` arrows, editorial insight text, or italic annotations. The bar-end value labels (Rule 4) are the only annotations. Add commentary only if the user explicitly requests it.
+**Rules (identity):**
+- Use `sns.barplot(x=..., y=..., hue=..., data=..., palette=..., legend=False, ax=ax)` — not `ax.bar()`. The `hue` parameter must match the `x` column.
+- Sort data descending by value before plotting.
+- Palette: `"rocket"` for ≥5 bars. For ≤4 bars use `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Slice left-to-right — do not rearrange or substitute.
+- Annotations: loop `ax.patches`, use `color="dimgrey"`, `weight="semibold"`. Do not add `ax.annotate()` arrows or editorial text — bar-end labels are the only annotations.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+- Always read data from CSV — never hardcode inline DataFrames. Apply `df.dropna()` or `df.dropna(subset=[...])` after loading to prevent NaN errors.
+
+**Adapt when:**
+- Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
+- Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
+- Adjust annotation format: `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.
+- Scale `fontsize` on ylabel and title proportionally to figure size.
+- Rotate x-tick labels with `ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")` when labels overlap.
 
 **Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For ≥5 bars, switch palette to `"rocket"`.
