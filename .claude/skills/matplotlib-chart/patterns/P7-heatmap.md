@@ -27,14 +27,15 @@ sns.despine(left=True, bottom=True)
 2. `annot=True, fmt=".2f"` — always annotate cells. Use `annot_kws={"size": 11, "weight": "medium"}`. Do not set annotation `color` — let seaborn auto-contrast.
 3. `linewidths=0.5, linecolor="white"` — default for matrices ≤12×12; reduce to `0.3` or omit for larger matrices.
 4. `square=True` — always use square cells for correlation matrices.
-5. `cbar_kws={"shrink": 0.8}` — do not add a colorbar label.
+5. `cbar_kws={"shrink": 0.8}` — do not add a colorbar label (no `"label"` key in `cbar_kws`, no `cbar.set_label()`).
 6. `figsize=(8, 6)` — default; scale up for matrices >10×10 (e.g., `(10, 8)` for 15×15).
 7. `ax.set_title("Title", fontsize=14, loc="left", pad=7)` — do not add `color="dimgrey"` to the title.
 8. `ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")` — default; omit rotation for short labels (<6 chars).
 9. `ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")` — remove tick marks.
 10. Data is pre-computed: load with `pd.read_csv(path, index_col=0)`. Do not compute `.corr()`.
-11. Show full matrix by default — do not mask the triangle unless the user requests it.
+11. Show full matrix by default — do NOT use `np.triu`, `np.tril`, or any `mask=` parameter. Only mask the triangle if the user explicitly says "lower triangle" or "upper triangle".
 12. `ax.grid(False)` is NOT needed for sns.heatmap — seaborn handles this. Do not add it.
+13. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths (e.g., `data/raw/...`), not absolute paths.
 
 ### Spectrogram (pcolormesh)
 
@@ -62,4 +63,4 @@ ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12, pad=7)
 sns.despine(left=True, bottom=True, right=True)
 ```
 
-**Customize:** For the heatmap, use `mask=np.triu(np.ones_like(corr, dtype=bool))` to show only the lower triangle. Adjust `vmax` on spectrograms to control color scaling. For spectrograms with dark backgrounds, use white text for panel labels.
+**Customize:** Adjust `vmax` on spectrograms to control color scaling. For spectrograms with dark backgrounds, use white text for panel labels.

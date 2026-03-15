@@ -69,5 +69,6 @@ sns.despine(left=True, bottom=True)
 7. Title: `fontsize=14`, `loc="left"`, `pad=7` — single line, no multiline titles. Do not use fontsize=13.
 8. Contour lines: solid (default), not dashed.
 9. Axis labels: use `r"$x_0$"` and `r"$x_1$"` or descriptive feature names — not both.
+10. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data.
 
 **Customize:** Assumes `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.

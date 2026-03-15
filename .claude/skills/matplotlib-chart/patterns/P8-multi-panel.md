@@ -74,5 +74,6 @@ sns.despine(left=True, bottom=True)
 12. Do NOT add per-event/per-category color schemes (e.g., blue for "cue", red for "stim"). All panels use `pal[5]`.
 13. ALWAYS use `gridspec.GridSpec` — never `plt.subplots()` or `fig.add_subplot()`. This pattern requires GridSpec for all layouts.
 14. When N items don't fit a standard grid, round up: 3-4 items → 2x2, 5-6 items → 3x2, 7-9 items → 3x3. Leave extra panels empty (hide with `ax.set_visible(False)`).
+15. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data (e.g., `data/raw/...`).
 
 **Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
