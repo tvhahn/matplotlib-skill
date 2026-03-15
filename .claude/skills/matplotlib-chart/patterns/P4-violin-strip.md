@@ -35,7 +35,7 @@ sns.despine(left=True, bottom=True)
 1. Always use horizontal orientation (`orient="h"`, `x="value_col"`, `y="category_col"`). Never use vertical orientation unless the user explicitly says "vertical".
 2. `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is mandatory. Never use colored fills, per-category palettes, or hue-based coloring.
 3. `ax.grid(axis="x", alpha=0.7, linewidth=1)` — exact params. Always `axis="x"` for horizontal.
-4. Do NOT add median markers, colored overlays, box plots, legends, or `ax.annotate()` arrows unless the user explicitly requests them. The strip dots ARE the data visualization.
+4. Do NOT add ANY text annotations, median markers, `ax.text()` value labels, `ax.annotate()` arrows, `ax.axvline()` reference lines, colored overlays, box plots, or legends. The strip dots ARE the data visualization — no embellishment needed. Only add annotations if the user explicitly says "annotate", "label", or "add median values".
 5. Title: `fontsize=12, loc="left", pad=7` with bold-prefix `r"$\bf{(a)}$"`. Do not use fontsize=14.
 6. `figsize=(12, 5)` default. Use `dpi=150`. Scale height only for 8+ categories.
 7. Violin params are fixed: `density_norm="width", inner=None, linewidth=2, saturation=1, cut=0, width=0.8, zorder=0`.
