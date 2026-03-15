@@ -12,7 +12,11 @@ fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
 df_sorted = df.sort_values("value", ascending=False)
 
-sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette="rocket", legend=False, ax=ax)
+# Palette selection: DIVERGING_COLORBLIND for ≤4 bars, "rocket" for ≥5
+n_bars = df_sorted.shape[0]
+pal = ["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n_bars] if n_bars <= 4 else "rocket"
+
+sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette=pal, legend=False, ax=ax)
 
 for p in ax.patches:
     value = p.get_height()
