@@ -41,7 +41,7 @@ ax.scatter(X[:, 0], X[:, 1], c=colormap[y], s=50,
 
 ax.set_ylabel(r"$x_1$")
 ax.set_xlabel(r"$x_0$")
-ax.set_aspect(1)
+ax.set_aspect(1)  # mandatory — decision boundaries must be square
 ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
