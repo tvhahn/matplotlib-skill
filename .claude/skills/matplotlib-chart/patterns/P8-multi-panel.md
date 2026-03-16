@@ -64,7 +64,7 @@ sns.despine(left=True, bottom=True)
 
 **Rules (identity):**
 1. Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
-2. When all panels show the **same metric** across conditions: use a single color `pal[5]` for all panels and share y-axis limits (compute global min/max before the loop).
+2. Default color is `pal[5]` for all panels. Share y-axis limits when panels show the same metric (compute global min/max before the loop).
 3. Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
 4. `ax.grid(False)` on every panel.
 5. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these.
@@ -73,11 +73,9 @@ sns.despine(left=True, bottom=True)
 8. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
 **Adapt when:**
-- Panels show **different metrics** (e.g., temperature vs pressure, price vs volume): use per-panel colors. "Same metric across groups" (e.g., life expectancy per country, stock price per symbol, weight per diet) is NOT "different metrics" — use `pal[5]` for all panels.
 - Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — the grid layout is the pattern's identity, not the panel content type.
-- Add `fill_between`, background shading, or reference lines when they encode meaningful information (e.g., health zones, confidence intervals, thresholds).
-- Scale `figsize` by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3 — adjust proportionally for content density.
-- Adjust `wspace`/`hspace` if gaps between panels look excessive or too tight.
+- Scale `figsize` and spacing (`wspace`/`hspace`) for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3.
 - Annotate first/last values by default for trends; omit for bar-type panels.
+- Use per-panel colors only when the user explicitly requests it or panels display fundamentally incomparable metrics (e.g., temperature vs. pressure on different y-axes). Default to `pal[5]`.
 
 **Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
