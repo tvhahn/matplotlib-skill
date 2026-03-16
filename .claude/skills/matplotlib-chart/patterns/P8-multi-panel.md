@@ -9,7 +9,7 @@ from matplotlib import gridspec
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-# --- Data ---
+# --- Data: always call .dropna() to handle missing values ---
 df = pd.read_csv("data.csv").dropna()
 
 # --- Palette: pal[5] for all panels (same metric across groups) ---
@@ -73,7 +73,7 @@ sns.despine(left=True, bottom=True)
 8. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
 **Adapt when:**
-- Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — the grid layout is the pattern's identity, not the panel content type.
+- Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis). The grid layout is the pattern's identity, not the panel content type.
 - Scale `figsize` and spacing (`wspace`/`hspace`) for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3.
 - Annotate first/last values by default for trends; omit for bar-type panels.
 - Use per-panel colors only when the user explicitly requests it or panels display fundamentally incomparable metrics (e.g., temperature vs. pressure on different y-axes). Default to `pal[5]`.
