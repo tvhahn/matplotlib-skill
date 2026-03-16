@@ -10,21 +10,29 @@ from matplotlib.lines import Line2D
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data ---
+df = pd.read_csv("data.csv")
+rolling_df = df.dropna(subset=["rolling"])
+
+# --- Palette (red/blue bars + cubehelix rolling line) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
 fig, ax = plt.subplots(figsize=(12, 6), dpi=150)
 
-# Colored bars: positive vs negative
-bar_colors = ["#d73027" if v >= 0 else "#4575b4" for v in df_annual["value"]]
-ax.bar(df_annual["year"], df_annual["value"],
+# Reference: use 0 for anomaly/deviation data, mean for all-positive data
+reference = 0 if (df["value"] < 0).any() else df["value"].mean()
+
+# Colored bars: #d73027 red for ≥ reference, #4575b4 blue for < reference
+bar_colors = ["#d73027" if v >= reference else "#4575b4" for v in df["value"]]
+ax.bar(df["year"], df["value"],
        color=bar_colors, alpha=0.55, width=0.9, zorder=2)
 
-# Rolling mean trend line
-ax.plot(df_annual["year"], df_annual["rolling"],
-        color=pal[5], linewidth=2.5, label="Rolling mean", zorder=4)
+# Rolling mean trend line — always pal[5], no markers
+ax.plot(rolling_df["year"], rolling_df["rolling"],
+        color=pal[5], linewidth=2.5, zorder=4)
 
-# Zero baseline
-ax.axhline(y=0, color="lightgrey", linewidth=0.8, zorder=1)
+# Reference baseline (at 0 for deviation data, at mean for all-positive)
+ax.axhline(y=reference, color="lightgrey", linewidth=0.8, zorder=1)
 
 ax.set_xlabel("Year", fontsize=12, labelpad=8, color="dimgrey")
 ax.set_ylabel("Y-Axis Label (Unit)", fontsize=12, labelpad=8, color="dimgrey")
@@ -50,7 +58,7 @@ sns.despine(left=True, bottom=True)
 - Bar colors are `"#d73027"` (red) for values ≥ reference and `"#4575b4"` (blue) for values < reference. Do not substitute or invert. Even if all values are positive, compute the series mean and color above/below it.
 - Rolling mean line uses `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)` — do not hardcode `"navy"`, `"black"`, or other colors. Use a plain `ax.plot()` — no markers or glow effects.
 - Exactly 3 legend items using custom Patch + Line2D handles. Adapt labels to data domain (e.g., "Above baseline" for anomaly data).
-- Reference value: default to `df["value"].mean()`. Use 0 for anomaly/deviation data; use median for heavily skewed distributions.
+- Reference value: use `0` when data has negative values; otherwise use `df["value"].mean()`. The template code shows the conditional: `reference = 0 if (df["value"] < 0).any() else df["value"].mean()`.
 - When the data provides a pre-computed `rolling` column, use it directly — do not recompute.
 - Filter NaN from rolling column before plotting: `rolling_df = df.dropna(subset=["rolling"])`.
 - Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.

@@ -7,6 +7,9 @@
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data ---
+df = pd.read_csv("data.csv").dropna(subset=["value", "category"])
+
 fig, ax = plt.subplots(figsize=(12, 5), dpi=150)
 
 sns.violinplot(

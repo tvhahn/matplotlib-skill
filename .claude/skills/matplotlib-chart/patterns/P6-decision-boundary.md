@@ -8,6 +8,14 @@ from matplotlib.lines import Line2D
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data (load from NPZ) ---
+data = np.load("data.npz", allow_pickle=True)
+xx0, xx1 = data["mesh_x0"], data["mesh_x1"]
+yy_hat, yy_prob = data["yy_hat"], data["yy_prob"]
+X, y = data["X"], data["y"]
+class_names = data["class_names"].tolist()
+
+# --- Palette (DIVERGING_COLORBLIND only) ---
 redish = "#d73027"
 blueish = "#4575b4"
 orangeish = "#fc8d59"
@@ -33,7 +41,7 @@ ax.scatter(X[:, 0], X[:, 1], c=colormap[y], s=50,
 
 ax.set_ylabel(r"$x_1$")
 ax.set_xlabel(r"$x_0$")
-ax.set_aspect(1)
+ax.set_aspect(1)  # mandatory — decision boundaries must be square
 ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
@@ -61,7 +69,7 @@ sns.despine(left=True, bottom=True)
 
 **Rules (identity):**
 - Colors: DIVERGING_COLORBLIND `["#d73027", "#4575b4", "#fc8d59"]`. For 2-class, use `["#d73027", "#4575b4"]`. Do not substitute Tableau, seaborn, or custom palettes.
-- Background uses probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — not `contourf` or `pcolormesh` filled regions. Dots encode continuous probability via size.
+- Background uses probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — not `contourf` or `pcolormesh` filled regions. Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
 - Assume `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are in memory — do not import sklearn or fit classifiers.
 - Two separate legends positioned outside with `bbox_to_anchor`: class legend and confidence legend. Use `ax.add_artist()` to keep both visible.
 - `set_aspect(1)` for square proportions.

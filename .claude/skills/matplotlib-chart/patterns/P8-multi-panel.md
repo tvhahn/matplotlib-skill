@@ -9,6 +9,10 @@ from matplotlib import gridspec
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data ---
+df = pd.read_csv("data.csv").dropna()
+
+# --- Palette: pal[5] for all panels (same metric across groups) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
 fig = plt.figure(figsize=(14, 9), dpi=150)
@@ -69,7 +73,7 @@ sns.despine(left=True, bottom=True)
 8. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
 **Adapt when:**
-- Panels show **different metrics or views**: use per-panel colors or per-metric palettes instead of uniform `pal[5]`. Color should encode meaning, not just be decorative.
+- Panels show **different metrics** (e.g., temperature vs pressure, price vs volume): use per-panel colors. "Same metric across groups" (e.g., life expectancy per country, stock price per symbol, weight per diet) is NOT "different metrics" — use `pal[5]` for all panels.
 - Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — the grid layout is the pattern's identity, not the panel content type.
 - Add `fill_between`, background shading, or reference lines when they encode meaningful information (e.g., health zones, confidence intervals, thresholds).
 - Scale `figsize` by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3 — adjust proportionally for content density.
