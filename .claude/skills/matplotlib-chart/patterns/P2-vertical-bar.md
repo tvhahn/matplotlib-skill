@@ -24,6 +24,7 @@ for p in ax.patches:
     _y = p.get_y() + value + space
     ax.text(_x, _y, f"{value:,.0f}", ha="center", va="bottom",
             weight="semibold", size=12, color="dimgrey")
+# No other annotations — bar-end labels above are the only data labels
 
 sns.despine(left=True, bottom=True)
 ax.grid(alpha=0.7, linewidth=1, axis="y")
