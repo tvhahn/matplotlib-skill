@@ -31,8 +31,8 @@ ax.bar(df["year"], df["value"],
 ax.plot(rolling_df["year"], rolling_df["rolling"],
         color=pal[5], linewidth=2.5, zorder=4)
 
-# Zero baseline
-ax.axhline(y=0, color="lightgrey", linewidth=0.8, zorder=1)
+# Reference baseline (at 0 for deviation data, at mean for all-positive)
+ax.axhline(y=reference, color="lightgrey", linewidth=0.8, zorder=1)
 
 ax.set_xlabel("Year", fontsize=12, labelpad=8, color="dimgrey")
 ax.set_ylabel("Y-Axis Label (Unit)", fontsize=12, labelpad=8, color="dimgrey")
