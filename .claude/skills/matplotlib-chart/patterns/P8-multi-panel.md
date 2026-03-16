@@ -9,6 +9,10 @@ from matplotlib import gridspec
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data ---
+df = pd.read_csv("data.csv").dropna()
+
+# --- Palette: pal[5] for all panels (same metric across groups) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
 fig = plt.figure(figsize=(14, 9), dpi=150)
