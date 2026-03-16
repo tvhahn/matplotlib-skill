@@ -10,18 +10,23 @@ from matplotlib.lines import Line2D
 
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data ---
+df = pd.read_csv("data.csv")
+rolling_df = df.dropna(subset=["rolling"])
+
+# --- Palette (red/blue bars + cubehelix rolling line) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
 fig, ax = plt.subplots(figsize=(12, 6), dpi=150)
 
-# Colored bars: positive vs negative
-bar_colors = ["#d73027" if v >= 0 else "#4575b4" for v in df_annual["value"]]
-ax.bar(df_annual["year"], df_annual["value"],
+# Colored bars: positive vs negative — #d73027 red, #4575b4 blue
+bar_colors = ["#d73027" if v >= 0 else "#4575b4" for v in df["value"]]
+ax.bar(df["year"], df["value"],
        color=bar_colors, alpha=0.55, width=0.9, zorder=2)
 
-# Rolling mean trend line
-ax.plot(df_annual["year"], df_annual["rolling"],
-        color=pal[5], linewidth=2.5, label="Rolling mean", zorder=4)
+# Rolling mean trend line — always pal[5], no markers
+ax.plot(rolling_df["year"], rolling_df["rolling"],
+        color=pal[5], linewidth=2.5, zorder=4)
 
 # Zero baseline
 ax.axhline(y=0, color="lightgrey", linewidth=0.8, zorder=1)
