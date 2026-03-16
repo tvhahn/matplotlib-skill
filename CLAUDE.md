@@ -138,6 +138,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 | `39-autoresearch-overnight-v4` | Autoresearch loop: 10 experiments across P1–P5/P8; average composite 0.90→0.93; key wins: dropna rules, code-level palette conditionals, edge-case clarifications |
 | `40-autoresearch-overnight-v5` | Reduced prescriptiveness: expert panel review → Identity vs. Defaults restructure; all 9 patterns refactored; 3 experiments (100% keep); avg composite 0.89→0.93; key insight: fewer rules + flexible defaults outperform exhaustive constraints |
 | `41-autoresearch-overnight-v7` | Autoresearch loop: 9 experiments across P2/P3/P4/P6/P8 (5 keeps, 4 discards); avg composite 0.87→0.91; key wins: P3 template/rule alignment (+0.17), P2 annotation comment (+0.04); key insight: template/rule inconsistencies are highest-leverage fixes |
+| `42-autoresearch-overnight-v8` | Autoresearch loop: 20 experiments across P4/P7/P8 (4 keeps, 16 discards); key wins: P8 line_color variable prevents pal[i] divergence (+0.09), P4 dynamic figsize scaling (+0.08); key insight: variable naming > prose rules for preventing misuse |
 
 ## Style Rules
 
