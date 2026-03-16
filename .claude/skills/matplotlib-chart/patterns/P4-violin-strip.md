@@ -10,7 +10,9 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 # --- Data ---
 df = pd.read_csv("data.csv").dropna(subset=["value", "category"])
 
-fig, ax = plt.subplots(figsize=(12, 5), dpi=150)
+# Scale height to category count
+n_cats = df["category"].nunique()
+fig, ax = plt.subplots(figsize=(12, max(5, 2 + n_cats * 1.2)), dpi=150)
 
 sns.violinplot(
     x="value", y="category", data=df,
