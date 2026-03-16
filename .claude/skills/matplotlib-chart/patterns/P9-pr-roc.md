@@ -22,7 +22,7 @@ baseline = float(data["baseline"])          # scalar
 
 # --- Plot ---
 fig, axes = plt.subplots(1, 2, figsize=(12, 6), dpi=150)
-fig.tight_layout(pad=5.0)
+fig.tight_layout(pad=3.0)
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
@@ -64,6 +64,8 @@ axes[1].set_xlabel("False Positive Rate", fontsize=12, labelpad=8, color="dimgre
 axes[1].set_ylabel("True Positive Rate", fontsize=12, labelpad=8, color="dimgrey")
 
 for ax in axes.flatten():
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1.05)
     ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
     ax.grid(False)
     ax.patch.set_edgecolor("lightgrey")
@@ -80,6 +82,7 @@ sns.despine(left=True, bottom=True)
 - Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
 - Baseline: use `ax.plot([0, 1], ...)` — not `axhline`. Do not use `sharex`/`sharey`.
 - Include metric values in legend labels when available (e.g., `f"Average (AP = {ap:.3f})"`).
+- Both panels: `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — always show the full probability range.
 - Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
 **Adapt when:**
@@ -87,5 +90,6 @@ sns.despine(left=True, bottom=True)
 - For single model (no CV), plot one `pal[5]` line and baseline — omit grey fold lines.
 - Adapt legend labels to context (e.g., model name instead of "k-fold models" for a single model).
 - Adjust `tight_layout(pad=...)` if panel spacing looks off.
+- Move legend `loc` if it occludes curves — e.g., `loc="center left"` for PR panel when baseline is high.
 
 **Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
