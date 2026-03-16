@@ -12,8 +12,8 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 # --- Data: always call .dropna() to handle missing values ---
 df = pd.read_csv("data.csv").dropna()
 
-# --- Palette: pal[5] for all panels (same metric across groups) ---
-pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
+# --- Single color for all panels (same metric across groups) ---
+line_color = sns.cubehelix_palette(6, rot=-0.25, light=0.7)[5]
 
 fig = plt.figure(figsize=(14, 9), dpi=150)
 gs = gridspec.GridSpec(3, 2)
@@ -40,8 +40,8 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     ax.patch.set_linewidth(0.8)
 
     # Line + scatter per panel (same color across all panels)
-    ax.plot(x_data, y_data, color=pal[5], linewidth=2, zorder=3)
-    ax.scatter(x_data, y_data, color=pal[5], s=40, zorder=4,
+    ax.plot(x_data, y_data, color=line_color, linewidth=2, zorder=3)
+    ax.scatter(x_data, y_data, color=line_color, s=40, zorder=4,
                edgecolors="white", linewidths=0.8)
 
     # Annotate first and last values
@@ -64,7 +64,7 @@ sns.despine(left=True, bottom=True)
 
 **Rules (identity):**
 1. Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
-2. Default color is `pal[5]` for all panels. Share y-axis limits when panels show the same metric (compute global min/max before the loop).
+2. Default color is `line_color` (cubehelix darkest) for all panels. Share y-axis limits when panels show the same metric (compute global min/max before the loop).
 3. Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
 4. `ax.grid(False)` on every panel.
 5. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these.
