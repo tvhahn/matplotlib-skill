@@ -2,6 +2,7 @@
 
 **When to use:** Distribution comparisons, showing individual observations within categories.
 **Palette:** White violins with black strip overlay.
+**Orientation:** Horizontal by default (`orient="h"`).
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -31,14 +32,18 @@ ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left", pad
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules:**
-1. Always use horizontal orientation (`orient="h"`, `x="value_col"`, `y="category_col"`). Never use vertical orientation unless the user explicitly says "vertical". This applies even for 2-3 categories — horizontal is always the default.
-2. `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is mandatory. Never use colored fills, per-category palettes, or hue-based coloring.
-3. `ax.grid(axis="x", alpha=0.7, linewidth=1)` — exact params. Always `axis="x"` for horizontal.
-4. Do NOT add ANY text annotations, median markers, `ax.text()` value labels, `ax.annotate()` arrows, `ax.axvline()` reference lines, colored overlays, box plots, or legends. The strip dots ARE the data visualization — no embellishment needed. Only add annotations if the user explicitly says "annotate", "label", or "add median values".
-5. Title: `fontsize=12, loc="left", pad=7` with bold-prefix `r"$\bf{(a)}$"`. Do not use fontsize=14.
-6. `figsize=(12, 5)` default. Use `dpi=150`. Scale height only for 8+ categories.
-7. Violin params are fixed: `density_norm="width", inner=None, linewidth=2, saturation=1, cut=0, width=0.8, zorder=0`.
-8. Strip params: `size=6, jitter=0.2, linewidth=0.5, marker="o", edgecolor=None, alpha=0.1, zorder=4`.
+**Rules (identity):**
+- Use horizontal orientation (`orient="h"`) by default. Only use vertical if the user explicitly requests it.
+- `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is the pattern's signature. Do not use colored fills or per-category palettes.
+- Violin core params: `density_norm="width", inner=None, cut=0`.
+- Title uses bold-prefix convention: `r"$\bf{(a)}$"` with `loc="left"`.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+
+**Adapt when:**
+- Scale height for 8+ categories (add ~1 inch per additional 4 categories).
+- Adjust strip `alpha` for data density: lower (0.05) for thousands of points, higher (0.2) for sparse data.
+- Add median markers or reference lines if the user requests them or if the insight requires comparing central tendency across groups.
+- Add value annotations if the user says "annotate", "label", or "add median values".
+- Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
 
 **Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.

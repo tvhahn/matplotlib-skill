@@ -3,6 +3,28 @@
 Complete aesthetic specification for Tim's publication-quality matplotlib/seaborn charts.
 Claude reads this file as reference material when generating chart code.
 
+## Identity vs. Defaults
+
+This spec distinguishes two kinds of values:
+
+**Identity tokens (immutable)** — these define the visual signature and must not change:
+- Palette hex codes and family assignments (Blues_d, RdBu_r, DIVERGING_COLORBLIND, cubehelix, etc.)
+- Font family: DejaVu Sans
+- Despine convention: `sns.despine(left=True, bottom=True)`
+- Annotation color: `"dimgrey"`
+- Legend frame: `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"`
+- Tick styling: `length=0, labelcolor="dimgrey"`
+- DPI: 150 standard / 300 publication
+- Save format: PDF+PNG with `bbox_inches="tight"`
+
+**Default values (flexible)** — these appear in templates as good starting points but should adapt to data:
+- `fontsize` on titles, labels, annotations — scale with figure size and content density
+- `alpha` on overlapping elements — adjust for data density
+- `figsize` tuples — scale for category count, label length, panel count
+- `pad`, `labelpad`, `wspace`, `hspace` — adjust for content spacing needs
+
+When a pattern template shows a specific numeric value (e.g., `fontsize=14`), treat it as a sensible default, not an immutable constraint — unless the Rules (identity) section explicitly mandates it.
+
 ## Base Configuration
 
 Always inline this style setup block at the top of the plotting section:

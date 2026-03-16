@@ -1,9 +1,8 @@
 # Multi-Panel Grid (GridSpec)
 
-**When to use:** 2x2, 3x2, 3x3, or irregular layouts showing same metric across different datasets/conditions.
-**Layout:** Always use `gridspec.GridSpec(rows, cols)` — rows first. A "3x2 grid" means 3 rows × 2 columns.
-**Line color:** Use a single color `pal[5]` (darkest cubehelix) for the line across all panels — do not vary color per panel. All panels show the same metric, so color should be consistent.
-**Figsize:** `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Always use `dpi=150`.
+**When to use:** 2x2, 3x2, 3x3, or irregular layouts showing the same metric across different datasets/conditions, or different but related views of the same data.
+**Layout:** Use `gridspec.GridSpec(rows, cols)` — rows first. A "3x2 grid" means 3 rows × 2 columns. You may also use `plt.subplots()` for regular grids.
+**Line color:** Default to `pal[5]` (darkest cubehelix) for line+scatter panels showing the same metric — consistent color emphasizes that the metric is identical across panels.
 
 ```python
 from matplotlib import gridspec
@@ -59,21 +58,22 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules:**
+**Rules (identity):**
 1. Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
-2. SINGLE line color `pal[5]` for ALL panels — never `pal[i]`, never per-panel/per-group colors. Every `ax.plot()` and `ax.scatter()` call must use `color=pal[5]`.
-3. Every panel MUST have `ax.scatter(...)` dots on data points (`s=40`, `edgecolors="white"`, `linewidths=0.8`, `zorder=4`). Do NOT use `fill_between`, SEM shading, area fills, error bands, or bar charts.
-4. Annotate BOTH first AND last values per panel with `ax.text(...)` — `fontsize=8`, `color="dimgrey"`. Format as plain number (`f"{val:.1f}"`) — no `$`, `%`, unit suffixes, or "Peak:" labels. No arrows or `ax.annotate()`.
-5. `ax.grid(False)` on every panel — do NOT add back any grid lines (no `yaxis.grid()`, no `xaxis.grid()`).
-6. Share y-axis limits across all panels: compute global min/max BEFORE the loop, then call `ax.set_ylim(y_global_min, y_global_max)` in every panel.
-7. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these labels.
-8. Suptitle: `fontsize=14`, centered above the grid — do not add `color="dimgrey"` to suptitle (keep default black for the main title).
-9. `gs.update(wspace=0.3, hspace=0.5)` — these are starting defaults. Adjust during Phase 5 visual review if gaps between panels or between suptitle and panels look excessive.
-10. Figsize by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Do not invent other sizes.
-11. Do NOT use `ax.annotate()` with arrows, "Peak:" labels, or `axvline`/`axhline` reference lines. Only `ax.text()` for first/last annotations.
-12. Do NOT add per-event/per-category color schemes (e.g., blue for "cue", red for "stim"). All panels use `pal[5]`.
-13. ALWAYS use `gridspec.GridSpec` — never `plt.subplots()` or `fig.add_subplot()`. This pattern requires GridSpec for all layouts.
-14. When N items don't fit a standard grid, round up: 3-4 items → 2x2, 5-6 items → 3x2, 7-9 items → 3x3. Leave extra panels empty (hide with `ax.set_visible(False)`).
-15. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data (e.g., `data/raw/...`).
+2. When all panels show the **same metric** across conditions: use a single color `pal[5]` for all panels and share y-axis limits (compute global min/max before the loop).
+3. Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
+4. `ax.grid(False)` on every panel.
+5. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these.
+6. Panel labels: counter-based `chr(ord('a') + i)` with bold prefix.
+7. When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`.
+8. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+
+**Adapt when:**
+- Panels show **different metrics or views**: use per-panel colors or per-metric palettes instead of uniform `pal[5]`. Color should encode meaning, not just be decorative.
+- Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — the grid layout is the pattern's identity, not the panel content type.
+- Add `fill_between`, background shading, or reference lines when they encode meaningful information (e.g., health zones, confidence intervals, thresholds).
+- Scale `figsize` by layout: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3 — adjust proportionally for content density.
+- Adjust `wspace`/`hspace` if gaps between panels look excessive or too tight.
+- Annotate first/last values by default for trends; omit for bar-type panels.
 
 **Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.

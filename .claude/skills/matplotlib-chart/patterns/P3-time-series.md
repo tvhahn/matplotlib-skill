@@ -2,10 +2,7 @@
 
 **When to use:** Time series visualization with annual/periodic aggregation and smoothing trend line. Also suitable for predicted vs actual (see Customize).
 **Palette:** `#4575b4` (blue) for negative/below-average values, `#d73027` (red) for positive/above-average values. Rolling line: cubehelix `pal[5]`.
-**Figsize:** `(12, 6)` for single-panel time series.
-**API:** Always use `ax.bar()` for the main data — never use `ax.scatter()`, `fill_between`, colorbars, or line-only variants for the primary layer.
-**Annotations:** Do not add data point annotations unless the user explicitly requests them.
-**Legend:** Exactly 3 items: above-average Patch, below-average Patch, rolling mean Line2D. Do not add extra entries for the zero baseline.
+**API:** Always use `ax.bar()` for the main data — bars are this pattern's signature.
 
 ```python
 from matplotlib.patches import Patch
@@ -48,19 +45,20 @@ ax.grid(False)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules:**
-1. Always use `ax.bar()` as the primary data layer — never use `ax.plot()`, `ax.scatter()`, or `fill_between` for the main data. Bars are the pattern's signature.
-2. Bar colors are EXACTLY `"#d73027"` (red) for values ≥ reference and `"#4575b4"` (blue) for values < reference. Do NOT substitute `"#fc8d59"`, orange, or any other color. Do NOT invert the convention (red is always above, blue is always below). Even if all values are positive, compute the series mean and color above/below it.
-3. Rolling mean line must use `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)` — never hardcode a color like `"navy"`, `"black"`, `"charcoal"`, or `"#2e2e2e"`. Use a plain `ax.plot()` call — do not add `marker=`, `markersize=`, glow, or shadow effects.
-4. `figsize=(12, 6)` — default for single-panel time series.
-5. Exactly 3 legend items using custom handles: `Patch(facecolor="#d73027", alpha=0.55)`, `Patch(facecolor="#4575b4", alpha=0.55)`, `Line2D([0], [0], color=pal[5], linewidth=2.5)`. Do not use `ax.plot(..., label=...)` — build handles explicitly. Default labels: `"Above average"`, `"Below average"`, `"Rolling mean"` — adapt labels to the data domain if context requires (e.g., "Above baseline" for anomaly data).
-6. Legend: prefer `loc="upper left"`, `fontsize=10`, standard frame styling. Move to another corner if upper-left occludes data.
-7. Reference value: default to `reference = df["value"].mean()`. Use for bar coloring (Rule 2) and baseline: `ax.axhline(y=reference, color="lightgrey", linewidth=0.8, zorder=1)`. Use 0 for anomaly/deviation data; use median for heavily skewed distributions.
-8. Bar styling: `alpha=0.55`, `width=0.9`, `zorder=2` — do not vary these.
-9. Do not add `ax.annotate()` arrows or data point labels unless the user explicitly requests them.
-10. When the data provides a pre-computed `rolling` column, use it directly — do not recompute rolling with `pd.Series.rolling()`.
-11. Title: `fontsize=14`, `loc="left"`, `pad=7` — defaults; keep `loc="left"`.
-12. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data.
-13. Always filter NaN from the rolling column before plotting: `rolling_df = df.dropna(subset=["rolling"])`. Plot the rolling line from `rolling_df`, not the full DataFrame. This prevents broken lines on datasets with leading NaN values.
+**Rules (identity):**
+- Use `ax.bar()` as the primary data layer — not `ax.scatter()`, `fill_between`, or line-only variants.
+- Bar colors are `"#d73027"` (red) for values ≥ reference and `"#4575b4"` (blue) for values < reference. Do not substitute or invert. Even if all values are positive, compute the series mean and color above/below it.
+- Rolling mean line uses `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)` — do not hardcode `"navy"`, `"black"`, or other colors. Use a plain `ax.plot()` — no markers or glow effects.
+- Exactly 3 legend items using custom Patch + Line2D handles. Adapt labels to data domain (e.g., "Above baseline" for anomaly data).
+- Reference value: default to `df["value"].mean()`. Use 0 for anomaly/deviation data; use median for heavily skewed distributions.
+- When the data provides a pre-computed `rolling` column, use it directly — do not recompute.
+- Filter NaN from rolling column before plotting: `rolling_df = df.dropna(subset=["rolling"])`.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+
+**Adapt when:**
+- Adjust bar `alpha` for data density: lower (0.4) for many bars, higher (0.65) for few.
+- Scale `figsize` wider for long time ranges (e.g., `(14, 6)` for 50+ years).
+- Move legend to another corner if `"upper left"` occludes data.
+- Add data point annotations if the user requests them.
 
 **Customize:** Adjust rolling window size (default 10). For predicted-vs-actual, replace bars with `ax.plot()` for true values (`#4575b4`, linewidth=1) and `ax.scatter()` for predictions (grey, alpha=0.4, s=2), compute rolling on predictions via `pd.rolling()`, and add RMSE/R² annotation box. Use `ax.annotate()` with `arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8)` for notable data points.

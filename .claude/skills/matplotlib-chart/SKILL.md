@@ -52,6 +52,7 @@ Parse `$ARGUMENTS` and any surrounding conversation for:
 - **Columns / variables:** Which columns map to x, y, hue, size, etc.
 - **Annotations:** Titles, axis labels, value labels, metric boxes (RMSE/R2), subplot labels
 - **Output context:** Standalone script (default), notebook cell, or function to add to a module
+- **Narrative intent:** What should the reader take away? Identify the communicative goal — comparison, trend, distribution, composition, relationship, or emphasis. Let this shape choices in Phase 2 (e.g., emphasis → selective color; neutral comparison → uniform palette).
 
 If the request is ambiguous (e.g., just "make a chart"), ask the user what data and chart type they want. Do not guess.
 

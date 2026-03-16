@@ -107,6 +107,8 @@ Read the 3 generated `.py` files. Compare across two tiers of dimensions (exclud
 
 Score = `structural_matching / structural_total` (only structural dimensions count for convergence). Log adaptive dimension variation as informational — divergence here is expected and healthy.
 
+**Appropriateness bonus:** If 2 of 3 runs match on a structural dimension and the third makes a defensible, data-driven choice (e.g., different figsize for a dataset with many more categories, moved legend to avoid occlusion), score that dimension as matching (1.0, not 0.67). Only penalize when the third run uses a fundamentally wrong approach (wrong palette family, wrong API).
+
 ### Layer 3 — Visual Quality
 Read the 3 PNGs. For each PNG, apply this 12-check **graded** rubric (0 / 1 / 2 per check):
 
@@ -148,6 +150,9 @@ Read all 3 generated `.py` files and score 5 binary checks:
 
 Score = `checks_passed / 5`.
 
+### Rule-Count Penalty
+Count the number of bullet points in the target pattern's "Rules (identity)" section. For every rule beyond 8, subtract 0.02 from the refinement score (floor at 0). This creates evolutionary pressure to keep patterns concise — the simplest specification that achieves quality is preferred.
+
 ### Composite Score
 ```
 composite = compliance × (0.25 × convergence + 0.45 × visual + 0.25 × refinement)
@@ -188,6 +193,7 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
    - Concrete: exact parameter values, explicit code, "do/don't" rules.
    - Avoid vague guidance — it doesn't reduce divergence.
    - **Before adding a new rule**, check whether the divergence is **harmful** (wrong visual output, broken API) or **adaptive** (reasonable data-driven variation like legend repositioning). Only add rules to prevent harmful divergence. If 2 of 3 runs make the same choice and the result looks correct, the pattern is already well-specified — do not add a rule to force the third run to match.
+   - **Pruning mode (every 10 experiments):** Instead of adding, attempt to **remove** the least-impactful rule from the highest-scoring pattern. If scores hold or improve after removal → keep the simplification. This counteracts the rule-accumulation ratchet. Prefer removing rules that re-state values already present in the code template.
 
 ---
 

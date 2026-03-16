@@ -59,16 +59,18 @@ ax.add_artist(legend1)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules:**
-1. Colors must be DIVERGING_COLORBLIND: `["#d73027", "#4575b4", "#fc8d59"]` — do not substitute Tableau, seaborn, or custom color palettes. For 2-class problems, use `["#d73027", "#4575b4"]` (drop orangeish only).
-2. Background must use probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — do not use `contourf` or `pcolormesh` filled regions. This applies to ALL cases including binary classification.
-3. Do not import sklearn or fit classifiers — assume `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.
-4. Two separate legends positioned outside the plot with `bbox_to_anchor=(1.05, ...)`: class legend at `(1.05, 0.35)` and confidence legend at `(1.05, 0.65)`. Use `ax.add_artist(legend1)` to keep both visible. This dual-legend layout is mandatory even for 2-class problems.
-5. `figsize=(8, 6)` — do not change to (9, 6) or other sizes.
-6. `set_aspect(1)` for square-ish proportions — do not use `set_aspect("auto")`.
-7. Title: `fontsize=14`, `loc="left"`, `pad=7` — single line, no multiline titles. Do not use fontsize=13.
-8. Contour lines: solid (default), not dashed.
-9. Axis labels: use `r"$x_0$"` and `r"$x_1$"` or descriptive feature names — not both.
-10. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data.
+**Rules (identity):**
+- Colors: DIVERGING_COLORBLIND `["#d73027", "#4575b4", "#fc8d59"]`. For 2-class, use `["#d73027", "#4575b4"]`. Do not substitute Tableau, seaborn, or custom palettes.
+- Background uses probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — not `contourf` or `pcolormesh` filled regions. Dots encode continuous probability via size.
+- Assume `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are in memory — do not import sklearn or fit classifiers.
+- Two separate legends positioned outside with `bbox_to_anchor`: class legend and confidence legend. Use `ax.add_artist()` to keep both visible.
+- `set_aspect(1)` for square proportions.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+
+**Adapt when:**
+- Adjust `figsize` if feature ranges are very asymmetric — `(8, 6)` is the default but `(10, 6)` works for wide feature ranges.
+- Adjust `bbox_to_anchor` positions if legends overlap with data points.
+- Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
+- Adjust probability dot `s` scaling factor for mesh density.
 
 **Customize:** Assumes `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.

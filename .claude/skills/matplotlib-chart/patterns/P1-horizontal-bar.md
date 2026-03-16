@@ -28,19 +28,19 @@ ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules:**
-- Always use `sns.barplot` — never use `ax.barh()` directly. Pass `palette="Blues_d"` to `sns.barplot`.
-- Always use `palette="Blues_d"` — never substitute cubehelix, rocket, or single-color palettes. The Blues_d gradient distinguishes ranked bars.
-- Figsize `(4, 7)` is the default for 8-15 bars. For fewer bars (3-5), use `(6, 4)`. Always keep `dpi=150`.
-- Annotation format is just the number with no prefixes or suffixes: `f"{value:.1f}"` for decimals, `f"{value:,.0f}"` for large integers. Never prepend `$` or append `%`, `" mpg"`, `" USD"`, or any other unit — the title provides context.
-- Annotation styling is fixed: `weight="semibold", size=10, color="dimgrey"`. Do not vary size.
-- `set_xlabel("")` — do not add an x-axis label; value labels on bar ends make it redundant.
-- `set_ylabel("")` — category names on the y-axis are self-explanatory.
-- `set_xticks([])` — always hide x-axis ticks; the bar-end labels carry the values.
-- Title: `fontsize=14, loc="left", pad=7` — do not use fontsize=12 or 13.
-- Do not add a separate `tick_params(axis="y", labelsize=...)` call — let `font_scale=1.0` control y-tick label size.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`. Use relative paths for data (e.g., `data/raw/...`).
-- Always read data from the CSV file — never hardcode data as inline DataFrames or dictionaries.
-- After loading CSV data, apply `df.dropna()` or `df.dropna(subset=[...])` to remove rows with missing values in key columns before plotting. This prevents silent NaN-related plotting errors.
+**Rules (identity):**
+- Use `sns.barplot()` — not `ax.barh()` directly.
+- Use `palette="Blues_d"` for neutral ranking. Do not substitute cubehelix, rocket, or single-color palettes.
+- Hide x-axis ticks with `set_xticks([])` — bar-end value labels carry the numbers.
+- Annotations use `color="dimgrey"` with `weight="semibold"`.
+- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+- Always read data from CSV — never hardcode inline DataFrames.
+- Apply `df.dropna()` or `df.dropna(subset=[...])` after loading CSV to prevent NaN errors.
+
+**Adapt when:**
+- Scale `figsize` for category count: `(4, 7)` for 8-15 bars, `(6, 4)` for 3-5 bars, wider for 15+.
+- Add unit prefixes/suffixes (e.g., `$`, `%`) when values are ambiguous without them — omit when the title provides enough context.
+- Adjust annotation `size` proportionally if bars are very narrow or figure is compact.
+- Scale title `fontsize` with figure size (12 for compact figures, 14-16 for large ones).
 
 **Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey).
