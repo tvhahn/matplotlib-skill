@@ -6,9 +6,14 @@
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
+# --- Data ---
+df = pd.read_csv("data.csv").dropna(subset=["name", "min", "max", "avg"])
+df = df.sort_values("avg", ascending=True).reset_index(drop=True)
+
+# --- Palette (two colors only — no colormaps or gradients) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
-darkblue = pal[5]  # "#1f253f"
-lightblue = pal[2]  # "#58849f"
+darkblue = pal[5]   # min/max dots
+lightblue = pal[2]  # avg dots
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
