@@ -14,6 +14,8 @@ df = pd.read_csv("data.csv").dropna(subset=["value", "category"])
 n_cats = df["category"].nunique()
 fig, ax = plt.subplots(figsize=(12, max(5, 2 + n_cats * 1.2)), dpi=150)
 
+# ALWAYS horizontal: x=numeric, y=categorical, orient="h"
+# Do NOT use vertical orientation even for 2 categories
 sns.violinplot(
     x="value", y="category", data=df,
     density_norm="width", inner=None, linewidth=2,
@@ -37,18 +39,19 @@ ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left", pad
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
+Apply style-reference invariants.
+
+**Signature:**
 - Use horizontal orientation (`orient="h"`) by default. Only use vertical if the user explicitly requests it.
 - `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is the pattern's signature. Do not use colored fills or per-category palettes.
 - Violin core params: `density_norm="width", inner=None, cut=0`.
-- Title uses bold-prefix convention: `r"$\bf{(a)}$"` with `loc="left"`.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
-**Adapt when:**
+**Guidance:**
 - Scale height for 8+ categories (add ~1 inch per additional 4 categories).
 - Adjust strip `alpha` for data density: lower (0.05) for thousands of points, higher (0.2) for sparse data.
 - Add median markers or reference lines if the user requests them or if the insight requires comparing central tendency across groups.
 - Add value annotations if the user says "annotate", "label", or "add median values".
 - Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
+- Title uses bold-prefix convention: `r"$\bf{(a)}$"` with `loc="left"` — adapt the label letter for multi-panel context.
 
 **Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
