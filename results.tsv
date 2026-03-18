@@ -12,3 +12,4 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 2	2026-03-18T07:33:00	P5	0.81	1.0	0.80	0.92	1.00	0.60	keep	0	REQUIRED comments on palette/annotations/legend; convergence 0.40→0.80; C still missing legend	7adaf82
 3	2026-03-18T07:38:00	P4	0.80	1.0	0.80	0.90	0.80	0.80	keep	0	ALWAYS horizontal comment; 2/3 still vertical but charts cleaner; visual 0.72→0.90	7a534be
 4	2026-03-18T07:48:00	P8	0.82	1.0	0.80	0.86	0.80	1.00	keep	0	Same-unit rule + no-Nx1; stocks now 3x2 grid (fixed!) but still per-symbol colors	f876959
+5	2026-03-18T07:55:00	P7	0.92	1.0	1.00	0.93	1.00	1.00	keep	0	Insight annotation + colorbar label guidance; all 3 have insights; conv 0.80→1.0	1808bf0
