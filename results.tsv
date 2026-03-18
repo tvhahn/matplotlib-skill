@@ -1,0 +1,15 @@
+experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	adaptiveness	status	consecutive_discards	description	commit
+0	2026-03-18T07:14:00	P1	0.87	1.0	1.00	0.90	0.80	1.00	baseline	0	A cubehelix (not Blues_d); hardcoded 23.9 in annotation; B+C excellent	e23fae6
+0	2026-03-18T07:14:00	P2	0.89	1.0	1.00	0.97	0.80	1.00	baseline	0	All 3 converge perfectly; A hardcodes inline data; editorial annotations strong	e23fae6
+0	2026-03-18T07:14:00	P3	0.92	1.0	1.00	0.90	1.00	1.00	baseline	0	Perfect convergence — red/blue bars, pal[5] rolling line, 3-item legend across all 3	e23fae6
+0	2026-03-18T07:14:00	P4	0.74	1.0	0.60	0.72	0.80	1.00	baseline	0	C went vertical (sig violation); B cramped 8-cat figure; median markers inconsistent	e23fae6
+0	2026-03-18T07:14:00	P5	0.69	1.0	0.40	0.78	0.60	1.00	baseline	0	B missing min/max labels + legend + used gradient; A inverted color roles; C correct	e23fae6
+0	2026-03-18T07:14:00	P6	0.89	1.0	1.00	0.82	1.00	1.00	baseline	0	All 3 use prob-sized dots (correct), DIVERGING_COLORBLIND, dual legends; dense mesh looks filled	e23fae6
+0	2026-03-18T07:14:00	P7	0.84	1.0	0.80	0.89	1.00	0.80	baseline	0	Consistent RdBu_r+annot+square; C (11x11 mtcars) missing insight annotation	e23fae6
+0	2026-03-18T07:14:00	P8	0.82	1.0	0.60	0.82	1.00	1.00	baseline	0	B stocks 5x1 stack with per-symbol colors; A+C excellent grid layouts	e23fae6
+0	2026-03-18T07:14:00	P9	0.67	1.0	0.60	0.75	0.60	0.80	baseline	0	2/3 runs failed (max turns); B has negative AP bug; only 1 PNG scored	e23fae6
+1	2026-03-18T07:26:00	P9	0.90	1.0	0.96	0.94	1.00	0.90	keep	0	AP/AUC computation in template + recall sort fix; 3/3 runs succeed; AP positive in all	9b5efce
+2	2026-03-18T07:33:00	P5	0.81	1.0	0.80	0.92	1.00	0.60	keep	0	REQUIRED comments on palette/annotations/legend; convergence 0.40→0.80; C still missing legend	7adaf82
+3	2026-03-18T07:38:00	P4	0.80	1.0	0.80	0.90	0.80	0.80	keep	0	ALWAYS horizontal comment; 2/3 still vertical but charts cleaner; visual 0.72→0.90	7a534be
+4	2026-03-18T07:48:00	P8	0.82	1.0	0.80	0.86	0.80	1.00	keep	0	Same-unit rule + no-Nx1; stocks now 3x2 grid (fixed!) but still per-symbol colors	f876959
+5	2026-03-18T07:55:00	P7	0.92	1.0	1.00	0.93	1.00	1.00	keep	0	Insight annotation + colorbar label guidance; all 3 have insights; conv 0.80→1.0	1808bf0

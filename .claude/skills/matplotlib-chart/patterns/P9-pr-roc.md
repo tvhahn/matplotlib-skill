@@ -20,6 +20,12 @@ tpr_avg = data["tpr_avg"]
 fpr_avg = data["fpr_avg"]
 baseline = float(data["baseline"])          # scalar
 
+# AP/AUC — recall_avg is in decreasing order (sklearn convention),
+# so sort ascending before integrating to get a positive area.
+sorted_pr = np.argsort(recall_avg)
+ap = float(np.trapezoid(precision_avg[sorted_pr], recall_avg[sorted_pr]))
+auc = float(np.trapezoid(tpr_avg, fpr_avg))  # fpr_avg is already ascending
+
 # --- Plot ---
 fig, axes = plt.subplots(1, 2, figsize=(12, 6), dpi=150)
 fig.tight_layout(pad=3.0)
@@ -33,7 +39,7 @@ for i in range(n_folds):
     axes[0].plot(recall_array[i], precision_array[i],
                  color="grey", alpha=0.5, linewidth=1, label=label)
 
-axes[0].plot(recall_avg, precision_avg, label="Average",
+axes[0].plot(recall_avg, precision_avg, label=f"Average (AP = {ap:.3f})",
              color=pal[5], linewidth=2)
 
 axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
@@ -51,7 +57,7 @@ for i in range(n_folds):
     axes[1].plot(fpr_array[i], tpr_array[i],
                  color="grey", alpha=0.5, linewidth=1, label=label)
 
-axes[1].plot(fpr_avg, tpr_avg, label="Average",
+axes[1].plot(fpr_avg, tpr_avg, label=f"Average (AUC = {auc:.3f})",
              color=pal[5], linewidth=2)
 
 axes[1].plot([0, 1], [0, 1], linestyle="--",
@@ -74,18 +80,19 @@ for ax in axes.flatten():
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
-- Do not import sklearn or run cross-validation — load pre-computed data from NPZ files with `np.load()`. Extract `baseline` as `float(data["baseline"])`.
-- Panel order: **(a) PR first**, **(b) ROC second**.
-- Three line layers per panel: (1) grey k-fold lines (`alpha=0.5`), (2) average line with `pal[5]`, (3) orange dashed baseline. Do not use `fill_between`.
-- Average line color is always `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)`.
-- Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
-- Baseline: use `ax.plot([0, 1], ...)` — not `axhline`. Do not use `sharex`/`sharey`.
-- Include metric values in legend labels when available (e.g., `f"Average (AP = {ap:.3f})"`).
-- Both panels: `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — always show the full probability range.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+Apply style-reference invariants.
 
-**Adapt when:**
+**Signature:**
+- PR first (a), ROC second (b) — panel order is fixed.
+- Three line layers per panel: (1) grey k-fold lines (`alpha=0.5`), (2) average line with `pal[5]`, (3) orange dashed baseline.
+- Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
+- Both panels: `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — always show the full probability range.
+
+**Guidance:**
+- Default: load pre-computed data from NPZ files with `np.load()`. The `recall_avg` array is in **decreasing** order (sklearn convention) — sort ascending with `np.argsort` before computing AP via `np.trapezoid`. Do **not** use `abs()` as a workaround. Allow sklearn import when the user provides a fitted model and explicitly requests cross-validation.
+- Average line color is always `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)`.
+- Include metric values in legend labels when available (e.g., `f"Average (AP = {ap:.3f})"`).
+- Default: no `fill_between`. Consider `fill_between` for confidence intervals if the user requests uncertainty visualization.
 - Adjust k-fold line `alpha` for number of folds: lower (0.3) for 20+ folds, default (0.5) for 5-10.
 - For single model (no CV), plot one `pal[5]` line and baseline — omit grey fold lines.
 - Adapt legend labels to context (e.g., model name instead of "k-fold models" for a single model).

@@ -62,20 +62,21 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
-1. Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
-2. Default color is `line_color` (cubehelix darkest) for all panels. Share y-axis limits when panels show the same metric (compute global min/max before the loop).
-3. Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
-4. `ax.grid(False)` on every panel.
-5. Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these.
-6. Panel labels: counter-based `chr(ord('a') + i)` with bold prefix.
-7. When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`.
-8. Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+Apply style-reference invariants.
 
-**Adapt when:**
-- Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis). The grid layout is the pattern's identity, not the panel content type.
-- Scale `figsize` and spacing (`wspace`/`hspace`) for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3.
+**Signature:**
+- Grid dimension order: rows first, columns second. `GridSpec(3, 2)` = 3 rows × 2 columns.
+- Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
+- Panel labels: counter-based `chr(ord('a') + i)` with bold prefix.
+- Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these.
+
+**Guidance:**
+- Default to single `line_color` (cubehelix darkest `pal[5]`) when panels show the same metric (same y-axis unit). Stock prices across companies, temperatures across cities, scores across models — all use **one color** because the unit is identical. Use per-panel colors only when panels display fundamentally different units (e.g., temperature vs precipitation).
+- Default shared y-axis limits for same metric (compute global min/max before the loop). Use independent y-axes when panels show different metrics or scales.
+- `ax.grid(False)` on every panel.
+- When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`. Do NOT use Nx1 vertical stacks — always use a balanced multi-column grid.
+- Scale `figsize` and spacing (`wspace`/`hspace`) for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Template values are starting points.
+- Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis).
 - Annotate first/last values by default for trends; omit for bar-type panels.
-- Use per-panel colors only when the user explicitly requests it or panels display fundamentally incomparable metrics (e.g., temperature vs. pressure on different y-axes). Default to `pal[5]`.
 
 **Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
