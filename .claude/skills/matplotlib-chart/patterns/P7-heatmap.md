@@ -22,17 +22,19 @@ ax.set_title("Correlation Matrix", fontsize=14, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
+Apply style-reference invariants.
+
+**Signature:**
 - Correlation heatmaps: `cmap="RdBu_r"` with `vmin=-1, vmax=1, center=0`. For non-correlation heatmaps (pivot tables), use `cmap="rocket"` without vmin/vmax/center.
 - Always annotate cells: `annot=True, fmt=".2f"`. Do not set annotation `color` — let seaborn auto-contrast.
 - `square=True` for correlation matrices.
-- No colorbar label — do not add `"label"` to `cbar_kws` or call `cbar.set_label()`.
-- Data is pre-computed: load with `pd.read_csv(path, index_col=0)`. Do not compute `.corr()`.
-- Show full matrix by default — do not mask with `np.triu`/`np.tril` unless the user explicitly requests it.
-- `ax.grid(False)` is NOT needed for `sns.heatmap` — seaborn handles this.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
-**Adapt when:**
+**Guidance:**
+- Default: add a colorbar label (e.g., `"Pearson r"`) and an insight annotation below the chart (`fig.text(...)` or subtitle) highlighting the strongest or most notable correlation. Consider omitting the insight only for very large matrices (>15×15) where a single finding is not representative.
+- Default: no additional colorbar label beyond the cbar. Consider adding one when the heatmap shows a non-obvious metric.
+- Default: show full matrix. Consider masking with `np.triu`/`np.tril` when the user requests it or the matrix is large (>15×15) and symmetric.
+- `ax.grid(False)` is NOT needed for `sns.heatmap` — seaborn handles this internally.
+- Data is typically pre-computed: load with `pd.read_csv(path, index_col=0)`. Allow `.corr()` when the user provides raw data.
 - Scale `figsize` for matrix size: `(8, 6)` for ≤10×10, `(10, 8)` for 10-15, `(12, 10)` for 15+.
 - Reduce `linewidths` to 0.3 or omit for matrices >12×12.
 - Reduce `annot_kws` size for large matrices where numbers would overlap.
