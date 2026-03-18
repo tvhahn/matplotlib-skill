@@ -10,10 +10,10 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 df = pd.read_csv("data.csv").dropna(subset=["name", "min", "max", "avg"])
 df = df.sort_values("avg", ascending=True).reset_index(drop=True)
 
-# --- Palette (two colors only — no colormaps or gradients) ---
+# --- Palette (EXACTLY two colors — no gradients, no colormaps, no per-item coloring) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
-darkblue = pal[5]   # min/max dots
-lightblue = pal[2]  # avg dots
+darkblue = pal[5]   # ALL min/max dots use this single color
+lightblue = pal[2]  # ALL avg dots use this single color
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
@@ -33,13 +33,13 @@ ax.scatter(x=df["max"], y=df["name"], s=DOT_SIZE,
 ax.scatter(x=df["avg"], y=df["name"], s=DOT_SIZE,
            color=lightblue, edgecolors="white", label="Average", zorder=4)
 
-# avg value annotations (centered above each avg dot)
+# avg value annotations — REQUIRED (centered above each avg dot)
 for i in range(df.shape[0]):
     ax.text(x=df["avg"].iloc[i], y=i + 0.15, s=f'{df["avg"].iloc[i]:,.0f}',
             ha="center", va="bottom", size=10,
             color="dimgrey", weight="medium")
 
-# min/max value annotations (below each dot, smaller text)
+# min/max value annotations — REQUIRED (below each dot, smaller text)
 for i in range(df.shape[0]):
     ax.text(x=df["min"].iloc[i], y=i - 0.15, s=f'{df["min"].iloc[i]:,.0f}',
             ha="center", va="top", size=8.5,
@@ -55,21 +55,22 @@ ax.set_ylabel("")
 ax.set_xlabel("X-Axis Label", fontsize=12, labelpad=8, color="dimgrey")
 ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 
+# Legend — REQUIRED (2 entries: "Min/Max" and "Average")
 ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
          labelcolor="dimgrey", loc="lower right", fontsize=11)
 ```
 
-**Rules (identity):**
+Apply style-reference invariants.
+
+**Signature:**
 - Palette: define `pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)`, then `darkblue = pal[5]` and `lightblue = pal[2]`. All min/max dots use `darkblue`, all avg dots use `lightblue` — do not use per-item gradient coloring, colormaps, or data-mapped colors.
 - Three separate `ax.scatter()` calls: one for min dots, one for max dots, one for avg dots. Do not combine, use loops per item, or use a colormap.
 - Annotate all three values per row: avg above, min/max below. All annotations `color="dimgrey"`.
 - Connecting lines: `ax.hlines()` from min to max — do not add extra lollipop sticks from zero.
-- Exactly 2 legend items: "Average" and "Min/Max".
-- Set a descriptive x-axis label — do not leave it empty.
-- Always read data from the CSV file — never hardcode data as inline arrays, lists, or DataFrames.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
 
-**Adapt when:**
+**Guidance:**
+- Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
+- Set a descriptive x-axis label — do not leave it empty.
 - Scale `DOT_SIZE` with figure size or data density (100-200 range).
 - Add unit prefixes (e.g., `$`) when values are currency or otherwise ambiguous without units.
 - Adjust annotation `size` proportionally if figure is compact or labels overlap.
