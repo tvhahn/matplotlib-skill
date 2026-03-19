@@ -46,6 +46,11 @@ ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
+# --- Insight annotation ---
+ax.text(0.02, 0.02, f"{len(class_names)} classes · {len(y)} training points",
+        transform=ax.transAxes, ha="left", va="bottom",
+        fontsize=9, color="dimgrey", style="italic")
+
 # class legend
 class_handles = [Line2D([0], [0], marker="o", color="w", markerfacecolor=c,
                         markersize=8, markeredgecolor="k", markeredgewidth=0.7,
@@ -81,6 +86,7 @@ Apply style-reference invariants.
 - Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
 - Adjust `figsize` if feature ranges are very asymmetric — `(8, 6)` is the default but `(10, 6)` works for wide feature ranges.
 - Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
-- Adjust probability dot `s` scaling factor for mesh density.
+- Adjust probability dot `s` scaling factor for mesh density. For very dense meshes (>5000 points), reduce `s` or increase the power exponent to keep dots visually distinct.
+- Always include an insight annotation: class count + sample size at minimum. If class_names are descriptive, mention the most/least separated classes. Position in lower-left using `transform=ax.transAxes`.
 
 **Customize:** Assumes `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.
