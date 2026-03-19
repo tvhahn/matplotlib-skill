@@ -17,6 +17,7 @@ line_color = sns.cubehelix_palette(6, rot=-0.25, light=0.7)[5]
 
 fig = plt.figure(figsize=(14, 9), dpi=150)
 gs = gridspec.GridSpec(3, 2)
+gs.update(wspace=0.15, hspace=0.35)
 axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(2)]
 fig.suptitle("Main Title", fontsize=14, y=0.98)
 
@@ -79,7 +80,8 @@ Apply style-reference invariants.
 - Default shared y-axis limits for same metric (compute global min/max before the loop). Use independent y-axes when panels show different metrics or scales.
 - `ax.grid(False)` on every panel.
 - When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`. Prefer balanced multi-column grids over Nx1 vertical stacks.
-- Scale `figsize` and spacing (`wspace`/`hspace`) for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Template values are starting points.
+- Keep column spacing tight: default `wspace=0.15` for all grids. Only the left column has y-labels, so right-column panels need no extra left margin. Use `hspace=0.30` for 2x2, `hspace=0.35` for 3x2, `hspace=0.40` for 3x3. Increase `wspace` only if both columns have y-labels or panels contain wide annotations.
+- Scale `figsize` for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Template values are starting points.
 - Use `fill_between`, `axvline`/`axhline`, or reference lines when they help communicate the data (e.g., confidence intervals, thresholds, baselines).
 - Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis).
 - Annotate first/last values by default for trends; omit for bar-type panels.
