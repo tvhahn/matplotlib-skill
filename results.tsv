@@ -8,3 +8,9 @@ experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness
 0	2026-03-19T08:13:47	P7	0.993	1.0	0.986	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
 0	2026-03-19T08:13:47	P8	0.979	1.0	0.958	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
 0	2026-03-19T08:13:47	P9	1.0	1.0	1.0	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
+1	2026-03-19T08:21:01	P5	0.84	1.0	0.89	0.8	0.8	keep	0	Move insight annotation below axes via fig.text to avoid data overlap	3f7c8dd
+2	2026-03-19T08:27:56	P5	0.979	1.0	0.958	1.0	1.0	keep	0	Enforce two-tone cubehelix palette + dimgrey title color	feda78d
+3	2026-03-19T08:33:19	P2	0.976	1.0	0.986	1.0	0.933	keep	0	Add explicit order= param to sns.barplot for descending sort	916ba43
+4	2026-03-19T08:38:55	P4	0.993	1.0	0.986	1.0	1.0	keep	0	Add dimgrey to title/xlabel + simplify title guidance	f5b8ddd
+5	2026-03-19T08:45:25	P3	0.979	1.0	0.958	1.0	1.0	keep	0	Add dimgrey title + reinforce exact bar color hex codes	0d91c5b
+6	2026-03-19T08:50:23	P1	0.979	1.0	0.958	1.0	1.0	keep	0	Add dimgrey title + move insight below axes via fig.text	6ca5ea6
