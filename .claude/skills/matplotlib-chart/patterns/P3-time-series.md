@@ -36,7 +36,7 @@ ax.axhline(y=reference, color="lightgrey", linewidth=0.8, zorder=1)
 
 ax.set_xlabel("Year", fontsize=12, labelpad=8, color="dimgrey")
 ax.set_ylabel("Y-Axis Label (Unit)", fontsize=12, labelpad=8, color="dimgrey")
-ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
 
 # Legend with Patch handles for bar colors + Line2D for rolling
 legend_handles = [
@@ -65,6 +65,7 @@ Apply style-reference invariants.
 - Default rolling line style: plain `ax.plot()`. Add markers if data is sparse (<10 points) to clarify individual values.
 - Default rolling line color is `pal[5]` (darkest cubehelix). Any dark cubehelix shade works if the darkest conflicts with the data.
 - Reference value: use `0` when data has negative values; otherwise use `df["value"].mean()`. The template code shows the conditional.
+- Bar colors must be exactly `"#d73027"` (red) and `"#4575b4"` (blue) — do not substitute other shades (e.g., steel blue, coral). These hex codes are the pattern's visual identity.
 - When the data provides a pre-computed `rolling` column, use it directly — do not recompute.
 - Adjust bar `alpha` for data density: lower (0.4) for many bars, higher (0.65) for few.
 - Scale `figsize` wider for long time ranges (e.g., `(14, 6)` for 50+ years).
