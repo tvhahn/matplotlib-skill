@@ -15,7 +15,9 @@ pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 darkblue = pal[5]   # min/max dots
 lightblue = pal[2]  # avg dots
 
-fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
+# Scale height to item count
+n_items = len(df)
+fig, ax = plt.subplots(figsize=(10, max(5, 1.5 + n_items * 0.8)), dpi=150)
 
 DOT_SIZE = 150
 
@@ -48,6 +50,13 @@ for i in range(df.shape[0]):
             ha="center", va="top", size=8.5,
             color="dimgrey", weight="normal")
 
+# --- Insight annotation (highlight widest range or top performer) ---
+df["range"] = df["max"] - df["min"]
+top = df.loc[df["avg"].idxmax()]
+ax.text(0.98, 0.02, f'{top["name"]} leads with avg {top["avg"]:,.0f}',
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=9, color="dimgrey", style="italic")
+
 ax.grid(False)
 sns.despine(left=True, bottom=True)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
@@ -72,11 +81,13 @@ Apply style-reference invariants.
 - Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
 - Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
 - Set a descriptive x-axis label — do not leave it empty.
+- Scale figsize height for item count: `max(5, 1.5 + n_items * 0.8)` — taller for more items.
 - Scale `DOT_SIZE` with figure size or data density (100-200 range).
 - Add unit prefixes (e.g., `$`) when values are currency or otherwise ambiguous without units.
 - Adjust annotation `size` proportionally if figure is compact or labels overlap.
 - Use `f'{value:.2f}'` for decimal data, `f'{value:,.0f}'` for large integers.
 - Move legend to avoid occlusion if data extends into the lower-right corner.
 - Omit min/max labels if the user says "clean" or "minimal".
+- Always include an insight annotation (e.g., top performer, widest range, or notable gap). Position in an open corner using `transform=ax.transAxes`.
 
 **Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
