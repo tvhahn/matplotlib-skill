@@ -78,14 +78,14 @@ grep 'dpi=' .claude/skills/matplotlib-chart/patterns/*.md
 | Command | When to use | Key behavior |
 |---------|------------|--------------|
 | `/iterate-skill` | "What should I improve?" | Single eval→improve→gallery cycle |
-| `/variation-analysis PN` | "Why does this pattern diverge?" | 3 parallel clean rooms per round, dataset variety |
-| `/variation-analysis-single PN` | Single-dataset convergence | All runs use same prompt |
+| `/variation-analysis PN` | "Does this pattern pass quality checks?" | 3 parallel clean rooms per round, dataset variety |
+| `/variation-analysis-single PN` | Single-dataset quality check | All runs use same prompt |
 | `/variation-analysis-all [P1,P3,P5]` | Sweep multiple patterns | Per-pattern subagent isolation |
 | `/autoresearch <tag>` | Fully autonomous loop | Branch `autoresearch/<tag>`, keep/revert per experiment |
 
 **Guardrails:** max 5 rounds, no pattern deletions, `sns.set_theme` and `sns.despine` immutable.
 
-**Autoresearch scoring layers:** compliance (0/1), convergence (0–1), visual (0–1), refinement (0–1), adaptiveness (0–1). See `.claude/commands/autoresearch.md` for full details.
+**Autoresearch scoring layers:** compliance (0/1), visual (0–1), refinement (0–1), adaptiveness (0–1). Composite = compliance × (0.50 × visual + 0.25 × refinement + 0.25 × adaptiveness) × signature_penalty. See `.claude/commands/autoresearch.md` for full details.
 
 **Circuit breakers:** 10 consecutive discards → next pattern; Docker failure → halt; all above threshold → patrol mode.
 

@@ -5,16 +5,16 @@ disable-model-invocation: true
 allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash(cp *), Bash(ls *), Bash(docker *)
 ---
 
-# Variation Analysis
+# Variation Analysis (Single Dataset)
 
-Run 3-round parallel clean-room variation analysis on a single chart pattern.
-Each round runs 3 parallel clean rooms with the same prompt, then compares
-generated code across ~10 dimensions to find divergence. Fixes are applied
-between rounds until the pattern converges.
+Run 3-round parallel clean-room quality check on a single chart pattern.
+Each round runs 3 parallel clean rooms with the same prompt, then evaluates
+whether all outputs maintain Tim's visual identity and meet the quality bar.
+Fixes are applied between rounds if quality issues are found.
 
 ## Guardrails
 
-- **Max 3 rounds** — if Round 3 still shows structural divergence, halt and report
+- **Max 3 rounds** — if Round 3 still shows quality issues, halt and report
 - **No destructive changes** — add/modify only, never delete patterns
 - **Style invariants** — `sns.set_theme()` and `sns.despine()` calls are immutable
 - **Rollback** — each round's fixes are committed; `git revert` any single one
@@ -60,16 +60,12 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
    - Otherwise, use the **first prompt** (index 0) from the pattern's pool in `scripts/chart-test-container.sh`
    - Log the chosen prompt — all 9 runs will use this exact same prompt
 
-5. Define comparison dimensions for this pattern. Always include these core dimensions:
-   - API calls (which seaborn/matplotlib functions used)
-   - Palette/cmap choice
-   - Figsize and aspect ratio
-   - Annotation styling (format, color, size, weight)
-   - Legend/colorbar configuration
-   - Title format (fontsize, loc, pad)
-   - Tick styling (tick_params arguments)
-   - Data handling (column selection, filtering, sorting)
-   - Add pattern-specific dimensions (e.g., masking for heatmaps, line styles for time series)
+5. Define quality evaluation dimensions:
+   - **Identity preservation:** Correct palette family, despine, legend frame styling, annotation color
+   - **Visual quality:** Layout balance, text readability, no overlaps/clipping, spacing
+   - **Data-appropriateness:** Figsize, annotations, legend placement
+   - **Informativeness:** Axis labels, insight annotations, units
+   - **Pattern-specific checks:** e.g., masking for heatmaps, bar coloring for time series
 
 ### Step 2: Round 1 — Establish Variation Baseline (tags A, B, C)
 
@@ -87,25 +83,25 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 4. Read all 3 PNGs for visual comparison
 
-5. Build convergence matrix: for each dimension, record what each run (A, B, C) produced
+5. Evaluate each PNG against quality dimensions. Note:
+   - Which charts meet the quality bar individually?
+   - Do all 3 maintain Tim's visual identity?
+   - Are there quality issues suggesting pattern needs clarification?
 
-6. Identify divergent dimensions — these are where the pattern is under-specified
+6. **Early exit check:** If all 3 charts meet the quality bar and maintain identity,
+   report "Pattern PN passes quality check — no issues found" and skip to Step 6
 
-7. **Early exit check:** If all 3 runs are structurally identical across all dimensions,
-   report "Pattern PN is already well-specified — no divergence found" and skip to Step 6
-   (gallery entry documents the convergence evidence)
-
-8. Propose specific fixes for each divergent dimension — each fix should add an explicit
-   rule or code snippet to the pattern
+7. Propose specific fixes for quality issues — fixes should improve guidance or defaults,
+   not add prohibitions
 
 ### Step 3: Apply Round 1 Fixes
 
-1. Edit the pattern file in `.claude/skills/matplotlib-chart/patterns/` to tighten the pattern on divergent dimensions
+1. Edit the pattern file in `.claude/skills/matplotlib-chart/patterns/` to improve guidance on quality issues
 
 2. Edit `.claude/skills/matplotlib-chart/style-reference.md` if palette or layout conventions change
 
-3. Each fix must be concrete: add explicit code, parameter values, or "do/do not" rules.
-   Vague guidance (e.g., "use appropriate colors") does not reduce divergence.
+3. Fixes should clarify guidance or improve defaults — avoid adding prohibitions.
+   Vague guidance (e.g., "use appropriate colors") does not help.
 
 ### Step 4: Round 2 — Validate Fixes (tags D, E, F)
 
@@ -119,13 +115,12 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 2. Read all 3 generated `.py` files and PNGs
 
-3. Build convergence matrix across the same dimensions
+3. Evaluate each PNG against quality dimensions
 
-4. Check: did Round 1 fixes converge? Any new divergence introduced?
+4. Check: did Round 1 fixes resolve quality issues? Any new issues introduced?
 
-5. If converged on all structural dimensions (cosmetic variation is acceptable), proceed to
-   Round 3 for final verification. If structural divergence remains, apply additional fixes
-   to the pattern file before Round 3.
+5. If all charts meet quality bar, proceed to Round 3 for final verification.
+   If quality issues remain, apply additional fixes before Round 3.
 
 ### Step 5: Round 3 — Final Verification (tags G, H, I)
 
@@ -139,13 +134,12 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 2. Read all 3 generated `.py` files and PNGs
 
-3. Confirm convergence across all structural dimensions
+3. Confirm all charts meet quality bar
 
 4. Select best output as representative
 
-5. If structural divergence persists after Round 3: **halt and report**. List the
-   dimensions that remain divergent and explain why additional rounds may not help
-   (e.g., the dimension may be inherently ambiguous).
+5. If quality issues persist after Round 3: **halt and report**. List the issues
+   that remain and suggest next steps.
 
 ### Step 6: Gallery Entry
 
@@ -160,12 +154,12 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 4. Write `README.md` following the pattern from galleries 27-29:
    - **What Changed** — bullet list of skill file edits
-   - **Why** — what divergence problem this solves
-   - **Prompt Used** — the exact prompt used for all 9 runs
-   - **Method** — dimension table showing what was compared
-   - **Round 1** — convergence table (A, B, C) with divergent dimensions highlighted
-   - **Round 2** — convergence table (D, E, F) showing fix validation
-   - **Round 3** — convergence table (G, H, I) confirming convergence
+   - **Why** — what quality issue this addresses
+   - **Prompt Used** — the exact prompt used for all runs
+   - **Method** — quality dimensions evaluated
+   - **Round 1** — quality assessment (A, B, C) with issues highlighted
+   - **Round 2** — quality assessment (D, E, F) showing fix validation
+   - **Round 3** — quality assessment (G, H, I) confirming quality bar met
    - **Files Modified** — what was changed in skill files
    - **Lessons Learned** — insights for the blog (most valuable section)
 
@@ -183,9 +177,9 @@ Include in the commit: skill file changes, gallery entry, CLAUDE.md update.
 ## Error Handling
 
 - **Docker not running:** If `scripts/chart-test-container.sh` fails with a Docker connection error, report the error and halt. Do not retry.
-- **Chart generation fails:** If any clean-room run produces zero PNGs, inspect `logs/clean-room/` for the root cause. A single failure in a round of 3 is acceptable (note it in the convergence table); if 2+ runs fail in the same round, halt and investigate.
-- **No divergence found:** If Round 1 shows all 3 runs structurally identical, this is a positive result. Create a gallery entry documenting the convergence evidence and skip Rounds 2-3.
-- **Persistent divergence:** If Round 3 still shows structural divergence, halt and report. Do not run additional rounds — the dimension may be inherently ambiguous and needs a different approach (e.g., rewriting the pattern from scratch via `/iterate-skill`).
+- **Chart generation fails:** If any clean-room run produces zero PNGs, inspect `logs/clean-room/` for the root cause. A single failure in a round of 3 is acceptable (note it in the quality assessment); if 2+ runs fail in the same round, halt and investigate.
+- **No issues found:** If Round 1 shows all 3 charts meeting the quality bar, this is a positive result. Create a gallery entry documenting the evidence and skip Rounds 2-3.
+- **Persistent issues:** If Round 3 still shows quality issues, halt and report. Do not run additional rounds — the issue may need a different approach (e.g., rewriting the pattern from scratch via `/iterate-skill`).
 - **Fewer than 3 rounds requested:** With `--rounds 2`, skip Round 3 (Steps 5). Minimum 2 rounds is required (baseline + validation).
 
 ## Example Usage

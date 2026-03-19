@@ -17,13 +17,29 @@ This spec distinguishes two kinds of values:
 - DPI: 150 standard / 300 publication
 - Save format: PDF+PNG with `bbox_inches="tight"`
 
-**Default values (flexible)** — these appear in templates as good starting points but should adapt to data:
+**Default values (flexible)** — these appear in templates as good starting points but should adapt to data properties:
 - `fontsize` on titles, labels, annotations — scale with figure size and content density
 - `alpha` on overlapping elements — adjust for data density
 - `figsize` tuples — scale for category count, label length, panel count
 - `pad`, `labelpad`, `wspace`, `hspace` — adjust for content spacing needs
+- `DOT_SIZE`, `linewidth`, `s` — scale for data volume and figure size
+- Format strings (`f"{value:.1f}"`, `f"{value:,.0f}"`) — match data type and precision
 
-When a pattern template shows a specific numeric value (e.g., `fontsize=14`), treat it as a sensible default, not an immutable constraint — unless the Rules (identity) section explicitly mandates it.
+When a pattern template shows a specific numeric value (e.g., `fontsize=14`, `alpha=0.55`, `DOT_SIZE=150`), treat it as a sensible default, not an immutable constraint. Adapt based on data properties, figure size, and content density. Only values listed in a pattern's **Signature** section define the visual identity.
+
+## Invariants Shorthand
+
+Pattern files say "Apply style-reference invariants" instead of repeating these.
+Every chart MUST include:
+
+1. `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")`
+2. `sns.despine(left=True, bottom=True)`
+3. `dpi=150` (300 only on explicit publication request)
+4. `bbox_inches="tight"` on every `savefig`; PDF+PNG dual save
+5. Legend frame: `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey"`
+6. Annotation color: `"dimgrey"`
+7. Tick styling: `ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")`
+8. Data: read from CSV/NPZ; apply `df.dropna()` after loading
 
 ## Base Configuration
 
@@ -216,7 +232,8 @@ fig = plt.figure(figsize=(14, 12), dpi=150)
 gs = gridspec.GridSpec(3, 3)
 ax1 = plt.subplot(gs[0, 0])
 # ...
-gs.update(wspace=0.15, hspace=0.4)
+# Adjust wspace/hspace for content density — no single "right" value
+gs.update(wspace=0.3, hspace=0.4)
 ```
 
 ### Title padding

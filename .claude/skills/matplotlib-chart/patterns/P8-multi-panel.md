@@ -18,7 +18,6 @@ line_color = sns.cubehelix_palette(6, rot=-0.25, light=0.7)[5]
 fig = plt.figure(figsize=(14, 9), dpi=150)
 gs = gridspec.GridSpec(3, 2)
 axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(2)]
-gs.update(wspace=0.3, hspace=0.5)
 fig.suptitle("Main Title", fontsize=14, y=0.98)
 
 # Shared y-axis: compute global limits BEFORE the loop
@@ -71,11 +70,12 @@ Apply style-reference invariants.
 - Axis labels: left column panels get `set_ylabel`, bottom row panels get `set_xlabel` — other panels omit these.
 
 **Guidance:**
-- Default to single `line_color` (cubehelix darkest `pal[5]`) when panels show the same metric (same y-axis unit). Stock prices across companies, temperatures across cities, scores across models — all use **one color** because the unit is identical. Use per-panel colors only when panels display fundamentally different units (e.g., temperature vs precipitation).
+- Default to single `line_color` (cubehelix darkest `pal[5]`) when panels show the same metric (same y-axis unit). Use per-panel colors when panels display different metrics or when color encodes a meaningful category.
 - Default shared y-axis limits for same metric (compute global min/max before the loop). Use independent y-axes when panels show different metrics or scales.
 - `ax.grid(False)` on every panel.
-- When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`. Do NOT use Nx1 vertical stacks — always use a balanced multi-column grid.
+- When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`. Prefer balanced multi-column grids over Nx1 vertical stacks.
 - Scale `figsize` and spacing (`wspace`/`hspace`) for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Template values are starting points.
+- Use `fill_between`, `axvline`/`axhline`, or reference lines when they help communicate the data (e.g., confidence intervals, thresholds, baselines).
 - Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis).
 - Annotate first/last values by default for trends; omit for bar-type panels.
 

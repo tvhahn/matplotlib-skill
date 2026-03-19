@@ -53,20 +53,22 @@ ax.grid(False)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
-- Use `ax.bar()` as the primary data layer — not `ax.scatter()`, `fill_between`, or line-only variants.
-- Bar colors are `"#d73027"` (red) for values ≥ reference and `"#4575b4"` (blue) for values < reference. Do not substitute or invert. Even if all values are positive, compute the series mean and color above/below it.
-- Rolling mean line uses `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)` — do not hardcode `"navy"`, `"black"`, or other colors. Use a plain `ax.plot()` — no markers or glow effects.
-- Exactly 3 legend items using custom Patch + Line2D handles. Adapt labels to data domain (e.g., "Above baseline" for anomaly data).
-- Reference value: use `0` when data has negative values; otherwise use `df["value"].mean()`. The template code shows the conditional: `reference = 0 if (df["value"] < 0).any() else df["value"].mean()`.
-- When the data provides a pre-computed `rolling` column, use it directly — do not recompute.
-- Filter NaN from rolling column before plotting: `rolling_df = df.dropna(subset=["rolling"])`.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+Apply style-reference invariants.
 
-**Adapt when:**
+**Signature:**
+- Use `ax.bar()` as the primary data layer.
+- Bar colors: `"#d73027"` (red) for values ≥ reference, `"#4575b4"` (blue) for values < reference.
+- Rolling mean line uses cubehelix `pal[5]`.
+- Legend with custom Patch + Line2D handles. Adapt labels to data domain.
+
+**Guidance:**
+- Default rolling line style: plain `ax.plot()`. Add markers if data is sparse (<10 points) to clarify individual values.
+- Default rolling line color is `pal[5]` (darkest cubehelix). Any dark cubehelix shade works if the darkest conflicts with the data.
+- Reference value: use `0` when data has negative values; otherwise use `df["value"].mean()`. The template code shows the conditional.
+- When the data provides a pre-computed `rolling` column, use it directly — do not recompute.
 - Adjust bar `alpha` for data density: lower (0.4) for many bars, higher (0.65) for few.
 - Scale `figsize` wider for long time ranges (e.g., `(14, 6)` for 50+ years).
 - Move legend to another corner if `"upper left"` occludes data.
-- Add data point annotations if the user requests them.
+- Add data point annotations if the user requests them or an insight warrants emphasis.
 
 **Customize:** Adjust rolling window size (default 10). For predicted-vs-actual, replace bars with `ax.plot()` for true values (`#4575b4`, linewidth=1) and `ax.scatter()` for predictions (grey, alpha=0.4, s=2), compute rolling on predictions via `pd.rolling()`, and add RMSE/R² annotation box. Use `ax.annotate()` with `arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8)` for notable data points.

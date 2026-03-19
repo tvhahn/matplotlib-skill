@@ -16,22 +16,10 @@ You produce clean, self-contained matplotlib/seaborn code. Every chart you gener
 Read the style spec before generating any code. Then identify the closest matching
 pattern from the index and read ONLY that pattern file.
 
-| Pattern | File | When to use |
-|---------|------|-------------|
-| P1 | `patterns/P1-horizontal-bar.md` | Ranked percentages, category comparisons |
-| P2 | `patterns/P2-vertical-bar.md` | Comparisons across categories, ranked values |
-| P3 | `patterns/P3-time-series.md` | Time series with rolling average |
-| P4 | `patterns/P4-violin-strip.md` | Distribution comparisons |
-| P5 | `patterns/P5-lollipop.md` | Min/max/avg ranges, model comparison |
-| P6 | `patterns/P6-decision-boundary.md` | Classification boundaries, probability maps |
-| P7 | `patterns/P7-heatmap.md` | Correlation matrices, spectrograms |
-| P8 | `patterns/P8-multi-panel.md` | Multi-panel grid layouts (2x2, 3x2, 3x3) |
-| P9 | `patterns/P9-pr-roc.md` | PR/ROC classification evaluation curves |
-
 # Design Philosophy
 
-These principles guide judgment when patterns don't cover the situation
-and when rules conflict. They are preferences, not absolutes.
+These principles take precedence over pattern defaults. When a pattern's default
+conflicts with the communicative goal, adapt the pattern to serve the principle.
 
  1. Above all else, show the data. (Tufte — the prime directive)
  2. Every element earns its ink. (Data-ink ratio, reframed as a test)
@@ -44,6 +32,18 @@ and when rules conflict. They are preferences, not absolutes.
  9. The reader should never do arithmetic. (Cleveland — if they need to compare, plot the comparison)
 10. When in doubt, remove. (Darkhorse "remove to improve" + Tufte "erase non-data-ink")
 
+| Pattern | File | When to use |
+|---------|------|-------------|
+| P1 | `patterns/P1-horizontal-bar.md` | Ranked percentages, category comparisons |
+| P2 | `patterns/P2-vertical-bar.md` | Comparisons across categories, ranked values |
+| P3 | `patterns/P3-time-series.md` | Time series with rolling average |
+| P4 | `patterns/P4-violin-strip.md` | Distribution comparisons |
+| P5 | `patterns/P5-lollipop.md` | Min/max/avg ranges, model comparison |
+| P6 | `patterns/P6-decision-boundary.md` | Classification boundaries, probability maps |
+| P7 | `patterns/P7-heatmap.md` | Correlation matrices, spectrograms |
+| P8 | `patterns/P8-multi-panel.md` | Multi-panel grid layouts (2x2, 3x2, 3x3) |
+| P9 | `patterns/P9-pr-roc.md` | PR/ROC classification evaluation curves |
+
 # Phase 1 -- Understand the Request
 
 Parse `$ARGUMENTS` and any surrounding conversation for:
@@ -53,6 +53,7 @@ Parse `$ARGUMENTS` and any surrounding conversation for:
 - **Annotations:** Titles, axis labels, value labels, metric boxes (RMSE/R2), subplot labels
 - **Output context:** Standalone script (default), notebook cell, or function to add to a module
 - **Narrative intent:** What should the reader take away? Identify the communicative goal — comparison, trend, distribution, composition, relationship, or emphasis. Let this shape choices in Phase 2 (e.g., emphasis → selective color; neutral comparison → uniform palette).
+- **Creative brief** (internal — not shown to user): Based on the narrative intent, note which Design Philosophy principles are most relevant and any pattern defaults you plan to deviate from. This guides choices in Phase 3.
 
 If the request is ambiguous (e.g., just "make a chart"), ask the user what data and chart type they want. Do not guess.
 
@@ -78,23 +79,17 @@ Override any default if the user explicitly requests it (e.g., "use a red color 
 
 Read `${CLAUDE_SKILL_DIR}/style-reference.md` for the full style spec. Then read the matching pattern file from the index table above.
 
-Adapt the closest pattern to the user's data. Every generated chart MUST include:
+Apply **style-reference invariants** (see Invariants Shorthand in style-reference.md).
 
-1. **Style setup block** (always inlined, never imported):
-   ```python
-   sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
-   ```
-2. **Despine all:** `sns.despine(left=True, bottom=True)`
-3. **Grid off** (or single-axis with `alpha=0.7` if it helps readability)
-4. **Tick marks off:** `ax.tick_params(axis="both", which="both", length=0)` where applicable
-5. **Framed legend:** `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"` on every legend
-6. **Dimgrey annotations:** All text annotations use `color="dimgrey"`
-7. **Tight save:** `bbox_inches="tight"` on every `savefig`
-8. **Colorblind-safe palette** from the reference
-9. **Bold subplot labels:** `r"$\bf{(a)}$"` prefix pattern for multi-panel figures
-10. **Alpha=0.4** for supporting/background visual elements
-11. **DejaVu Sans font** in the sns.set call
-12. **150 DPI** default (300 only on explicit user request for publication quality)
+Then adapt the pattern's **Signature** elements — these define the pattern's visual
+identity and should be preserved unless the user explicitly requests otherwise.
+
+For everything else — palette, figsize, fontsize, alpha, padding, legend position,
+annotation format, grid visibility — start with the pattern's template defaults and
+adapt based on:
+- The Creative Brief from Phase 1
+- Data properties (category count, value range, density, label length)
+- Design Philosophy principles (especially P6: annotate the insight)
 
 Dependencies are limited to: `matplotlib`, `seaborn`, `numpy`, `pandas` (as needed by the chart).
 

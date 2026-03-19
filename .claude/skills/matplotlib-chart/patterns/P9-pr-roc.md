@@ -84,19 +84,19 @@ Apply style-reference invariants.
 
 **Signature:**
 - PR first (a), ROC second (b) — panel order is fixed.
-- Three line layers per panel: (1) grey k-fold lines (`alpha=0.5`), (2) average line with `pal[5]`, (3) orange dashed baseline.
+- Three line layers per panel: (1) grey k-fold lines, (2) average line with cubehelix `pal[5]`, (3) orange dashed baseline.
 - Subplot outlines: `ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`.
-- Both panels: `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — always show the full probability range.
 
 **Guidance:**
 - Default: load pre-computed data from NPZ files with `np.load()`. The `recall_avg` array is in **decreasing** order (sklearn convention) — sort ascending with `np.argsort` before computing AP via `np.trapezoid`. Do **not** use `abs()` as a workaround. Allow sklearn import when the user provides a fitted model and explicitly requests cross-validation.
 - Average line color is always `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)`.
 - Include metric values in legend labels when available (e.g., `f"Average (AP = {ap:.3f})"`).
 - Default: no `fill_between`. Consider `fill_between` for confidence intervals if the user requests uncertainty visualization.
-- Adjust k-fold line `alpha` for number of folds: lower (0.3) for 20+ folds, default (0.5) for 5-10.
+- Adjust k-fold line `alpha` for number of folds: lower (0.3) for 20+ folds, higher (0.5-0.6) for 5-10.
+- Both panels default to `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — show the full probability range.
 - For single model (no CV), plot one `pal[5]` line and baseline — omit grey fold lines.
 - Adapt legend labels to context (e.g., model name instead of "k-fold models" for a single model).
-- Adjust `tight_layout(pad=...)` if panel spacing looks off.
+- Adjust `tight_layout(pad=...)` or add `fig.suptitle()` as layout requires.
 - Move legend `loc` if it occludes curves — e.g., `loc="center left"` for PR panel when baseline is high.
 
 **Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.

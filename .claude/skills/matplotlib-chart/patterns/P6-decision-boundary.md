@@ -67,17 +67,19 @@ ax.add_artist(legend1)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
-- Colors: DIVERGING_COLORBLIND `["#d73027", "#4575b4", "#fc8d59"]`. For 2-class, use `["#d73027", "#4575b4"]`. Do not substitute Tableau, seaborn, or custom palettes.
-- Background uses probability-sized dots (`s=40 * yy_prob**3`, `alpha=0.3`) — not `contourf` or `pcolormesh` filled regions. Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
-- Assume `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are in memory — do not import sklearn or fit classifiers.
-- Two separate legends positioned outside with `bbox_to_anchor`: class legend and confidence legend. Use `ax.add_artist()` to keep both visible.
-- `set_aspect(1)` for square proportions.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
+Apply style-reference invariants.
 
-**Adapt when:**
+**Signature:**
+- Colors: DIVERGING_COLORBLIND `["#d73027", "#4575b4", "#fc8d59"]`. For 2-class, use `["#d73027", "#4575b4"]`.
+- Background uses probability-sized dots — not `contourf` or `pcolormesh` filled regions.
+- Two separate legends: class legend and confidence legend. Use `ax.add_artist()` to keep both visible.
+- `set_aspect(1)` for square proportions.
+
+**Guidance:**
+- Default: load pre-computed data from NPZ (`xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names`). Allow sklearn import when the user provides raw data and explicitly requests fitting.
+- Position legends outside with `bbox_to_anchor`; adjust positions to avoid occlusion with the data.
+- Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
 - Adjust `figsize` if feature ranges are very asymmetric — `(8, 6)` is the default but `(10, 6)` works for wide feature ranges.
-- Adjust `bbox_to_anchor` positions if legends overlap with data points.
 - Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
 - Adjust probability dot `s` scaling factor for mesh density.
 

@@ -10,10 +10,10 @@ sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 df = pd.read_csv("data.csv").dropna(subset=["name", "min", "max", "avg"])
 df = df.sort_values("avg", ascending=True).reset_index(drop=True)
 
-# --- Palette (EXACTLY two colors — no gradients, no colormaps, no per-item coloring) ---
+# --- Palette (default: two-tone cubehelix) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
-darkblue = pal[5]   # ALL min/max dots use this single color
-lightblue = pal[2]  # ALL avg dots use this single color
+darkblue = pal[5]   # min/max dots
+lightblue = pal[2]  # avg dots
 
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
 
@@ -63,12 +63,13 @@ ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"
 Apply style-reference invariants.
 
 **Signature:**
-- Palette: define `pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)`, then `darkblue = pal[5]` and `lightblue = pal[2]`. All min/max dots use `darkblue`, all avg dots use `lightblue` — do not use per-item gradient coloring, colormaps, or data-mapped colors.
-- Three separate `ax.scatter()` calls: one for min dots, one for max dots, one for avg dots. Do not combine, use loops per item, or use a colormap.
-- Annotate all three values per row: avg above, min/max below. All annotations `color="dimgrey"`.
-- Connecting lines: `ax.hlines()` from min to max — do not add extra lollipop sticks from zero.
+- Cubehelix palette: `pal[5]` (dark) for min/max dots, `pal[2]` (light) for avg dots.
+- Three separate `ax.scatter()` calls: one for min dots, one for max dots, one for avg dots.
+- Connecting lines: `ax.hlines()` from min to max.
 
 **Guidance:**
+- Default two-tone coloring (all min/max one color, all avg another). Use per-item colors when items have semantic meaning that warrants distinct colors (e.g., pass/fail categories).
+- Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
 - Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
 - Set a descriptive x-axis label — do not leave it empty.
 - Scale `DOT_SIZE` with figure size or data density (100-200 range).

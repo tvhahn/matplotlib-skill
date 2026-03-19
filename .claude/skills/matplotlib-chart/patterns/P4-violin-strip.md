@@ -42,11 +42,11 @@ sns.despine(left=True, bottom=True)
 Apply style-reference invariants.
 
 **Signature:**
-- Use horizontal orientation (`orient="h"`) by default. Only use vertical if the user explicitly requests it.
-- `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is the pattern's signature. Do not use colored fills or per-category palettes.
+- `color="white"` on violinplot and `color="black"` on stripplot — the white-with-black-dots look is the pattern's signature.
 - Violin core params: `density_norm="width", inner=None, cut=0`.
 
 **Guidance:**
+- Default horizontal orientation (`orient="h"`). Use vertical when it better suits the data (e.g., 2-3 categories with short labels).
 - Scale height for 8+ categories (add ~1 inch per additional 4 categories).
 - Adjust strip `alpha` for data density: lower (0.05) for thousands of points, higher (0.2) for sparse data.
 - Add median markers or reference lines if the user requests them or if the insight requires comparing central tendency across groups.

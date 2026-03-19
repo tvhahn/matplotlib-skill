@@ -8,7 +8,7 @@ allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash
 # Autoresearch
 
 Autonomous skill improvement loop. Modifies individual pattern files in `patterns/`,
-evaluates via a composite metric (compliance × convergence × visual × refinement),
+evaluates via a composite metric (compliance × weighted quality layers × signature_penalty),
 keeps improvements, reverts regressions, and repeats until interrupted or all patterns
 exceed the threshold.
 
@@ -37,10 +37,11 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 ## Guardrails
 
-- **Immutable files:** `style-reference.md`, `SKILL.md`
+- **Immutable:** `style-reference.md` Invariants section, `SKILL.md` Design Philosophy
 - **Immutable calls:** `sns.set_theme()` and `sns.despine()` — never modify
 - **No pattern deletions** — add/modify only
 - **Single file modified per experiment:** the target `patterns/PN-*.md` file
+- **Signature items:** max 4 per pattern (enforced by signature_penalty)
 - **Max 5 rounds per pattern before moving on** (circuit breaker below)
 
 ---
@@ -80,7 +81,7 @@ uv run scripts/evaluate_skill.py --json --pattern N
 ```
 Parse JSON output. Score = 1.0 if all checks pass, 0.0 if any fail.
 
-### Layer 2 — Convergence
+### Layer 2 — Visual Quality
 Select 3 different prompts from the pattern's pool (indices 0, 1, 2). Run 3 parallel clean rooms:
 ```bash
 scripts/chart-test-container.sh --tag P${N}-base-A "<prompt_A>" &
@@ -88,28 +89,6 @@ scripts/chart-test-container.sh --tag P${N}-base-B "<prompt_B>" &
 scripts/chart-test-container.sh --tag P${N}-base-C "<prompt_C>" &
 wait
 ```
-
-Read the 3 generated `.py` files. Compare across two tiers of dimensions (excluding data-handling):
-
-**Structural dimensions (must match — define the pattern's identity):**
-1. API calls (seaborn/matplotlib functions used)
-2. Palette/cmap family (e.g., "rocket", "RdBu_r", cubehelix)
-3. DPI and save conventions (PDF+PNG, dpi=150, bbox_inches)
-4. Grid on/off and despine configuration
-5. Core pattern structure (e.g., bars+rolling line for P3, k-fold+average for P9)
-
-**Adaptive dimensions (may vary based on data — healthy flexibility):**
-6. Figsize scaling (may increase for more data points/categories)
-7. Legend position (may move to avoid occlusion)
-8. Annotation format (decimal places may adapt to value range)
-9. Exact parameter values (fontsize, labelpad, alpha within ±2 of spec)
-10. Pattern-specific adaptations (rotation, axis limits, label text)
-
-Score = `structural_matching / structural_total` (only structural dimensions count for convergence). Log adaptive dimension variation as informational — divergence here is expected and healthy.
-
-**Appropriateness bonus:** If 2 of 3 runs match on a structural dimension and the third makes a defensible, data-driven choice (e.g., different figsize for a dataset with many more categories, moved legend to avoid occlusion), score that dimension as matching (1.0, not 0.67). Only penalize when the third run uses a fundamentally wrong approach (wrong palette family, wrong API).
-
-### Layer 3 — Visual Quality
 Read the 3 PNGs. For each PNG, apply this 12-check **graded** rubric (0 / 1 / 2 per check):
 
 | Check | 0 | 1 | 2 |
@@ -129,15 +108,15 @@ Read the 3 PNGs. For each PNG, apply this 12-check **graded** rubric (0 / 1 / 2 
 
 **Note:** Check 12 evaluates against chart communication standards, NOT against the pattern spec. A pattern cannot opt out of informativeness by removing labels from its spec.
 
-**Red flag cap:** If ANY of these are present in a PNG, that PNG's raw score is **halved**:
-- Overlapping text (any text element obscured by another)
-- Clipped content (bars, labels, or annotations cut off at figure edges)
-- Default matplotlib legend (no custom frame styling visible)
-- Visible axis spines (despine not applied or overridden)
+**Red flag cap:** If ANY of these are present in a PNG, reduce the **specific affected check** to 0 (do not halve the entire PNG score):
+- Overlapping text → check 6 (annotation quality) = 0
+- Clipped content → check 1 (layout balance) = 0
+- Default matplotlib legend → check 7 (legend compliance) = 0
+- Visible axis spines → check 8 (grid/spine cleanliness) = 0
 
-Score = `total_points / 72` (12 checks × 2 max × 3 PNGs). A "pretty good" chart typically scores 16–20/24 per PNG (visual ≈ 0.70–0.80), leaving meaningful headroom for improvement.
+Score = `total_points / 72` (12 checks × 2 max × 3 PNGs).
 
-### Layer 4 — Refinement (code quality)
+### Layer 3 — Refinement (code quality)
 Read all 3 generated `.py` files and score 5 binary checks:
 
 | Check | Pass (1) | Fail (0) |
@@ -150,19 +129,39 @@ Read all 3 generated `.py` files and score 5 binary checks:
 
 Score = `checks_passed / 5`.
 
-### Rule-Count Penalty
-Count the number of bullet points in the target pattern's "Rules (identity)" section. For every rule beyond 8, subtract 0.02 from the refinement score (floor at 0). This creates evolutionary pressure to keep patterns concise — the simplest specification that achieves quality is preferred.
+### Layer 4 — Adaptiveness
+Read all 3 PNGs and generated `.py` files. Score 5 binary checks:
+
+| Check | Pass (1) | Fail (0) |
+|-------|----------|----------|
+| 1. **Figsize scales for data volume** | figsize adapts to category count, label length, or data density | Fixed figsize regardless of data properties |
+| 2. **Annotations reflect data-specific insights** | Annotations include data-specific values, labels, or findings | Only generic labels copied from template |
+| 3. **Legend positioned to avoid occlusion** | Legend placed where it doesn't cover data points | Legend covers data or placed without regard to data |
+| 4. **Palette matches data semantics** | Diverging for ±, sequential for ranking, categorical for groups | Palette applied without semantic consideration |
+| 5. **At least one data-driven choice** | Code makes at least one choice that goes beyond template copy-paste | Pure template copy-paste with only column names changed |
+
+Score = `checks_passed / 5`.
+
+### Signature Penalty
+Count the number of bullet points in the target pattern's "Signature" section.
+
+```
+signature_penalty = min(1.0, 1.0 - 0.05 × max(0, signature_count - 4))
+```
+
+A pattern with 4 or fewer signature items: penalty = 1.0 (no reduction).
+A pattern with 5 items loses 5%, 6 items loses 10%, etc.
 
 ### Composite Score
 ```
-composite = compliance × (0.25 × convergence + 0.45 × visual + 0.25 × refinement)
+composite = compliance × (0.50 × visual + 0.25 × refinement + 0.25 × adaptiveness) × signature_penalty
 ```
 
 ### Log Baseline
 Create `results.tsv` with header and one row per pattern:
 ```
-experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	status	consecutive_discards	description	commit
-0	2026-03-14T10:00:00	P1	0.48	1.0	0.8	0.75	0.8	baseline	0	Initial baseline	abc1234
+experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness	status	consecutive_discards	description	commit
+0	2026-03-14T10:00:00	P1	0.48	1.0	0.75	0.8	0.6	baseline	0	Initial baseline	abc1234
 ```
 
 ---
@@ -186,14 +185,13 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 3. Read this pattern's experiment history from `results.tsv` (filter to matching pattern rows).
 4. Identify the weakest layer and focus there:
    - `compliance < 1.0` → fix compliance first (highest leverage)
-   - `convergence` is lowest → tighten rules on **structural** dimensions only
    - `visual` is lowest → adjust layout, sizing, annotations
-   - `refinement` is lowest → add defensive coding guidance, save convention rules
+   - `refinement` is lowest → add defensive coding guidance
+   - `adaptiveness` is lowest → add Guidance for data-driven adaptation
 5. Propose a **specific, small change** — one dimension at a time.
-   - Concrete: exact parameter values, explicit code, "do/don't" rules.
-   - Avoid vague guidance — it doesn't reduce divergence.
-   - **Before adding a new rule**, check whether the divergence is **harmful** (wrong visual output, broken API) or **adaptive** (reasonable data-driven variation like legend repositioning). Only add rules to prevent harmful divergence. If 2 of 3 runs make the same choice and the result looks correct, the pattern is already well-specified — do not add a rule to force the third run to match.
-   - **Pruning mode (every 10 experiments):** Instead of adding, attempt to **remove** the least-impactful rule from the highest-scoring pattern. If scores hold or improve after removal → keep the simplification. This counteracts the rule-accumulation ratchet. Prefer removing rules that re-state values already present in the code template.
+   - Concrete: exact parameter values, explicit code, clear guidance.
+   - **Before adding a new Signature item**, check whether the divergence is **harmful** (wrong visual identity) or **adaptive** (reasonable data-driven variation). Only add Signature items to prevent harmful identity divergence. Move adaptive guidance to the Guidance section.
+   - **Pruning mode (every 5 experiments):** Instead of adding, attempt to **remove** the least-impactful Signature item or Guidance point from the **highest-scoring** pattern. If scores hold or improve after removal → keep the simplification. Removing Signature items improves the signature_penalty multiplier, making simplification structurally advantaged.
 
 ---
 
@@ -215,7 +213,7 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 uv run scripts/evaluate_skill.py --json --pattern N
 ```
 
-### Layer 2 — Convergence
+### Layer 2 — Visual Quality
 Select 3 prompts from the pool (rotate through pool indices to avoid reusing baseline prompts):
 ```bash
 scripts/chart-test-container.sh --tag exp${EXP}-A "<prompt_1>" &
@@ -224,18 +222,18 @@ scripts/chart-test-container.sh --tag exp${EXP}-C "<prompt_3>" &
 wait
 ```
 
-Read 3 `.py` files → compare 5 structural dimensions → `structural_matching / 5` (log adaptive dimension variation as informational)
-
-### Layer 3 — Visual Quality
 Read 3 PNGs → apply 12-check graded rubric (0/1/2 per check) to each → `total_points / 72`
-Apply red flag caps if any PNG has overlapping text, clipped content, visible spines, or default legend.
+Apply red flag caps: reduce specific affected check to 0 (not entire PNG score).
 
-### Layer 4 — Refinement
+### Layer 3 — Refinement
 Read 3 `.py` files → score 5 binary code-quality checks → `passed / 5`
+
+### Layer 4 — Adaptiveness
+Read 3 PNGs + `.py` files → score 5 binary adaptiveness checks → `passed / 5`
 
 ### Composite
 ```
-composite = compliance × (0.25 × convergence + 0.45 × visual + 0.25 × refinement)
+composite = compliance × (0.50 × visual + 0.25 × refinement + 0.25 × adaptiveness) × signature_penalty
 ```
 
 ---
@@ -244,7 +242,7 @@ composite = compliance × (0.25 × convergence + 0.45 × visual + 0.25 × refine
 
 1. Append a row to `results.tsv`:
    ```
-   EXP	TIMESTAMP	PN	COMPOSITE	COMPLIANCE	CONVERGENCE	VISUAL	REFINEMENT	STATUS	CONSEC	DESCRIPTION	COMMIT
+   EXP	TIMESTAMP	PN	COMPOSITE	COMPLIANCE	VISUAL	REFINEMENT	ADAPTIVENESS	STATUS	CONSEC	DESCRIPTION	COMMIT
    ```
 
 2. Compare composite to the pattern's **previous best** (latest `keep` or `baseline` row):
@@ -292,20 +290,20 @@ P2      | 0.92       | 3           | 2     | 1
 Tab-separated, header row + data rows. Created on first run, append-only.
 
 ```
-experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	status	consecutive_discards	description	commit
+experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness	status	consecutive_discards	description	commit
 ```
 
 Column types:
 - `experiment`: Sequential integer (0 = baseline)
 - `timestamp`: ISO 8601 (e.g., `2026-03-14T10:30:00`)
 - `pattern`: `P1`..`P9`
-- `composite`, `compliance`, `convergence`, `visual`, `refinement`: Float 0.0–1.0
+- `composite`, `compliance`, `visual`, `refinement`, `adaptiveness`: Float 0.0–1.0
 - `status`: `baseline`, `keep`, `discard`, `error`
 - `consecutive_discards`: Integer, resets on `keep`
 - `description`: Free text, no tabs
 - `commit`: 7-char git hash or `(reverted)`
 
-**Backward compatibility:** Old rows without a `refinement` column are valid. Treat missing refinement as 1.0 when computing composite for comparison purposes.
+**Backward compatibility:** Old rows with a `convergence` column are valid. Ignore the convergence column when computing composite — use the 4-layer formula.
 
 ---
 

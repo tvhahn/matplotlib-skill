@@ -75,14 +75,13 @@ Spawn an Agent (general-purpose) with a prompt containing:
      - Tags: Round 1=A,B,C; Round 2=D,E,F; Round 3=G,H,I; Round 4=J,K,L; Round 5=M,N,O
      - Run 3 parallel clean rooms: `scripts/chart-test-container.sh --tag <tag> "<prompt>" &`
      - Read .py files and PNGs from results
-     - Compare across **structural dimensions only** (exclude data-handling since prompts differ):
-       API calls, palette/cmap, figsize, annotation styling, legend config, title format,
-       tick styling, grid config, DPI/save, pattern-specific dims
-     - If converged: stop rounds early. If diverged: fix the pattern file in `patterns/`, continue.
+     - Evaluate each chart against quality dimensions:
+       identity preservation, visual quality, data-appropriateness, informativeness, pattern-specific checks
+     - If all meet quality bar: stop rounds early. If issues found: fix the pattern file in `patterns/`, continue.
    - Create gallery entry `docs/gallery/NN-pX-variation-analysis/`:
      - Copy representative PNGs (round1-A.png, round1-B.png, etc.)
      - Write README.md with: What Changed, Why, Prompts Used (table of tag→prompt),
-       Method, Round tables, Files Modified, Lessons Learned
+       Method, Quality assessments per round, Files Modified, Lessons Learned
    - Update CLAUDE.md gallery table
    - Commit: `📊 feat(skill): tighten PX via parallel clean-room variation analysis`
 
@@ -96,7 +95,7 @@ Spawn an Agent (general-purpose) with a prompt containing:
 
 7. **Rounds limit** from `--rounds`
 
-8. **Return format:** "Return a one-line summary: `PX: [converged/diverged] in N rounds (M fixes). Gallery NN. [details]`"
+8. **Return format:** "Return a one-line summary: `PX: [passed/issues found] in N rounds (M fixes). Gallery NN. [details]`"
 
 #### 2c. Record result
 
@@ -121,16 +120,16 @@ Print the complete results table:
 
 | Pattern | Rounds | Result | Gallery | Details |
 |---------|--------|--------|---------|---------|
-| P1      | 1      | Converged (no changes) | 34 | Already well-specified |
-| P4      | 3      | Converged (5 fixes) | 35 | figsize, palette, legend loc, title pad, grid |
-| P7      | 3      | DIVERGED (1 dim remains) | 36 | masking behavior inherently ambiguous |
+| P1      | 1      | Passed (no changes) | 34 | All charts met quality bar |
+| P4      | 3      | Passed (5 fixes) | 35 | figsize, legend loc, spacing improved |
+| P7      | 3      | Issues remain (1) | 36 | annotation density needs user input |
 ```
 
 ## Error Handling
 
 - **Docker not running:** First subagent will fail fast. Report and halt — no point spawning more.
 - **Subagent failure:** Record "FAILED" in results table, continue to next pattern.
-- **All patterns already converged:** Report success — no changes needed.
+- **All patterns pass:** Report success — no changes needed.
 - **Partial completion:** Results table shows progress. Completed patterns have atomic commits;
   un-attempted patterns can be run later with a smaller pattern list.
 

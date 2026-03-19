@@ -28,16 +28,14 @@ ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
 sns.despine(left=True, bottom=True)
 ```
 
-**Rules (identity):**
-- Use `sns.barplot()` — not `ax.barh()` directly.
-- Use `palette="Blues_d"` for neutral ranking. Do not substitute cubehelix, rocket, or single-color palettes.
-- Hide x-axis ticks with `set_xticks([])` — bar-end value labels carry the numbers.
-- Annotations use `color="dimgrey"` with `weight="semibold"`.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
-- Always read data from CSV — never hardcode inline DataFrames.
-- Apply `df.dropna()` or `df.dropna(subset=[...])` after loading CSV to prevent NaN errors.
+Apply style-reference invariants.
 
-**Adapt when:**
+**Signature:**
+- Bar-end value labels with hidden x-ticks (`set_xticks([])`); the labels carry the numbers, not the axis.
+- Annotations use `color="dimgrey"`.
+
+**Guidance:**
+- Default `sns.barplot()` for the bar layer. Template shows `palette="Blues_d"` for neutral ranking. Consider `Greys_r` + `ACCENT_RED` for selective emphasis when the insight calls attention to one or two bars.
 - Scale `figsize` for category count: `(4, 7)` for 8-15 bars, `(6, 4)` for 3-5 bars, wider for 15+.
 - Add unit prefixes/suffixes (e.g., `$`, `%`) when values are ambiguous without them — omit when the title provides enough context.
 - Adjust annotation `size` proportionally if bars are very narrow or figure is compact.

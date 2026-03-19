@@ -34,15 +34,15 @@ ax.set_ylabel("Y-Axis Label", fontsize=13, labelpad=10, color="dimgrey")
 ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 ```
 
-**Rules (identity):**
-- Use `sns.barplot(x=..., y=..., hue=..., data=..., palette=..., legend=False, ax=ax)` — not `ax.bar()`. The `hue` parameter must match the `x` column.
-- Sort data descending by value before plotting.
-- Palette: `"rocket"` for ≥5 bars. For ≤4 bars use `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`. Slice left-to-right — do not rearrange or substitute.
-- Annotations: loop `ax.patches`, use `color="dimgrey"`, `weight="semibold"`. Do not add `ax.annotate()` arrows or editorial text — bar-end labels are the only annotations.
-- Always use `dpi=150`. Save PDF+PNG with `bbox_inches="tight"`.
-- Always read data from CSV — never hardcode inline DataFrames. Apply `df.dropna()` or `df.dropna(subset=[...])` after loading to prevent NaN errors.
+Apply style-reference invariants.
 
-**Adapt when:**
+**Signature:**
+- Sort data descending by value before plotting.
+- Palette family: `DIVERGING_COLORBLIND` for ≤4 bars, `"rocket"` for ≥5 bars.
+
+**Guidance:**
+- Default `sns.barplot()` for the bar layer. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
+- Add editorial annotations (`ax.annotate()`, arrows, text callouts) when an insight warrants emphasis (Design Philosophy P6).
 - Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
 - Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
 - Adjust annotation format: `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.
