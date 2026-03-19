@@ -69,6 +69,11 @@ axes[1].set_title(r"$\bf{(b)}$" + " ROC Curve", loc="left", fontsize=12, pad=7)
 axes[1].set_xlabel("False Positive Rate", fontsize=12, labelpad=8, color="dimgrey")
 axes[1].set_ylabel("True Positive Rate", fontsize=12, labelpad=8, color="dimgrey")
 
+# --- Figure-level insight ---
+quality = "Strong" if auc > 0.85 else "Moderate" if auc > 0.70 else "Weak"
+fig.text(0.99, 0.01, f"{quality} classifier: AUC = {auc:.3f}, AP = {ap:.3f}",
+         ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
+
 for ax in axes.flatten():
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1.05)
@@ -97,6 +102,7 @@ Apply style-reference invariants.
 - For single model (no CV), plot one `pal[5]` line and baseline — omit grey fold lines.
 - Adapt legend labels to context (e.g., model name instead of "k-fold models" for a single model).
 - Adjust `tight_layout(pad=...)` or add `fig.suptitle()` as layout requires.
+- Always add a figure-level insight annotation summarizing classifier quality (e.g., "Strong classifier: AUC = 0.97, AP = 0.95"). Compute dynamically from AP and AUC values.
 - Move legend `loc` if it occludes curves — e.g., `loc="center left"` for PR panel when baseline is high.
 
 **Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
