@@ -15,7 +15,8 @@ df_sorted = df.sort_values("value", ascending=False)
 n_bars = df_sorted.shape[0]
 pal = ["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n_bars] if n_bars <= 4 else "rocket"
 
-sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette=pal, legend=False, ax=ax)
+sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette=pal,
+           order=df_sorted["category"].tolist(), legend=False, ax=ax)
 
 for p in ax.patches:
     value = p.get_height()
@@ -45,7 +46,7 @@ Apply style-reference invariants.
 - Palette family: `DIVERGING_COLORBLIND` for ≤4 bars, `"rocket"` for ≥5 bars.
 
 **Guidance:**
-- Default `sns.barplot()` for the bar layer. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
+- Default `sns.barplot()` for the bar layer. Always pass `order=df_sorted["column"].tolist()` to enforce descending sort — seaborn ignores DataFrame order and re-sorts by category name without this. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
 - Always include an insight annotation (e.g., top performer, gap between #1 and #2). Position in upper-right using `transform=ax.transAxes`. Compute findings dynamically from the data — do not hardcode values.
 - Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
 - Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
