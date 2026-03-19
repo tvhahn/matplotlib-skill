@@ -20,9 +20,9 @@ for p in ax.patches:
 
 # --- Insight annotation (highlight top item or notable gap) ---
 top = df.sort_values("percent", ascending=False).iloc[0]
-ax.text(0.98, 0.02, f'{top["category"]} leads at {top["percent"]:.1f}',
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=9, color="dimgrey", style="italic")
+fig.text(0.98, 0.01, f'{top["category"]} leads at {top["percent"]:.1f}',
+         ha="right", va="bottom",
+         fontsize=9, color="dimgrey", style="italic")
 
 ax.set_ylabel("")
 ax.set_xlabel("")
@@ -30,7 +30,7 @@ ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)
 ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_xticks([])
-ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
 sns.despine(left=True, bottom=True)
 ```
 
@@ -46,6 +46,6 @@ Apply style-reference invariants.
 - Add unit prefixes/suffixes (e.g., `$`, `%`) when values are ambiguous without them — omit when the title provides enough context.
 - Adjust annotation `size` proportionally if bars are very narrow or figure is compact.
 - Scale title `fontsize` with figure size (12 for compact figures, 14-16 for large ones).
-- Always include an insight annotation (e.g., top performer, notable gap between top-2). Position in lower-right using `transform=ax.transAxes`. Compute the finding dynamically — do not hardcode values.
+- Always include an insight annotation (e.g., top performer, notable gap between top-2). Position BELOW the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom")` — never inside the axes area where it can overlap data rows. Compute the finding dynamically — do not hardcode values.
 
 **Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey).
