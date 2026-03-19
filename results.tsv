@@ -13,3 +13,10 @@ experiment	timestamp	pattern	composite	compliance	convergence	visual	refinement	
 3	2026-03-18T07:38:00	P4	0.80	1.0	0.80	0.90	0.80	0.80	keep	0	ALWAYS horizontal comment; 2/3 still vertical but charts cleaner; visual 0.72→0.90	7a534be
 4	2026-03-18T07:48:00	P8	0.82	1.0	0.80	0.86	0.80	1.00	keep	0	Same-unit rule + no-Nx1; stocks now 3x2 grid (fixed!) but still per-symbol colors	f876959
 5	2026-03-18T07:55:00	P7	0.92	1.0	1.00	0.93	1.00	1.00	keep	0	Insight annotation + colorbar label guidance; all 3 have insights; conv 0.80→1.0	1808bf0
+6	2026-03-19T06:50:00	P4	0.92	1.0	1.00	0.94	0.80	1.00	keep	0	Default median markers + value annotations; 2/3 horizontal, all have insight annotations; hardcoded value in C	314200b
+7	2026-03-19T07:00:00	P5	0.91	1.0	1.00	0.92	0.80	1.00	keep	0	Figsize scaling + insight annotation; all 3 have insights + dynamic figsize; B hardcodes data; B/C deviate to gradient palette	d2c2fa4
+8	2026-03-19T07:05:00	P8	0.97	1.0	1.00	0.93	1.00	1.00	keep	0	Figure-level insight annotation; all 3 have dynamic cross-panel insights; A/B use per-panel colors; C uses single line_color	59b0734
+9	2026-03-19T07:15:00	P1	0.97	1.0	1.00	0.93	1.00	1.00	keep	0	Insight annotation + no-hardcode guidance; all 3 have dynamic insights; refinement 0.80→1.00; C uses continent colors	029bc39
+10	2026-03-19T07:20:00	P2	0.99	1.0	1.00	0.97	1.00	1.00	keep	0	Insight annotation guidance; all 3 dynamic insights; A sorts by cylinder order (adaptive); B rotates labels for 10 bars; C uses DIVERGING_COLORBLIND for 4	1085764
+11	2026-03-19T07:25:00	P6	0.96	1.0	1.00	0.92	1.00	1.00	keep	0	Insight annotation + mesh density guidance; B failed (penguins 0 PNGs); A/C have insight annotations + descriptive feature names; dense mesh still an issue	7e9629c
+12	2026-03-19T07:29:00	P9	0.98	1.0	1.00	0.96	1.00	1.00	keep	0	Figure-level quality insight (Weak/Strong); B failed (wine 0 PNGs); A shows Weak classifier label; C shows Strong classifier label; both dynamic AP/AUC	0101ff5
