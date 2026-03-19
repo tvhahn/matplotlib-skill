@@ -53,9 +53,9 @@ for i in range(df.shape[0]):
 # --- Insight annotation (highlight widest range or top performer) ---
 df["range"] = df["max"] - df["min"]
 top = df.loc[df["avg"].idxmax()]
-ax.text(0.98, 0.02, f'{top["name"]} leads with avg {top["avg"]:,.0f}',
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=9, color="dimgrey", style="italic")
+fig.text(0.98, 0.01, f'{top["name"]} leads with avg {top["avg"]:,.0f}',
+         ha="right", va="bottom",
+         fontsize=9, color="dimgrey", style="italic")
 
 ax.grid(False)
 sns.despine(left=True, bottom=True)
@@ -88,6 +88,6 @@ Apply style-reference invariants.
 - Use `f'{value:.2f}'` for decimal data, `f'{value:,.0f}'` for large integers.
 - Move legend to avoid occlusion if data extends into the lower-right corner.
 - Omit min/max labels if the user says "clean" or "minimal".
-- Always include an insight annotation (e.g., top performer, widest range, or notable gap). Position in an open corner using `transform=ax.transAxes`.
+- Always include an insight annotation (e.g., top performer, widest range, or notable gap). Position BELOW the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom")` — never inside the axes area where it can overlap data rows.
 
 **Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
