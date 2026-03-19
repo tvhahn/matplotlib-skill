@@ -42,8 +42,8 @@ ax.grid(axis="x", alpha=0.7, linewidth=1)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.yaxis.label.set_visible(False)
 ax.tick_params(axis="x", labelsize=12)
-ax.set_xlabel("Value", labelpad=10, fontsize=12)
-ax.set_title(r"$\bf{(a)}$" + " Distribution Title", fontsize=12, loc="left", pad=7)
+ax.set_xlabel("Value", labelpad=10, fontsize=12, color="dimgrey")
+ax.set_title("Distribution Title", fontsize=14, loc="left", pad=7, color="dimgrey")
 sns.despine(left=True, bottom=True)
 ```
 
@@ -60,6 +60,6 @@ Apply style-reference invariants.
 - Always include median markers (`"|"` marker) with value annotations by default — this satisfies Design Principle P6 (annotate the insight). Omit only if the user explicitly says no annotations.
 - Format median annotations to match the data precision (`.1f` for continuous, `,.0f` for counts). Position labels above the marker (`va="bottom"`) to avoid overlapping strip points.
 - Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
-- Title uses bold-prefix convention: `r"$\bf{(a)}$"` with `loc="left"` — adapt the label letter for multi-panel context.
+- Title: `fontsize=14, loc="left", pad=7, color="dimgrey"`. For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
 
 **Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
