@@ -14,3 +14,7 @@ experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness
 4	2026-03-19T08:38:55	P4	0.993	1.0	0.986	1.0	1.0	keep	0	Add dimgrey to title/xlabel + simplify title guidance	f5b8ddd
 5	2026-03-19T08:45:25	P3	0.979	1.0	0.958	1.0	1.0	keep	0	Add dimgrey title + reinforce exact bar color hex codes	0d91c5b
 6	2026-03-19T08:50:23	P1	0.979	1.0	0.958	1.0	1.0	keep	0	Add dimgrey title + move insight below axes via fig.text	6ca5ea6
+7	2026-03-19T13:38:00	P8	0.979	1.0	0.958	1.0	1.0	keep	0	Tighten default wspace to 0.15 + explicit spacing guidance per grid size	2b699e4
+8	2026-03-19T13:48:00	P8	0.910	1.0	0.819	1.0	1.0	discard	1	Add inline comment reinforcing wspace=0.15 for all grid sizes	(reverted)
+9	2026-03-19T13:58:00	P8	0.993	1.0	0.986	1.0	1.0	keep	0	Add dimgrey suptitle + limit panel density to 8-10 items	bc132c4
+10	2026-03-19T14:08:00	P8	0.938	1.0	0.875	1.0	1.0	discard	1	Enforce minimum 8pt annotation font size for readability	(reverted)
