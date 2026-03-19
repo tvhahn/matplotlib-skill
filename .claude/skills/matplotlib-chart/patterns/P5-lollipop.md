@@ -62,7 +62,7 @@ sns.despine(left=True, bottom=True)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_ylabel("")
 ax.set_xlabel("X-Axis Label", fontsize=12, labelpad=8, color="dimgrey")
-ax.set_title("Chart Title", fontsize=14, loc="left", pad=7)
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
 
 # Legend — REQUIRED (2 entries: "Min/Max" and "Average")
 ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
@@ -77,7 +77,7 @@ Apply style-reference invariants.
 - Connecting lines: `ax.hlines()` from min to max.
 
 **Guidance:**
-- Default two-tone coloring (all min/max one color, all avg another). Use per-item colors when items have semantic meaning that warrants distinct colors (e.g., pass/fail categories).
+- Always use two-tone coloring: all min/max dots `pal[5]`, all avg dots `pal[2]`. Do NOT assign per-item colors or substitute other colors (e.g., coral, orange) — the two-tone cubehelix look is the pattern's visual identity.
 - Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
 - Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
 - Set a descriptive x-axis label — do not leave it empty.
