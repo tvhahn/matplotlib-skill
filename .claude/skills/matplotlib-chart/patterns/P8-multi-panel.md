@@ -58,6 +58,11 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     if row == 2:
         ax.set_xlabel("X Label", fontsize=9, labelpad=6, color="dimgrey")
 
+# --- Figure-level insight annotation ---
+# Compute a summary finding across all panels (e.g., highest peak, steepest trend)
+fig.text(0.99, 0.01, "Panel (c) shows the steepest growth (+42%)",
+         ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
+
 sns.despine(left=True, bottom=True)
 ```
 
@@ -78,5 +83,6 @@ Apply style-reference invariants.
 - Use `fill_between`, `axvline`/`axhline`, or reference lines when they help communicate the data (e.g., confidence intervals, thresholds, baselines).
 - Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis).
 - Annotate first/last values by default for trends; omit for bar-type panels.
+- Always add a figure-level insight annotation (`fig.text()`) that highlights a cross-panel finding (e.g., "Panel (c) shows the steepest growth"). Compute the finding dynamically from data — do not hardcode.
 
 **Customize:** For prediction plots, add `ax.scatter(x, y_pred, alpha=0.4, c="grey", s=2)` and metric annotation box. Remove `ax.patch.set_edgecolor/linewidth` if panel borders are not desired.
