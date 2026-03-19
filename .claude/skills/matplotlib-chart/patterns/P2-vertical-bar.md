@@ -24,7 +24,11 @@ for p in ax.patches:
     _y = p.get_y() + value + space
     ax.text(_x, _y, f"{value:,.0f}", ha="center", va="bottom",
             weight="semibold", size=12, color="dimgrey")
-# No other annotations — bar-end labels above are the only data labels
+# --- Insight annotation (highlight top performer or notable gap) ---
+top = df_sorted.iloc[0]
+ax.text(0.98, 0.98, f'{top["category"]} leads at {top["value"]:,.0f}',
+        transform=ax.transAxes, ha="right", va="top",
+        fontsize=9, color="dimgrey", style="italic")
 
 sns.despine(left=True, bottom=True)
 ax.grid(alpha=0.7, linewidth=1, axis="y")
@@ -42,7 +46,7 @@ Apply style-reference invariants.
 
 **Guidance:**
 - Default `sns.barplot()` for the bar layer. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
-- Add editorial annotations (`ax.annotate()`, arrows, text callouts) when an insight warrants emphasis (Design Philosophy P6).
+- Always include an insight annotation (e.g., top performer, gap between #1 and #2). Position in upper-right using `transform=ax.transAxes`. Compute findings dynamically from the data — do not hardcode values.
 - Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
 - Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
 - Adjust annotation format: `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.

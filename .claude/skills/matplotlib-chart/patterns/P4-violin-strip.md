@@ -30,6 +30,14 @@ sns.stripplot(
     zorder=4, orient="h", ax=ax,
 )
 
+# --- Median annotations (default: always show) ---
+medians = df.groupby("category")["value"].median()
+for i, cat in enumerate(df["category"].unique()):
+    med = medians[cat]
+    ax.plot(med, i, marker="|", color="dimgrey", markersize=14, markeredgewidth=2, zorder=5)
+    ax.text(med, i - 0.35, f"{med:.1f}", ha="center", va="bottom",
+            fontsize=10, color="dimgrey", weight="semibold")
+
 ax.grid(axis="x", alpha=0.7, linewidth=1)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.yaxis.label.set_visible(False)
@@ -49,8 +57,8 @@ Apply style-reference invariants.
 - Default horizontal orientation (`orient="h"`). Use vertical when it better suits the data (e.g., 2-3 categories with short labels).
 - Scale height for 8+ categories (add ~1 inch per additional 4 categories).
 - Adjust strip `alpha` for data density: lower (0.05) for thousands of points, higher (0.2) for sparse data.
-- Add median markers or reference lines if the user requests them or if the insight requires comparing central tendency across groups.
-- Add value annotations if the user says "annotate", "label", or "add median values".
+- Always include median markers (`"|"` marker) with value annotations by default — this satisfies Design Principle P6 (annotate the insight). Omit only if the user explicitly says no annotations.
+- Format median annotations to match the data precision (`.1f` for continuous, `,.0f` for counts). Position labels above the marker (`va="bottom"`) to avoid overlapping strip points.
 - Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
 - Title uses bold-prefix convention: `r"$\bf{(a)}$"` with `loc="left"` — adapt the label letter for multi-panel context.
 
