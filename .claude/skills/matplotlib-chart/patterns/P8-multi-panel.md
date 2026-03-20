@@ -1,7 +1,7 @@
 # Multi-Panel Grid (GridSpec)
 
 **When to use:** 2x2, 3x2, 3x3, or irregular layouts showing the same metric across different datasets/conditions, or different but related views of the same data.
-**Layout:** Use `gridspec.GridSpec(rows, cols)` — rows first. A "3x2 grid" means 3 rows × 2 columns. You may also use `plt.subplots()` for regular grids.
+**Layout:** Always use `gridspec.GridSpec(rows, cols)` — rows first. A "3x2 grid" means 3 rows × 2 columns. Do not use `plt.subplots(N, 1)` for Nx1 vertical stacks — always use multi-column grids (minimum 2 columns).
 **Line color:** Default to `pal[5]` (darkest cubehelix) for line+scatter panels showing the same metric — consistent color emphasizes that the metric is identical across panels.
 
 ```python
