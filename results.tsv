@@ -18,3 +18,6 @@ experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness
 8	2026-03-19T13:48:00	P8	0.910	1.0	0.819	1.0	1.0	discard	1	Add inline comment reinforcing wspace=0.15 for all grid sizes	(reverted)
 9	2026-03-19T13:58:00	P8	0.993	1.0	0.986	1.0	1.0	keep	0	Add dimgrey suptitle + limit panel density to 8-10 items	bc132c4
 10	2026-03-19T14:08:00	P8	0.938	1.0	0.875	1.0	1.0	discard	1	Enforce minimum 8pt annotation font size for readability	(reverted)
+11	2026-03-19T23:00:00	P8	0.972	1.0	0.944	1.0	1.0	keep	0	Add explicit left/right margins (left=0.08, right=0.98) to gs.update() for tighter right edge	00d83bf
+12	2026-03-19T23:08:00	P8	0.986	1.0	0.972	1.0	1.0	keep	0	Add top=0.93 bottom=0.07 bounds to gs.update() to prevent hspace inflation	66261fa
+13	2026-03-19T23:14:00	P8	0.986	1.0	0.972	1.0	1.0	keep	0	Enforce GridSpec with multi-column grids, disallow Nx1 vertical stacks	1a190c3
