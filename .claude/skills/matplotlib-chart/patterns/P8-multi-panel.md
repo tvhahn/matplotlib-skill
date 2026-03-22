@@ -17,7 +17,7 @@ line_color = sns.cubehelix_palette(6, rot=-0.25, light=0.7)[5]
 
 fig = plt.figure(figsize=(14, 9), dpi=150)
 gs = gridspec.GridSpec(3, 2)
-gs.update(wspace=0.15, hspace=0.35, left=0.08, right=0.98, top=0.93, bottom=0.07)
+gs.update(wspace=0.08, hspace=0.35, left=0.08, right=0.99, top=0.93, bottom=0.07)
 axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(2)]
 fig.suptitle("Main Title", fontsize=14, y=0.98, color="dimgrey")
 
@@ -56,6 +56,8 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
     # Axis labels: left column gets y-label, bottom row gets x-label
     if col == 0:
         ax.set_ylabel("Y Label", fontsize=9, labelpad=6, color="dimgrey")
+    else:
+        ax.tick_params(labelleft=False)  # hide redundant y-ticks on right column
     if row == 2:
         ax.set_xlabel("X Label", fontsize=9, labelpad=6, color="dimgrey")
 
@@ -80,8 +82,8 @@ Apply style-reference invariants.
 - Default shared y-axis limits for same metric (compute global min/max before the loop). Use independent y-axes when panels show different metrics or scales.
 - `ax.grid(False)` on every panel.
 - When N items don't fit a standard grid, round up: 3-4 → 2x2, 5-6 → 3x2, 7-9 → 3x3. Hide extras with `ax.set_visible(False)`. Prefer balanced multi-column grids over Nx1 vertical stacks.
-- Keep column spacing tight: default `wspace=0.15` for all grids. Only the left column has y-labels, so right-column panels need no extra left margin. Use `hspace=0.30` for 2x2, `hspace=0.35` for 3x2, `hspace=0.40` for 3x3. Increase `wspace` only if both columns have y-labels or panels contain wide annotations.
-- Control figure margins with `left=0.08, right=0.98, top=0.93, bottom=0.07` in `gs.update()`. The asymmetric left/right accounts for y-labels on the left; `right=0.98` pushes right-column panels close to the figure edge. `top=0.93` reserves space for the suptitle (placed at `y=0.98`); `bottom=0.07` reserves space for the figure-level insight annotation. These bounds prevent hspace inflation — keep hspace at the defaults (0.30/0.35/0.40) and let top/bottom control the outer margins instead.
+- **Spacing:** `wspace=0.08` keeps columns tight — do not exceed 0.12. Right-column panels omit y-tick labels when y-axis is shared (`ax.tick_params(labelleft=False)`) so the gap can be narrow. Use `hspace=0.30` for 2x2, `hspace=0.35` for 3x2, `hspace=0.40` for 3x3. Do not inflate hspace beyond these values.
+- **Figure margins:** `left=0.08, right=0.99, top=0.93, bottom=0.07`. The `right=0.99` pushes the right column panels flush against the figure edge. Combined with `bbox_inches="tight"`, this eliminates dead space on the right. `top=0.93` reserves suptitle space; `bottom=0.07` reserves insight annotation space.
 - Scale `figsize` for panel count and content density: `(10, 8)` for 2x2, `(14, 9)` for 3x2, `(14, 12)` for 3x3. Template values are starting points.
 - Use `fill_between`, `axvline`/`axhline`, or reference lines when they help communicate the data (e.g., confidence intervals, thresholds, baselines).
 - Panel content varies: use horizontal bars, violins, scatter, or line+scatter per panel as appropriate — keep a single y-axis per panel (no twinx/dual-axis). When a panel would contain more than 8–10 items (bars, lines, categories), filter to top-N or aggregate to keep the panel readable.
