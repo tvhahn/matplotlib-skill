@@ -1,7 +1,7 @@
 # Autoresearch Program
 
 Human-authored research priorities. Read by the agent each iteration.
-Last updated: 2026-03-16.
+Last updated: 2026-03-21.
 
 ## Current Priorities
 
@@ -22,8 +22,9 @@ Last updated: 2026-03-16.
 
 - **Minimum composite threshold:** 0.60 (compliance × weighted layers × signature_penalty)
 - **Target:** all 9 patterns above 0.60; stretch goal 0.80
+- **Diminishing returns:** patterns above 0.90 are frozen — skip to next-lowest
 - **Compliance must be 1.0** — fix compliance failures before optimizing other layers
-- **Note:** Threshold lowered from 0.85 to 0.60 to account for the harder 5-layer scoring (graded visual rubric + refinement + adaptiveness). A "good" pattern typically scores ~0.45–0.55 under the new system.
+- **Note (v2 scoring):** Scoring overhauled 2026-03-21. Visual rubric restructured (10 checks, 4 deliberately hard), refinement/adaptiveness graduated to 0/1/2/3 scales, worst-of-3 floor, quadratic signature penalty. Expected baseline: 0.50–0.75 (v1 baselines were 0.90–1.00 due to ceiling effects). See `docs/specs/autoresearch-v2/` for rationale. Old results.tsv rows are v1 scores — re-baseline before comparing.
 
 ## Exploration Strategies
 

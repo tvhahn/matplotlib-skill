@@ -85,9 +85,9 @@ grep 'dpi=' .claude/skills/matplotlib-chart/patterns/*.md
 
 **Guardrails:** max 5 rounds, no pattern deletions, `sns.set_theme` and `sns.despine` immutable.
 
-**Autoresearch scoring layers:** compliance (0/1), visual (0–1), refinement (0–1), adaptiveness (0–1). Composite = compliance × (0.50 × visual + 0.25 × refinement + 0.25 × adaptiveness) × signature_penalty. See `.claude/commands/autoresearch.md` for full details.
+**Autoresearch scoring (v2):** compliance (0/1 gate), visual (10-check tiered rubric with worst-of-3 floor), refinement (5-check graded 0–3), adaptiveness (5-check graded 0–3). Composite = compliance × (0.50 × visual + 0.25 × refinement + 0.25 × adaptiveness) × signature_penalty (quadratic). Evaluation delegated to Agent subagents for context efficiency. See `docs/specs/autoresearch-v2/` for full spec and `.claude/commands/autoresearch.md` for implementation.
 
-**Circuit breakers:** 10 consecutive discards → next pattern; Docker failure → halt; all above threshold → patrol mode.
+**Circuit breakers:** 10 consecutive discards → next pattern; Docker failure → halt; pattern above 0.90 → skip (diminishing returns); all above threshold → patrol mode.
 
 ## Plan Verification — MANDATORY
 
