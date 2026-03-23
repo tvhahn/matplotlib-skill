@@ -101,7 +101,8 @@ Apply style-reference invariants.
 - Both panels default to `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — show the full probability range.
 - For single model (no CV), plot one `pal[5]` line and baseline — omit grey fold lines.
 - Adapt legend labels to context (e.g., model name instead of "k-fold models" for a single model).
-- Adjust `tight_layout(pad=...)` or add `fig.suptitle()` as layout requires.
+- Add a `fig.suptitle()` with the dataset name and classification context (e.g., "Breast Cancer — 5-Fold Cross-Validation Performance"). This gives the reader domain context without requiring external knowledge.
+- Adjust `tight_layout(pad=...)` as layout requires when suptitle is present.
 - Always add a figure-level insight annotation summarizing classifier quality (e.g., "Strong classifier: AUC = 0.97, AP = 0.95"). Compute dynamically from AP and AUC values.
 - Move legend `loc` if it occludes curves — e.g., `loc="center left"` for PR panel when baseline is high.
 
