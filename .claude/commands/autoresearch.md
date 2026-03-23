@@ -309,7 +309,7 @@ designer would make. Justify every score of 2 with a specific observation.
 
 | Check | 0 | 1 | 2 |
 |-------|---|---|---|
-| 7. **Narrative coherence** | Title is generic/descriptive only ("Sales by Region") | Title suggests a finding, visual partially supports it | Title states a clear finding, visual evidence directly supports it — chart argues a point |
+| 7. **Title quality** | Missing title or placeholder text ("Chart Title") | Classical title describes the metric (e.g., "Collisions per Billion Miles by State") | Classical title + insight annotation below chart that states a data-specific finding |
 | 8. **Typography hierarchy** | All text same weight/size, no visual priority | Some hierarchy (title larger), but labels compete for attention | Clear progression: title > subtitle > labels > annotations. Professional editorial quality |
 | 9. **Reader self-sufficiency** | Reader needs external context (no units, unlabeled axes, ambiguous categories) | Most context present, one gap (missing units or vague axis label) | Unfamiliar reader can fully interpret. Units clear, values labeled, axes descriptive |
 | 10. **Adaptive composition** | Template defaults applied without regard for data | 1–2 layout choices adapted to data | Layout demonstrates understanding of the specific dataset. Non-obvious choices that improve communication |

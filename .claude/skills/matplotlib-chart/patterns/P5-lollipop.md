@@ -50,22 +50,19 @@ for i in range(df.shape[0]):
             ha="center", va="top", size=8.5,
             color="dimgrey", weight="normal")
 
-# --- Data-driven title and insight ---
-df["range"] = df["max"] - df["min"]
-top = df.loc[df["avg"].idxmax()]
-widest = df.loc[df["range"].idxmax()]
-
 ax.grid(False)
 sns.despine(left=True, bottom=True)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_ylabel("")
 ax.set_xlabel("Descriptive X-Axis Label (units)", fontsize=12, labelpad=8, color="dimgrey")
-ax.set_title(f'{top["name"]} Leads — Widest Spread in {widest["name"]}',
-             fontsize=14, loc="left", pad=7, color="dimgrey")
+ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
 
-# Insight annotation — positioned below axes, never inside the data area
+# --- Insight annotation — positioned below axes, never inside the data area ---
+df["range"] = df["max"] - df["min"]
+top = df.loc[df["avg"].idxmax()]
+widest = df.loc[df["range"].idxmax()]
 fig.text(0.98, 0.01,
-         f'Range spans {widest["range"]:,.0f} for {widest["name"]}',
+         f'{top["name"]} leads — widest spread in {widest["name"]} ({widest["range"]:,.0f})',
          ha="right", va="bottom",
          fontsize=9, color="dimgrey", style="italic")
 
@@ -85,7 +82,7 @@ Apply style-reference invariants.
 - Always use two-tone coloring: all min/max dots `pal[5]`, all avg dots `pal[2]`. Do NOT assign per-item colors or substitute other colors (e.g., coral, orange) — the two-tone cubehelix look is the pattern's visual identity.
 - Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
 - Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
-- **Title must state a data-derived finding** — compute from the DataFrame (e.g., `f'{top["name"]} Leads ...'`). Never use a generic description like "Lollipop Chart" or "Range Comparison". The title should tell the reader what to notice before they read the chart.
+- Use classical titles that describe the metric (e.g., "Health Spending Range by Country"). Insight annotations carry findings, not the title.
 - Set a descriptive x-axis label — do not leave it empty.
 - Scale figsize height for item count: `max(3.5, 1.0 + n_items * 0.9)` — compact for 3–4 items, tall for 7+.
 - Scale `DOT_SIZE` with figure size or data density (100-200 range).

@@ -30,7 +30,7 @@ Apply style-reference invariants.
 - `square=True` for correlation matrices.
 
 **Guidance:**
-- Prefer titles that state a finding (e.g., "Flipper length and body mass are strongly correlated (r=0.87)") over generic labels. Compute the finding from the data's strongest off-diagonal correlation.
+- Use classical titles that describe the chart (e.g., "Feature Correlation Matrix"). Insight annotations carry findings, not the title.
 - Default: add a colorbar label (e.g., `"Pearson r"`) and an insight annotation below the chart (`fig.text(...)` or subtitle) highlighting the strongest or most notable correlation. Consider omitting the insight only for very large matrices (>15×15) where a single finding is not representative.
 - Default: no additional colorbar label beyond the cbar. Consider adding one when the heatmap shows a non-obvious metric.
 - Default: show full matrix. Consider masking with `np.triu`/`np.tril` when the user requests it or the matrix is large (>15×15) and symmetric.

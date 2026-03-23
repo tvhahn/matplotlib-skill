@@ -25,13 +25,13 @@ for p in ax.patches:
     _y = p.get_y() + value + space
     ax.text(_x, _y, f"{value:,.0f}", ha="center", va="bottom",
             weight="semibold", size=12, color="dimgrey")
-# --- Data-driven title and insight ---
+ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
+
+# --- Insight annotation ---
 top = df_sorted.iloc[0]
 runner_up = df_sorted.iloc[1] if len(df_sorted) > 1 else top
 gap = top["value"] - runner_up["value"]
-ax.set_title(f'{top["category"]} Leads at {top["value"]:,.0f}',
-             loc="left", fontsize=14, pad=7)
-ax.text(0.98, 0.98, f'{gap:,.0f} ahead of {runner_up["category"]}',
+ax.text(0.98, 0.98, f'{top["category"]} leads — {gap:,.0f} ahead of {runner_up["category"]}',
         transform=ax.transAxes, ha="right", va="top",
         fontsize=9, color="dimgrey", style="italic")
 
@@ -52,7 +52,7 @@ Apply style-reference invariants.
 - Always read data from the CSV file using `pd.read_csv()` — never hardcode data values inline. If the data needs aggregation (groupby, filter by year, etc.), perform it in pandas after loading.
 - Default `sns.barplot()` for the bar layer. Always pass `order=df_sorted["column"].tolist()` to enforce descending sort — seaborn ignores DataFrame order and re-sorts by category name without this. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
 - Always include an insight annotation (e.g., top performer, gap between #1 and #2). Position in upper-right using `transform=ax.transAxes`. Compute findings dynamically from the data — do not hardcode values.
-- **Title must state a data-derived finding** — compute from the DataFrame (e.g., `f'{top["category"]} Leads at {top["value"]:,.0f}'`). Never use a generic description like "Bar Chart" or "Comparison". The title should tell the reader what to notice.
+- Use classical titles that describe the metric (e.g., "Net Electricity Generation by Source"). Insight annotations carry findings, not the title.
 - Omit y-axis grid (`ax.grid(False)`) when bar-end value labels are present — the labels carry the numbers, making grid lines redundant ink.
 - Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
 - Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
