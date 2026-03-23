@@ -41,7 +41,7 @@ Apply style-reference invariants.
 - Annotations use `color="dimgrey"`.
 
 **Guidance:**
-- Default `sns.barplot()` for the bar layer. Template shows `palette="Blues_d"` for neutral ranking. Consider `Greys_r` + `ACCENT_RED` for selective emphasis when the insight calls attention to one or two bars.
+- Default `sns.barplot()` for the bar layer. Template shows `palette="Blues_d"` for neutral ranking. When one bar clearly dominates (e.g., top value >2× the median), consider `Greys_r` + `ACCENT_RED` (`"#bd0c0c"`) on the standout bar to reinforce the finding visually.
 - Scale `figsize` for category count: `(4, 7)` for 8-15 bars, `(6, 4)` for 3-5 bars, wider for 15+.
 - Prefer titles that state a finding (e.g., "North Dakota leads in collision rates") over generic descriptions. Compute the finding from data.
 - Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix (e.g., "mpg") when the axis label alone doesn't suffice. Add unit prefixes/suffixes when values are ambiguous — omit when the title provides enough context.
