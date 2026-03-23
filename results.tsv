@@ -9,3 +9,4 @@ experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness
 0	2026-03-23T06:11:28	P8	0.696	1.0	0.67	0.93	0.60	baseline	0	V2 baseline	9808995
 0	2026-03-23T06:11:28	P9	0.715	1.0	0.73	0.93	0.47	baseline	0	V2 baseline	9808995
 14	2026-03-23T14:58:18	P8	0.674	1.0	0.69	0.73	0.67	discard	1	Add finding-based suptitle guidance	(reverted)
+15	2026-03-23T15:08:56	P9	0.775	1.0	0.82	0.93	0.53	keep	0	Add suptitle with dataset context guidance	633e5e6
