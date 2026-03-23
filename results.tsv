@@ -1,26 +1,10 @@
 experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness	status	consecutive_discards	description	commit
-0	2026-03-19T08:13:47	P1	0.951	1.0	0.903	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P2	0.883	1.0	0.958	0.8	1.0	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P3	0.909	1.0	0.917	0.867	0.933	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P4	0.901	1.0	0.903	0.8	1.0	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P5	0.767	1.0	0.833	0.8	0.6	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P6	0.979	1.0	0.958	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P7	0.993	1.0	0.986	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P8	0.979	1.0	0.958	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
-0	2026-03-19T08:13:47	P9	1.0	1.0	1.0	1.0	1.0	baseline	0	Initial baseline	8f4e8f0
-1	2026-03-19T08:21:01	P5	0.84	1.0	0.89	0.8	0.8	keep	0	Move insight annotation below axes via fig.text to avoid data overlap	3f7c8dd
-2	2026-03-19T08:27:56	P5	0.979	1.0	0.958	1.0	1.0	keep	0	Enforce two-tone cubehelix palette + dimgrey title color	feda78d
-3	2026-03-19T08:33:19	P2	0.976	1.0	0.986	1.0	0.933	keep	0	Add explicit order= param to sns.barplot for descending sort	916ba43
-4	2026-03-19T08:38:55	P4	0.993	1.0	0.986	1.0	1.0	keep	0	Add dimgrey to title/xlabel + simplify title guidance	f5b8ddd
-5	2026-03-19T08:45:25	P3	0.979	1.0	0.958	1.0	1.0	keep	0	Add dimgrey title + reinforce exact bar color hex codes	0d91c5b
-6	2026-03-19T08:50:23	P1	0.979	1.0	0.958	1.0	1.0	keep	0	Add dimgrey title + move insight below axes via fig.text	6ca5ea6
-7	2026-03-19T13:38:00	P8	0.979	1.0	0.958	1.0	1.0	keep	0	Tighten default wspace to 0.15 + explicit spacing guidance per grid size	2b699e4
-8	2026-03-19T13:48:00	P8	0.910	1.0	0.819	1.0	1.0	discard	1	Add inline comment reinforcing wspace=0.15 for all grid sizes	(reverted)
-9	2026-03-19T13:58:00	P8	0.993	1.0	0.986	1.0	1.0	keep	0	Add dimgrey suptitle + limit panel density to 8-10 items	bc132c4
-10	2026-03-19T14:08:00	P8	0.938	1.0	0.875	1.0	1.0	discard	1	Enforce minimum 8pt annotation font size for readability	(reverted)
-11	2026-03-19T23:00:00	P8	0.972	1.0	0.944	1.0	1.0	keep	0	Add explicit left/right margins (left=0.08, right=0.98) to gs.update() for tighter right edge	00d83bf
-12	2026-03-19T23:08:00	P8	0.986	1.0	0.972	1.0	1.0	keep	0	Add top=0.93 bottom=0.07 bounds to gs.update() to prevent hspace inflation	66261fa
-13	2026-03-19T23:14:00	P8	0.986	1.0	0.972	1.0	1.0	keep	0	Enforce GridSpec with multi-column grids, disallow Nx1 vertical stacks	1a190c3
-14	2026-03-19T23:22:00	P8	0.993	1.0	0.986	1.0	1.0	keep	0	Close Nx1 loophole — ban GridSpec(N,1) and plt.subplots(N,1) explicitly	62b10ef
-15	2026-03-21T20:26:00	P8	0.993	1.0	0.986	1.0	1.0	keep	0	Tighten wspace to 0.08, right to 0.99, hide right-column y-ticks for shared axes	0074e89
-16	2026-03-21T20:31:00	P8	0.979	1.0	0.958	1.0	1.0	discard	1	Cap wspace at 0.12 even for independent y-axes	(reverted)
+0	2026-03-23T06:11:28	P1	0.645	1.0	0.72	0.67	0.47	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P2	0.575	1.0	0.65	0.53	0.47	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P3	0.664	1.0	0.77	0.53	0.67	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P4	0.630	1.0	0.66	0.67	0.53	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P5	0.527	1.0	0.59	0.53	0.40	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P6	0.638	1.0	0.68	0.67	0.60	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P7	0.672	1.0	0.71	0.67	0.60	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P8	0.696	1.0	0.67	0.93	0.60	baseline	0	V2 baseline	9808995
+0	2026-03-23T06:11:28	P9	0.715	1.0	0.73	0.93	0.47	baseline	0	V2 baseline	9808995
