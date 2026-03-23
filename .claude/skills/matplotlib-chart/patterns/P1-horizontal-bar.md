@@ -6,7 +6,10 @@
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(4, 7), dpi=150)
+# Scale height for category count
+n_cats = df["category"].nunique()
+fig_h = max(4, 1 + n_cats * 0.7)
+fig, ax = plt.subplots(figsize=(max(4, fig_h * 0.6), fig_h), dpi=150)
 
 sns.barplot(x="percent", y="category", hue="category", data=df, palette="Blues_d", legend=False, ax=ax)
 
