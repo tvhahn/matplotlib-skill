@@ -271,7 +271,7 @@ CLEANEOF
         -e CLAUDE_CODE_OAUTH_TOKEN="$OAUTH_TOKEN" \
         -w /workspace \
         "$IMAGE" \
-        bash -c "claude --dangerously-skip-permissions -p '${prompt//\'/\'\\\'\'}' --max-turns 15" \
+        bash -c "claude --dangerously-skip-permissions -p '${prompt//\'/\'\\\'\'}' --max-turns 40" \
         > "$run_dir/claude_output.txt" 2>&1
 
     # Copy highlights to run_dir top level

@@ -142,9 +142,9 @@ When user says "quick plot" or "exploratory":
 - Skip PDF output
 - Smaller figsize if appropriate
 
-# Phase 5 -- Run & Verify (max 2 visual rounds)
+# Phase 5 -- Run & Verify (max 3 visual rounds)
 
-After generating the code, verify in three stages: code compliance, visual quality review, and (if needed) visual confirmation. Hard cap: **2 visual inspection rounds**. Do not iterate beyond that.
+After generating the code, verify in up to four stages: code compliance, visual quality review, visual refinement, and (if needed) final polish. Hard cap: **3 visual inspection rounds**. Do not iterate beyond that.
 
 ## Stage A — Code Compliance Scan (before running)
 
@@ -181,7 +181,7 @@ Follow the **enumerate-before-evaluate** protocol — list what you see before m
 
 If any issue in items 2–6 requires a code change, fix the code and re-run → proceed to Stage C.
 
-## Stage C — Visual Confirmation (Round 2, only if Stage B required changes)
+## Stage C — Visual Refinement (Round 2, only if Stage B required changes)
 
 Read the updated PNG. Confirm:
 
@@ -189,7 +189,17 @@ Read the updated PNG. Confirm:
 2. No new issues were introduced by the fixes
 3. Aesthetic elements remain consistent with `style-reference.md`
 
-**If issues remain after Stage C:** do NOT iterate further. Report the remaining issues to the user and ask whether to regenerate from scratch or accept as-is.
+If all issues are resolved, stop. If new issues were introduced by the fixes, proceed to Stage D.
+
+## Stage D — Final Polish (Round 3, only if Stage C found new issues)
+
+Fix the issues identified in Stage C, re-run, and read the updated PNG. Confirm:
+
+1. All Stage C issues are resolved
+2. No new regressions were introduced
+3. Chart meets `style-reference.md` standards
+
+**If issues remain after Stage D:** do NOT iterate further. Report the remaining issues to the user and ask whether to regenerate from scratch or accept as-is.
 
 ## Final — Report & Handoff
 
