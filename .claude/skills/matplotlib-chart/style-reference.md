@@ -16,6 +16,7 @@ This spec distinguishes two kinds of values:
 - Tick styling: `length=0, labelcolor="dimgrey"`
 - DPI: 150 standard / 300 publication
 - Save format: PDF+PNG with `bbox_inches="tight"`
+- Panel frame (when used): `ax.patch` with `edgecolor="lightgrey"`, `linewidth=0.8`
 
 **Default values (flexible)** — these appear in templates as good starting points but should adapt to data properties:
 - `fontsize` on titles, labels, annotations — scale with figure size and content density
@@ -139,11 +140,10 @@ For spectrograms/heatmaps, also remove the right spine:
 sns.despine(left=True, bottom=True, right=True)
 ```
 
-### Subplot outlines (multi-panel only)
+### Panel Frames
 
-For GridSpec multi-panel layouts, add a subtle rectangular border around each
-subplot's background patch. This frames each panel visually without re-enabling
-axis spines:
+A subtle rectangular border around an axes background patch. This frames the
+chart visually without re-enabling axis spines:
 
 ```python
 for ax in axes_list:
@@ -153,6 +153,19 @@ for ax in axes_list:
 
 Apply **after** `sns.despine()`. Spines remain removed; the border comes from
 the axes background patch, not the spine objects.
+
+**When to use a frame:**
+- Multi-panel layouts (always — frames separate panels visually)
+- Charts where data floats in the coordinate space without touching the edges (curves, violin shapes, scatter clouds)
+- Charts with bounded semantic axes (e.g., 0–1 probability ranges)
+
+**When to omit a frame:**
+- Bar charts (bars anchor to a baseline, creating their own visual edge)
+- Lollipop charts (lines span the chart width, creating horizontal structure)
+- Heatmaps (the cell grid creates its own visual boundary)
+- Any chart where data elements fill the plot area
+
+The pattern's Guidance section provides chart-type-specific recommendations. When not specified, omit the frame (the existing default).
 
 ## Typography
 

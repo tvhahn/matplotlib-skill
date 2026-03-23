@@ -73,5 +73,6 @@ Apply style-reference invariants.
 - Scale `figsize` wider for long time ranges (e.g., `(14, 6)` for 50+ years).
 - Move legend to another corner if `"upper left"` occludes data.
 - Add data point annotations if the user requests them or an insight warrants emphasis.
+- **Panel frame:** Optional. Consider adding a panel frame (`ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`) when the rolling mean line floats far above the bar tops, creating a visual gap between data and chart boundary. Omit when bars fill most of the vertical space.
 
 **Customize:** Adjust rolling window size (default 10). For predicted-vs-actual, replace bars with `ax.plot()` for true values (`#4575b4`, linewidth=1) and `ax.scatter()` for predictions (grey, alpha=0.4, s=2), compute rolling on predictions via `pd.rolling()`, and add RMSE/R² annotation box. Use `ax.annotate()` with `arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8)` for notable data points.

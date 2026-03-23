@@ -40,6 +40,7 @@ Apply style-reference invariants.
 - Reduce `linewidths` to 0.3 or omit for matrices >12×12.
 - Reduce `annot_kws` size for large matrices where numbers would overlap.
 - Omit tick label `rotation` for short labels (<6 chars).
+- **Panel frame:** Correlation heatmaps do not need a panel frame — the cell grid creates its own visual boundary. For spectrograms (`pcolormesh`), add a panel frame (`ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`) to define the panel edges, especially for multi-panel layouts.
 
 ### Spectrogram (pcolormesh)
 

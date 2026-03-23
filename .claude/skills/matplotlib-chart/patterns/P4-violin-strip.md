@@ -75,5 +75,6 @@ Apply style-reference invariants.
 - **Title must state a data-derived finding** — compute from medians (e.g., `f"{top_cat} Has the Highest Median ({top_val:.1f})"`). Never use a generic description like "Distribution" or "Violin Plot". For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
 - Always include an insight annotation below the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")`. Highlight the most notable comparison, widest spread, or outlier group — computed dynamically from data.
 - Adapt annotation format to the data domain: `$` prefix for currency, unit suffix (e.g., "g", "mpg") when the axis label alone doesn't suffice.
+- **Panel frame:** Consider adding a panel frame (`ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`) when violins float with significant white space above and below, especially with 3+ categories. Omit for compact 2-category charts or when the chart is embedded in a multi-panel layout that already provides framing.
 
 **Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
