@@ -60,6 +60,8 @@ Apply style-reference invariants.
 - Always include median markers (`"|"` marker) with value annotations by default — this satisfies Design Principle P6 (annotate the insight). Omit only if the user explicitly says no annotations.
 - Format median annotations to match the data precision (`.1f` for continuous, `,.0f` for counts). Position labels above the marker (`va="bottom"`) to avoid overlapping strip points.
 - Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
-- Title: `fontsize=14, loc="left", pad=7, color="dimgrey"`. For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
+- Title: `fontsize=14, loc="left", pad=7, color="dimgrey"`. Prefer titles that state a finding (e.g., "Gentoo penguins are substantially heavier") over generic descriptions. For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
+- Always include an insight annotation below the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")`. Highlight the most notable comparison, widest spread, or outlier group — computed dynamically from data.
+- Adapt annotation format to the data domain: `$` prefix for currency, unit suffix (e.g., "g", "mpg") when the axis label alone doesn't suffice.
 
 **Customize:** Adjust `alpha` on stripplot for density. Use `density_norm="count"` for proportional widths.
