@@ -15,9 +15,9 @@ pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 darkblue = pal[5]   # min/max dots
 lightblue = pal[2]  # avg dots
 
-# Scale height to item count
+# Scale height to item count (shorter for few items, taller for many)
 n_items = len(df)
-fig, ax = plt.subplots(figsize=(10, max(5, 1.5 + n_items * 0.8)), dpi=150)
+fig, ax = plt.subplots(figsize=(10, max(3.5, 1.0 + n_items * 0.9)), dpi=150)
 
 DOT_SIZE = 150
 
@@ -81,11 +81,11 @@ Apply style-reference invariants.
 - Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
 - Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
 - Set a descriptive x-axis label — do not leave it empty.
-- Scale figsize height for item count: `max(5, 1.5 + n_items * 0.8)` — taller for more items.
+- Scale figsize height for item count: `max(3.5, 1.0 + n_items * 0.9)` — compact for 3–4 items, tall for 7+.
 - Scale `DOT_SIZE` with figure size or data density (100-200 range).
 - Add unit prefixes (e.g., `$`) when values are currency or otherwise ambiguous without units.
 - Adjust annotation `size` proportionally if figure is compact or labels overlap.
-- Use `f'{value:.2f}'` for decimal data, `f'{value:,.0f}'` for large integers.
+- Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix (e.g., "mpg", "yr") when the axis label alone doesn't suffice. Use `f'{value:.2f}'` for decimal data, `f'{value:,.0f}'` for large integers.
 - Move legend to avoid occlusion if data extends into the lower-right corner.
 - Omit min/max labels if the user says "clean" or "minimal".
 - Always include an insight annotation (e.g., top performer, widest range, or notable gap). Position BELOW the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom")` — never inside the axes area where it can overlap data rows.
