@@ -80,6 +80,7 @@ Apply style-reference invariants.
 - Always use two-tone coloring: all min/max dots `pal[5]`, all avg dots `pal[2]`. Do NOT assign per-item colors or substitute other colors (e.g., coral, orange) — the two-tone cubehelix look is the pattern's visual identity.
 - Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
 - Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
+- Prefer titles that state a finding (e.g., "USA has the widest health spending range") over generic descriptions. Compute the finding from data.
 - Set a descriptive x-axis label — do not leave it empty.
 - Scale figsize height for item count: `max(3.5, 1.0 + n_items * 0.9)` — compact for 3–4 items, tall for 7+.
 - Scale `DOT_SIZE` with figure size or data density (100-200 range).
