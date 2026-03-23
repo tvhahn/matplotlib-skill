@@ -49,6 +49,8 @@ Apply style-reference invariants.
 - Always read data from the CSV file using `pd.read_csv()` — never hardcode data values inline. If the data needs aggregation (groupby, filter by year, etc.), perform it in pandas after loading.
 - Default `sns.barplot()` for the bar layer. Always pass `order=df_sorted["column"].tolist()` to enforce descending sort — seaborn ignores DataFrame order and re-sorts by category name without this. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
 - Always include an insight annotation (e.g., top performer, gap between #1 and #2). Position in upper-right using `transform=ax.transAxes`. Compute findings dynamically from the data — do not hardcode values.
+- Prefer titles that state a finding (e.g., "8-cylinder engines produce 2× the horsepower of 4-cylinder") over generic descriptions. Compute the finding from data.
+- Omit y-axis grid (`ax.grid(False)`) when bar-end value labels are present — the labels carry the numbers, making grid lines redundant ink.
 - Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
 - Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
 - Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix when the y-axis label alone doesn't suffice. Use `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.
