@@ -46,11 +46,12 @@ Apply style-reference invariants.
 - Palette family: `DIVERGING_COLORBLIND` for ≤4 bars, `"rocket"` for ≥5 bars.
 
 **Guidance:**
+- Always read data from the CSV file using `pd.read_csv()` — never hardcode data values inline. If the data needs aggregation (groupby, filter by year, etc.), perform it in pandas after loading.
 - Default `sns.barplot()` for the bar layer. Always pass `order=df_sorted["column"].tolist()` to enforce descending sort — seaborn ignores DataFrame order and re-sorts by category name without this. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
 - Always include an insight annotation (e.g., top performer, gap between #1 and #2). Position in upper-right using `transform=ax.transAxes`. Compute findings dynamically from the data — do not hardcode values.
 - Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
 - Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
-- Adjust annotation format: `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.
+- Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix when the y-axis label alone doesn't suffice. Use `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.
 - Scale `fontsize` on ylabel and title proportionally to figure size.
 - Rotate x-tick labels with `ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")` when labels overlap.
 
