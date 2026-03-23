@@ -10,3 +10,9 @@ experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness
 0	2026-03-23T06:11:28	P9	0.715	1.0	0.73	0.93	0.47	baseline	0	V2 baseline	9808995
 14	2026-03-23T14:58:18	P8	0.674	1.0	0.69	0.73	0.67	discard	1	Add finding-based suptitle guidance	(reverted)
 15	2026-03-23T15:08:56	P9	0.775	1.0	0.82	0.93	0.53	keep	0	Add suptitle with dataset context guidance	633e5e6
+16	2026-03-23T17:25:00	P5	0.683	1.0	0.73	0.67	0.60	keep	0	Add data-driven title computation to template	a8e08e8
+17	2026-03-23T17:55:00	P2	0.718	1.0	0.77	0.73	0.60	keep	0	Add data-driven title and remove redundant grid	fd3d2d0
+18	2026-03-23T18:45:00	P4	0.740	1.0	0.78	0.73	0.67	keep	0	Add data-driven title and insight annotation to template	ebb5eb9
+19	2026-03-23T19:35:00	P6	0.616	1.0	0.67	0.60	0.60	discard	1	Add data-driven title and strengthen finding guidance	(reverted)
+20	2026-03-23T20:15:00	P6	0.529	1.0	0.59	0.53	0.47	discard	2	Add dense data guidance and class name cleaning	(reverted)
+21	2026-03-23T20:50:00	P1	0.635	1.0	0.67	0.56	0.64	discard	1	Add data-driven title and gap insight annotation	(reverted)
