@@ -62,6 +62,8 @@ Apply style-reference invariants.
 - Legend with custom Patch + Line2D handles. Adapt labels to data domain.
 
 **Guidance:**
+- Always read data from the CSV file using `pd.read_csv()` — never hardcode data values inline. The pre-computed CSV has columns `year`, `value`, `rolling`.
+- Prefer titles that state a finding (e.g., "Global temperatures have risen 1.2°C since 1880") over generic descriptions. Compute the finding from the data.
 - Default rolling line style: plain `ax.plot()`. Add markers if data is sparse (<10 points) to clarify individual values.
 - Default rolling line color is `pal[5]` (darkest cubehelix). Any dark cubehelix shade works if the darkest conflicts with the data.
 - Reference value: use `0` when data has negative values; otherwise use `df["value"].mean()`. The template code shows the conditional.
