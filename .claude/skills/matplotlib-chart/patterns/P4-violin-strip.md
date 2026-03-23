@@ -38,12 +38,24 @@ for i, cat in enumerate(df["category"].unique()):
     ax.text(med, i - 0.35, f"{med:.1f}", ha="center", va="bottom",
             fontsize=10, color="dimgrey", weight="semibold")
 
+# --- Data-driven title and insight ---
+medians_sorted = medians.sort_values(ascending=False)
+top_cat = medians_sorted.index[0]
+top_val = medians_sorted.iloc[0]
+ax.set_title(f"{top_cat} Has the Highest Median ({top_val:.1f})",
+             fontsize=14, loc="left", pad=7, color="dimgrey")
+
+# Insight annotation — positioned below axes, never inside the data area
+if len(medians_sorted) > 1:
+    spread = medians_sorted.iloc[0] - medians_sorted.iloc[-1]
+    fig.text(0.98, 0.01, f"Median spread: {spread:.1f} across {n_cats} groups",
+             ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
+
 ax.grid(axis="x", alpha=0.7, linewidth=1)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.yaxis.label.set_visible(False)
 ax.tick_params(axis="x", labelsize=12)
-ax.set_xlabel("Value", labelpad=10, fontsize=12, color="dimgrey")
-ax.set_title("Distribution Title", fontsize=14, loc="left", pad=7, color="dimgrey")
+ax.set_xlabel("Descriptive X-Axis Label (units)", labelpad=10, fontsize=12, color="dimgrey")
 sns.despine(left=True, bottom=True)
 ```
 
@@ -60,7 +72,7 @@ Apply style-reference invariants.
 - Always include median markers (`"|"` marker) with value annotations by default — this satisfies Design Principle P6 (annotate the insight). Omit only if the user explicitly says no annotations.
 - Format median annotations to match the data precision (`.1f` for continuous, `,.0f` for counts). Position labels above the marker (`va="bottom"`) to avoid overlapping strip points.
 - Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
-- Title: `fontsize=14, loc="left", pad=7, color="dimgrey"`. Prefer titles that state a finding (e.g., "Gentoo penguins are substantially heavier") over generic descriptions. For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
+- **Title must state a data-derived finding** — compute from medians (e.g., `f"{top_cat} Has the Highest Median ({top_val:.1f})"`). Never use a generic description like "Distribution" or "Violin Plot". For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
 - Always include an insight annotation below the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")`. Highlight the most notable comparison, widest spread, or outlier group — computed dynamically from data.
 - Adapt annotation format to the data domain: `$` prefix for currency, unit suffix (e.g., "g", "mpg") when the axis label alone doesn't suffice.
 
