@@ -46,8 +46,10 @@ ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
-# --- Insight annotation ---
-ax.text(0.02, 0.02, f"{len(class_names)} classes · {len(y)} training points",
+# --- Insight annotation (per-class counts from data) ---
+class_counts = [np.sum(y == i) for i in range(len(class_names))]
+counts_str = " · ".join(f"{n} ({c})" for n, c in zip(class_names, class_counts))
+ax.text(0.02, 0.02, f"{len(class_names)} classes · {counts_str}",
         transform=ax.transAxes, ha="left", va="bottom",
         fontsize=9, color="dimgrey", style="italic")
 
