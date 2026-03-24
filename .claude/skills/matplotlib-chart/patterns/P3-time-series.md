@@ -48,6 +48,12 @@ ax.legend(handles=legend_handles, loc="upper left", fontsize=10,
          frameon=True, facecolor="white", framealpha=0.8,
          edgecolor="lightgrey", labelcolor="dimgrey")
 
+# --- Insight annotation (change over time from data) ---
+first_year, last_year = int(df["year"].min()), int(df["year"].max())
+change = df["value"].iloc[-1] - df["value"].iloc[0]
+fig.text(0.98, 0.01, f"Change: {change:+.1f} from {first_year} to {last_year}",
+         ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
+
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.grid(False)
 sns.despine(left=True, bottom=True)
@@ -63,7 +69,7 @@ Apply style-reference invariants.
 
 **Guidance:**
 - Always read data from the CSV file using `pd.read_csv()` — never hardcode data values inline. The pre-computed CSV has columns `year`, `value`, `rolling`.
-- Prefer titles that state a finding (e.g., "Global temperatures have risen 1.2°C since 1880") over generic descriptions. Compute the finding from the data.
+- Use classical titles that describe the metric (e.g., "Global Temperature Anomalies, 1880–2023"). Insight annotations carry findings, not the title.
 - Default rolling line style: plain `ax.plot()`. Add markers if data is sparse (<10 points) to clarify individual values.
 - Default rolling line color is `pal[5]` (darkest cubehelix). Any dark cubehelix shade works if the darkest conflicts with the data.
 - Reference value: use `0` when data has negative values; otherwise use `df["value"].mean()`. The template code shows the conditional.

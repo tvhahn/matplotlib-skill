@@ -6,7 +6,10 @@
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(4, 7), dpi=150)
+# Scale height for category count
+n_cats = df["category"].nunique()
+fig_h = max(4, 1 + n_cats * 0.7)
+fig, ax = plt.subplots(figsize=(max(4, fig_h * 0.6), fig_h), dpi=150)
 
 sns.barplot(x="percent", y="category", hue="category", data=df, palette="Blues_d", legend=False, ax=ax)
 
@@ -43,7 +46,7 @@ Apply style-reference invariants.
 **Guidance:**
 - Default `sns.barplot()` for the bar layer. Template shows `palette="Blues_d"` for neutral ranking. When one bar clearly dominates (e.g., top value >2× the median), consider `Greys_r` + `ACCENT_RED` (`"#bd0c0c"`) on the standout bar to reinforce the finding visually.
 - Scale `figsize` for category count: `(4, 7)` for 8-15 bars, `(6, 4)` for 3-5 bars, wider for 15+.
-- Prefer titles that state a finding (e.g., "North Dakota leads in collision rates") over generic descriptions. Compute the finding from data.
+- Use classical titles that describe the metric (e.g., "Collisions per Billion Miles by State"). Insight annotations carry findings, not the title.
 - Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix (e.g., "mpg") when the axis label alone doesn't suffice. Add unit prefixes/suffixes when values are ambiguous — omit when the title provides enough context.
 - Adjust annotation `size` proportionally if bars are very narrow or figure is compact.
 - Scale title `fontsize` with figure size (12 for compact figures, 14-16 for large ones).

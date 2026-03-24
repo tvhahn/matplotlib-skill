@@ -46,8 +46,10 @@ ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
 
-# --- Insight annotation ---
-ax.text(0.02, 0.02, f"{len(class_names)} classes · {len(y)} training points",
+# --- Insight annotation (per-class counts from data) ---
+class_counts = [np.sum(y == i) for i in range(len(class_names))]
+counts_str = " · ".join(f"{n} ({c})" for n, c in zip(class_names, class_counts))
+ax.text(0.02, 0.02, f"{len(class_names)} classes · {counts_str}",
         transform=ax.transAxes, ha="left", va="bottom",
         fontsize=9, color="dimgrey", style="italic")
 
@@ -87,7 +89,7 @@ Apply style-reference invariants.
 - Adjust `figsize` if feature ranges are very asymmetric — `(8, 6)` is the default but `(10, 6)` works for wide feature ranges.
 - Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
 - Adjust probability dot `s` scaling factor for mesh density. For very dense meshes (>5000 points), reduce `s` or increase the power exponent to keep dots visually distinct.
-- Prefer titles that state a finding (e.g., "Setosa is fully separable by petal dimensions") over generic labels. Identify the most/least separated classes from the boundary structure.
+- Use classical titles that describe the chart (e.g., "KNN Decision Boundary — Iris Species"). Insight annotations carry findings, not the title.
 - Always include an insight annotation: class count + sample size at minimum. If class_names are descriptive, mention the most/least separated classes. Position in lower-left using `transform=ax.transAxes`.
 
 **Customize:** Assumes `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.
