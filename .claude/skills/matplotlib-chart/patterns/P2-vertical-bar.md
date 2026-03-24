@@ -7,12 +7,24 @@
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
-
 df_sorted = df.sort_values("value", ascending=False)
 
-# Palette selection: DIVERGING_COLORBLIND for ≤4 bars, "rocket" for ≥5
+# --- Dynamic figsize and format ---
 n_bars = df_sorted.shape[0]
+max_val = df_sorted["value"].max()
+# Detect annotation format from data magnitude
+if max_val < 10:
+    fmt = ".2f"      # small decimal values (e.g., carats, proportions)
+elif max_val < 100:
+    fmt = ".1f"      # medium values (e.g., mpg, scores)
+else:
+    fmt = ",.0f"     # large integers (e.g., dollars, MWh)
+# Scale width for bar count: compact for ≤4, wider for many bars
+fig_w = max(6, 4 + n_bars * 1.0)
+
+fig, ax = plt.subplots(figsize=(fig_w, 6), dpi=150)
+
+# Palette selection: DIVERGING_COLORBLIND for ≤4 bars, "rocket" for ≥5
 pal = ["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n_bars] if n_bars <= 4 else "rocket"
 
 sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette=pal,
@@ -23,7 +35,7 @@ for p in ax.patches:
     space = df_sorted["value"].max() * 0.02
     _x = p.get_x() + p.get_width() / 2
     _y = p.get_y() + value + space
-    ax.text(_x, _y, f"{value:,.0f}", ha="center", va="bottom",
+    ax.text(_x, _y, f"{value:{fmt}}", ha="center", va="bottom",
             weight="semibold", size=12, color="dimgrey")
 ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 
@@ -31,7 +43,7 @@ ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
 top = df_sorted.iloc[0]
 runner_up = df_sorted.iloc[1] if len(df_sorted) > 1 else top
 gap = top["value"] - runner_up["value"]
-ax.text(0.98, 0.98, f'{top["category"]} leads — {gap:,.0f} ahead of {runner_up["category"]}',
+ax.text(0.98, 0.98, f'{top["category"]} leads — {gap:{fmt}} ahead of {runner_up["category"]}',
         transform=ax.transAxes, ha="right", va="top",
         fontsize=9, color="dimgrey", style="italic")
 
