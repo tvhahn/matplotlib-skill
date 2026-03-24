@@ -23,9 +23,17 @@ colors = [redish, blueish, orangeish]
 
 mesh_points = np.c_[xx0.ravel(), xx1.ravel()]
 
-fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
+# --- Dynamic figsize (match data aspect ratio for set_aspect(1)) ---
+x_span = X[:, 0].max() - X[:, 0].min()
+y_span = X[:, 1].max() - X[:, 1].min()
+data_aspect = x_span / y_span if y_span > 0 else 1.0
+base = 7
+fig_w = base * max(1.0, data_aspect) + 2.0  # extra width for outside legends
+fig_h = base * max(1.0, 1.0 / data_aspect)
 
-# probability dots (sized by confidence)
+fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
+
+# probability-sized dots ONLY — never use pcolormesh or contourf
 colormap = np.array(colors[:len(class_names)])
 ax.scatter(mesh_points[:, 0], mesh_points[:, 1], c=colormap[yy_hat.ravel()],
            alpha=0.3, s=40 * yy_prob.ravel()**3, linewidths=0)
@@ -86,7 +94,7 @@ Apply style-reference invariants.
 - Default: load pre-computed data from NPZ (`xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names`). Allow sklearn import when the user provides raw data and explicitly requests fitting.
 - Position legends outside with `bbox_to_anchor`; adjust positions to avoid occlusion with the data.
 - Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
-- Adjust `figsize` if feature ranges are very asymmetric — `(8, 6)` is the default but `(10, 6)` works for wide feature ranges.
+- Dynamic figsize is computed from data aspect ratio in the template. Do not hardcode `figsize=(8, 6)` — use the template's `data_aspect` computation.
 - Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
 - Adjust probability dot `s` scaling factor for mesh density. For very dense meshes (>5000 points), reduce `s` or increase the power exponent to keep dots visually distinct.
 - Use classical titles that describe the chart (e.g., "KNN Decision Boundary — Iris Species"). Insight annotations carry findings, not the title.

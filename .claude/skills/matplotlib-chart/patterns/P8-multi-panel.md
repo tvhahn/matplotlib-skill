@@ -15,10 +15,17 @@ df = pd.read_csv("data.csv").dropna()
 # --- Single color for all panels (same metric across groups) ---
 line_color = sns.cubehelix_palette(6, rot=-0.25, light=0.7)[5]
 
-fig = plt.figure(figsize=(14, 9), dpi=150)
-gs = gridspec.GridSpec(3, 2)
-gs.update(wspace=0.08, hspace=0.35, left=0.08, right=0.99, top=0.93, bottom=0.07)
-axes_list = [plt.subplot(gs[i, j]) for i in range(3) for j in range(2)]
+# --- Dynamic grid dimensions and figsize ---
+n_rows, n_cols = 3, 2  # derive from data: 2x2 for ≤4, 3x2 for 5-6, 3x3 for 7-9
+grid_figsize = {(2, 2): (10, 8), (3, 2): (14, 9), (3, 3): (14, 12), (2, 3): (14, 8)}
+fig_w, fig_h = grid_figsize.get((n_rows, n_cols), (14, 9))
+hspace_map = {2: 0.30, 3: 0.35}
+
+fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
+gs = gridspec.GridSpec(n_rows, n_cols)
+gs.update(wspace=0.08, hspace=hspace_map.get(n_rows, 0.35),
+          left=0.08, right=0.99, top=0.93, bottom=0.07)
+axes_list = [plt.subplot(gs[i, j]) for i in range(n_rows) for j in range(n_cols)]
 fig.suptitle("Main Title", fontsize=14, y=0.98, color="dimgrey")
 
 # Shared y-axis: compute global limits BEFORE the loop
@@ -26,11 +33,12 @@ y_global_min = all_values.min()
 y_global_max = all_values.max()
 y_pad = (y_global_max - y_global_min) * 0.1
 
-labels = [chr(ord('a') + i) for i in range(6)]
+n_panels = n_rows * n_cols
+labels = [chr(ord('a') + i) for i in range(n_panels)]
 titles = ["Dataset 1", "Dataset 2", "Dataset 3", "Dataset 4", "Dataset 5", "Dataset 6"]
 
 for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
-    row, col = divmod(i, 2)
+    row, col = divmod(i, n_cols)
 
     ax.grid(False)
     ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
@@ -58,7 +66,7 @@ for i, (ax, label, title) in enumerate(zip(axes_list, labels, titles)):
         ax.set_ylabel("Y Label", fontsize=9, labelpad=6, color="dimgrey")
     else:
         ax.tick_params(labelleft=False)  # hide redundant y-ticks on right column
-    if row == 2:
+    if row == n_rows - 1:
         ax.set_xlabel("X Label", fontsize=9, labelpad=6, color="dimgrey")
 
 # --- Figure-level insight annotation ---

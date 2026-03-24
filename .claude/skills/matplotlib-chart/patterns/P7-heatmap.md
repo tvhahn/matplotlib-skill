@@ -8,17 +8,33 @@
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
+# --- Dynamic figsize and annotation size for matrix dimensions ---
+n_vars = corr.shape[0]
+fig_w = max(6, 2 + n_vars * 1.2)    # wider for more columns
+fig_h = max(5, 1 + n_vars * 1.0)    # taller for more rows
+annot_size = max(7, 13 - n_vars)     # shrink text for large matrices
+
+fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
 
 sns.heatmap(corr, annot=True, fmt=".2f", cmap="RdBu_r", ax=ax,
             vmin=-1, vmax=1, center=0,
             linewidths=0.5, linecolor="white", square=True,
-            cbar_kws={"shrink": 0.8},
-            annot_kws={"size": 11, "weight": "medium"})
+            cbar_kws={"shrink": 0.8, "label": "Pearson r"},
+            annot_kws={"size": annot_size, "weight": "medium"})
 
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
-ax.set_title("Correlation Matrix", fontsize=14, loc="left", pad=7)
+ax.set_title("Correlation Matrix", fontsize=14, loc="left", pad=7, color="dimgrey")
+
+# --- Insight annotation (strongest correlation from data) ---
+mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
+upper = corr.where(mask)
+strongest_val = upper.abs().max().max()
+strongest_pair = upper.abs().stack().idxmax()
+fig.text(0.98, 0.01,
+         f"Strongest: {strongest_pair[0]} ↔ {strongest_pair[1]} (r = {corr.loc[strongest_pair]:.2f})",
+         ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
+
 sns.despine(left=True, bottom=True)
 ```
 
@@ -36,9 +52,8 @@ Apply style-reference invariants.
 - Default: show full matrix. Consider masking with `np.triu`/`np.tril` when the user requests it or the matrix is large (>15×15) and symmetric.
 - `ax.grid(False)` is NOT needed for `sns.heatmap` — seaborn handles this internally.
 - Data is typically pre-computed: load with `pd.read_csv(path, index_col=0)`. Allow `.corr()` when the user provides raw data.
-- Scale `figsize` for matrix size: `(8, 6)` for ≤10×10, `(10, 8)` for 10-15, `(12, 10)` for 15+.
+- Dynamic figsize and annotation size are computed from matrix dimensions in the template. Do not hardcode these.
 - Reduce `linewidths` to 0.3 or omit for matrices >12×12.
-- Reduce `annot_kws` size for large matrices where numbers would overlap.
 - Omit tick label `rotation` for short labels (<6 chars).
 - **Panel frame:** Correlation heatmaps do not need a panel frame — the cell grid creates its own visual boundary. For spectrograms (`pcolormesh`), add a panel frame (`ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`) to define the panel edges, especially for multi-panel layouts.
 
