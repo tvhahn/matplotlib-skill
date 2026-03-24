@@ -48,6 +48,12 @@ ax.legend(handles=legend_handles, loc="upper left", fontsize=10,
          frameon=True, facecolor="white", framealpha=0.8,
          edgecolor="lightgrey", labelcolor="dimgrey")
 
+# --- Insight annotation (change over time from data) ---
+first_year, last_year = int(df["year"].min()), int(df["year"].max())
+change = df["value"].iloc[-1] - df["value"].iloc[0]
+fig.text(0.98, 0.01, f"Change: {change:+.1f} from {first_year} to {last_year}",
+         ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
+
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 ax.grid(False)
 sns.despine(left=True, bottom=True)
