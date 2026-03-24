@@ -15,9 +15,21 @@ pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 darkblue = pal[5]   # min/max dots
 lightblue = pal[2]  # avg dots
 
-# Scale height to item count (shorter for few items, taller for many)
+# --- Dynamic figsize and format ---
 n_items = len(df)
-fig, ax = plt.subplots(figsize=(10, max(3.5, 1.0 + n_items * 0.9)), dpi=150)
+max_val = df["max"].max()
+# Detect annotation format from data magnitude
+if max_val < 10:
+    fmt = ".2f"      # small decimal values (e.g., carats, percentages)
+elif max_val < 100:
+    fmt = ".1f"      # medium values (e.g., mpg, scores)
+else:
+    fmt = ",.0f"     # large integers (e.g., dollars, population)
+# Scale width for annotation text; scale height for item count
+fig_w = max(8, 10 + max(0, len(f"{max_val:{fmt}}") - 4) * 0.5)
+fig_h = max(3.5, 1.0 + n_items * 0.9)
+
+fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
 
 DOT_SIZE = 150
 
@@ -37,16 +49,16 @@ ax.scatter(x=df["avg"], y=df["name"], s=DOT_SIZE,
 
 # avg value annotations — REQUIRED (centered above each avg dot)
 for i in range(df.shape[0]):
-    ax.text(x=df["avg"].iloc[i], y=i + 0.15, s=f'{df["avg"].iloc[i]:,.0f}',
+    ax.text(x=df["avg"].iloc[i], y=i + 0.15, s=f'{df["avg"].iloc[i]:{fmt}}',
             ha="center", va="bottom", size=10,
             color="dimgrey", weight="medium")
 
 # min/max value annotations — REQUIRED (below each dot, smaller text)
 for i in range(df.shape[0]):
-    ax.text(x=df["min"].iloc[i], y=i - 0.15, s=f'{df["min"].iloc[i]:,.0f}',
+    ax.text(x=df["min"].iloc[i], y=i - 0.15, s=f'{df["min"].iloc[i]:{fmt}}',
             ha="center", va="top", size=8.5,
             color="dimgrey", weight="normal")
-    ax.text(x=df["max"].iloc[i], y=i - 0.15, s=f'{df["max"].iloc[i]:,.0f}',
+    ax.text(x=df["max"].iloc[i], y=i - 0.15, s=f'{df["max"].iloc[i]:{fmt}}',
             ha="center", va="top", size=8.5,
             color="dimgrey", weight="normal")
 
@@ -62,7 +74,7 @@ df["range"] = df["max"] - df["min"]
 top = df.loc[df["avg"].idxmax()]
 widest = df.loc[df["range"].idxmax()]
 fig.text(0.98, 0.01,
-         f'{top["name"]} leads — widest spread in {widest["name"]} ({widest["range"]:,.0f})',
+         f'{top["name"]} leads — widest spread in {widest["name"]} ({widest["range"]:{fmt}})',
          ha="right", va="bottom",
          fontsize=9, color="dimgrey", style="italic")
 
