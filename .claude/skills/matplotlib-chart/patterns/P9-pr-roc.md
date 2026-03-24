@@ -28,7 +28,9 @@ auc = float(np.trapezoid(tpr_avg, fpr_avg))  # fpr_avg is already ascending
 
 # --- Plot ---
 fig, axes = plt.subplots(1, 2, figsize=(12, 6), dpi=150)
-fig.tight_layout(pad=3.0)
+fig.suptitle("Dataset Name — N-Fold Cross-Validation Performance",
+             fontsize=14, y=1.02)
+fig.tight_layout(pad=3.0, rect=[0, 0.03, 1, 0.97])
 
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
 
@@ -39,9 +41,11 @@ for i in range(n_folds):
     axes[0].plot(recall_array[i], precision_array[i],
                  color="grey", alpha=0.5, linewidth=1, label=label)
 
+# CRITICAL: average line MUST use pal[5] (cubehelix dark blue) — not orange, not grey
 axes[0].plot(recall_avg, precision_avg, label=f"Average (AP = {ap:.3f})",
              color=pal[5], linewidth=2)
 
+# CRITICAL: baseline MUST be orange dashed — not grey, not black
 axes[0].plot([0, 1], [baseline, baseline], linestyle="--",
              label="No skill", color="orange", linewidth=2, zorder=0)
 
@@ -57,9 +61,11 @@ for i in range(n_folds):
     axes[1].plot(fpr_array[i], tpr_array[i],
                  color="grey", alpha=0.5, linewidth=1, label=label)
 
+# CRITICAL: average line MUST use pal[5] — same color on both panels
 axes[1].plot(fpr_avg, tpr_avg, label=f"Average (AUC = {auc:.3f})",
              color=pal[5], linewidth=2)
 
+# CRITICAL: baseline MUST be orange dashed — same on both panels
 axes[1].plot([0, 1], [0, 1], linestyle="--",
              label="No skill", color="orange", linewidth=2, zorder=0)
 
@@ -94,16 +100,12 @@ Apply style-reference invariants.
 
 **Guidance:**
 - Default: load pre-computed data from NPZ files with `np.load()`. The `recall_avg` array is in **decreasing** order (sklearn convention) — sort ascending with `np.argsort` before computing AP via `np.trapezoid`. Do **not** use `abs()` as a workaround. Allow sklearn import when the user provides a fitted model and explicitly requests cross-validation.
-- Average line color is always `pal[5]` from `sns.cubehelix_palette(6, rot=-0.25, light=0.7)`.
-- Include metric values in legend labels when available (e.g., `f"Average (AP = {ap:.3f})"`).
-- Default: no `fill_between`. Consider `fill_between` for confidence intervals if the user requests uncertainty visualization.
+- Include metric values in legend labels (e.g., `f"Average (AP = {ap:.3f})"`).
+- Do NOT use `fill_between` unless the user explicitly requests confidence intervals.
 - Adjust k-fold line `alpha` for number of folds: lower (0.3) for 20+ folds, higher (0.5-0.6) for 5-10.
-- Both panels default to `set_xlim(0, 1)` and `set_ylim(0, 1.05)` — show the full probability range.
-- For single model (no CV), plot one `pal[5]` line and baseline — omit grey fold lines.
-- Adapt legend labels to context (e.g., model name instead of "k-fold models" for a single model).
-- Add a `fig.suptitle()` with the dataset name and classification context (e.g., "Breast Cancer — 5-Fold Cross-Validation Performance"). This gives the reader domain context without requiring external knowledge.
-- Adjust `tight_layout(pad=...)` as layout requires when suptitle is present.
-- Always add a figure-level insight annotation summarizing classifier quality (e.g., "Strong classifier: AUC = 0.97, AP = 0.95"). Compute dynamically from AP and AUC values.
+- Both panels default to `set_xlim(0, 1)` and `set_ylim(0, 1.05)`.
+- Replace "Dataset Name" in the `fig.suptitle()` template with the actual dataset name and fold count.
+- Always add a figure-level insight annotation. Compute dynamically from AP and AUC.
 - Move legend `loc` if it occludes curves — e.g., `loc="center left"` for PR panel when baseline is high.
 
 **Customize:** Add AUC/AP values in legend labels. For single model (no CV), plot one line with `pal[5]` and the baseline — omit the grey fold lines.
