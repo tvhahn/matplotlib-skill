@@ -16,3 +16,4 @@ experiment	timestamp	pattern	composite	compliance	visual	refinement	adaptiveness
 19	2026-03-23T19:35:00	P6	0.616	1.0	0.67	0.60	0.60	discard	1	Add data-driven title and strengthen finding guidance	(reverted)
 20	2026-03-23T20:15:00	P6	0.529	1.0	0.59	0.53	0.47	discard	2	Add dense data guidance and class name cleaning	(reverted)
 21	2026-03-23T20:50:00	P1	0.635	1.0	0.67	0.56	0.64	discard	1	Add data-driven title and gap insight annotation	(reverted)
+9	2026-03-24T03:50:00	P8	0.718	1.0	0.78	0.60	0.80	keep	0	Add dynamic grid figsize lookup and parameterized dimensions	5f95556
