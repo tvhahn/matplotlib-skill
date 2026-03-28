@@ -113,7 +113,7 @@ The orchestrator copies the relevant rubric tables into the subagent prompt.
 
 3. Read these files (context for the full run):
    - `program.md` — research priorities and strategies
-   - `.claude/skills/matplotlib-chart/style-reference.md` — palette/layout conventions
+   - `.claude/skills/matplotlib/style-reference.md` — palette/layout conventions
 
 4. Read prompt pools from `scripts/chart-test-container.sh` to know available prompts per pattern.
 
@@ -209,10 +209,10 @@ Also initialize the in-memory best-per-pattern dict with baseline scores.
 
 ## Step 4: Apply and Commit
 
-1. Edit the target pattern file in `.claude/skills/matplotlib-chart/patterns/` with the proposed change.
+1. Edit the target pattern file in `.claude/skills/matplotlib/patterns/` with the proposed change.
 2. Commit immediately:
    ```bash
-   git add .claude/skills/matplotlib-chart/patterns/
+   git add .claude/skills/matplotlib/patterns/
    git commit -m "📊 feat(skill): [1-sentence description of change]"
    ```
 

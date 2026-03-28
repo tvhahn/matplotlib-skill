@@ -1,5 +1,5 @@
 ---
-name: matplotlib-chart
+name: matplotlib
 description: "Generate publication-quality matplotlib/seaborn charts and diagrams. Produces colorblind-accessible, despined, annotation-rich figures using Tim's personal aesthetic (whitegrid, DejaVu Sans, cubehelix/ColorBrewer palettes). Use when creating any data visualization, chart, plot, or diagram."
 argument-hint: "[description of chart to create, e.g. 'bar chart of accuracy by model']"
 allowed-tools: Bash, Write, Read, Glob, Grep

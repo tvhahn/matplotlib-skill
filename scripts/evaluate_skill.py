@@ -4,7 +4,7 @@
 #     "pyyaml>=6.0",
 # ]
 # ///
-"""Automated evaluation of the matplotlib-chart skill for style compliance.
+"""Automated evaluation of the matplotlib skill for style compliance.
 
 Checks pattern files in patterns/ against the style rules defined in CLAUDE.md
 and style-reference.md. Can be run standalone or called from the iterate-skill
@@ -36,7 +36,7 @@ def _find_repo_root():
 
 
 REPO_ROOT = _find_repo_root()
-SKILL_DIR = REPO_ROOT / ".claude" / "skills" / "matplotlib-chart"
+SKILL_DIR = REPO_ROOT / ".claude" / "skills" / "matplotlib"
 PATTERNS_DIR = SKILL_DIR / "patterns"
 FIGURES_DIR = REPO_ROOT / "scratch" / "figures"
 
@@ -266,7 +266,7 @@ def summarize(all_results: list[dict]) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Evaluate matplotlib-chart skill")
+    parser = argparse.ArgumentParser(description="Evaluate matplotlib skill")
     parser.add_argument(
         "--check-renders",
         action="store_true",
@@ -323,7 +323,7 @@ def main():
         print(json.dumps(output, indent=2))
     else:
         print("=" * 60)
-        print("Matplotlib Chart Skill — Style Compliance Report")
+        print("Matplotlib Skill — Style Compliance Report")
         print("=" * 60)
         print(f"\nPatterns found: {len(blocks)} ({', '.join(sorted(blocks.keys()))})")
         print(f"Score: {summary['score']}")

@@ -1,1 +1,1 @@
-"""Test package for matplotlib-chart-skill."""
+"""Test package for matplotlib-skill."""

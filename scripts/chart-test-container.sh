@@ -1,5 +1,5 @@
 #!/bin/bash
-# Launch a Docker clean room to test the matplotlib-chart skill.
+# Launch a Docker clean room to test the matplotlib skill.
 #
 # Gives Claude Code the skill spec + datasets and a simple chart request.
 # Claude Code discovers the skill and generates the chart from scratch —
@@ -37,7 +37,7 @@ REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%H.%M")
 
 # --- Resolve devcontainer image + host path (for DooD) ---
-CONTAINER_ID=$(docker ps -qf "name=matplotlib-chart-skill" 2>/dev/null | head -1)
+CONTAINER_ID=$(docker ps -qf "name=matplotlib-skill" 2>/dev/null | head -1)
 if [ -n "$CONTAINER_ID" ]; then
     IMAGE=$(docker inspect --format='{{.Config.Image}}' "$CONTAINER_ID" 2>/dev/null || echo "")
     HOST_REPO_DIR=$(docker inspect "$CONTAINER_ID" \
@@ -248,14 +248,14 @@ run_clean_room() {
 
     rm -rf "$TMPDIR"
     mkdir -p "$TMPDIR/.claude/skills"
-    cp -r "$REPO_DIR/.claude/skills/matplotlib-chart" "$TMPDIR/.claude/skills/"
+    cp -r "$REPO_DIR/.claude/skills/matplotlib" "$TMPDIR/.claude/skills/"
     cp -r "$REPO_DIR/data" "$TMPDIR/data"
     cp "$REPO_DIR/pyproject.toml" "$TMPDIR/"
     [ -f "$REPO_DIR/uv.lock" ] && cp "$REPO_DIR/uv.lock" "$TMPDIR/"
 
     # Minimal CLAUDE.md — just enough context, no coaching
     cat > "$TMPDIR/CLAUDE.md" << 'CLEANEOF'
-# matplotlib-chart-skill
+# matplotlib-skill
 
 Datasets are in `data/raw/`. Save charts to `./figures/`.
 CLEANEOF

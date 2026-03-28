@@ -1,8 +1,8 @@
-# matplotlib-chart-skill
+# matplotlib-skill
 
 ## Project Purpose
 
-This repo is the **source of truth** for Tim's `matplotlib-chart` Claude Code skill AND a gallery documenting its evolution for a blog article about iteratively building a Claude Code skill.
+This repo is the **source of truth** for Tim's `matplotlib` Claude Code skill AND a gallery documenting its evolution for a blog article about iteratively building a Claude Code skill.
 
 The skill generates publication-quality matplotlib/seaborn charts matching Tim's personal aesthetic (whitegrid, DejaVu Sans, cubehelix/ColorBrewer palettes, despined, annotation-rich).
 
@@ -12,14 +12,14 @@ This repo doubles as evidence for a blog article. See `docs/BLOG-NARRATIVE.md` f
 
 ### Key Paths
 
-- `.claude/skills/matplotlib-chart/` — SKILL.md, style-reference.md, patterns/P1–P9
+- `.claude/skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9
 - `data/` — datasets.yaml manifest, raw/ datasets
 - `scripts/` — chart-test-container.sh, evaluate_skill.py, test_chart_patterns.py
 - `docs/gallery/` — iteration snapshots (see TEMPLATE.md)
 
 ## Skill Discovery
 
-- **In-repo:** Claude Code finds `.claude/skills/matplotlib-chart/SKILL.md` directly
+- **In-repo:** Claude Code finds `.claude/skills/matplotlib/SKILL.md` directly
 - **Global:** Two-hop symlink from `~/.claude/skills/` → `~/dotfiles/` → this repo (edits propagate instantly)
 - **Rule:** Never edit skill files in dotfiles or `~/.claude/skills/` directly
 
@@ -27,7 +27,7 @@ This repo doubles as evidence for a blog article. See `docs/BLOG-NARRATIVE.md` f
 
 Each `docs/gallery/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
 
-1. Make skill changes in `.claude/skills/matplotlib-chart/`
+1. Make skill changes in `.claude/skills/matplotlib/`
 2. Run `scripts/chart-test-container.sh --quick` (or full run without `--quick`) to generate charts in a clean room
 3. Create `docs/gallery/NN-name/` folder (next sequential number)
 4. Copy relevant PNGs from `logs/clean-room/latest/` into the gallery folder
@@ -36,7 +36,7 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 
 ## Style Rules
 
-All charts follow the aesthetic defined in `.claude/skills/matplotlib-chart/style-reference.md`:
+All charts follow the aesthetic defined in `.claude/skills/matplotlib/style-reference.md`:
 
 - `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")` -- identical in every pattern
 - `sns.despine(left=True, bottom=True)` -- all spines removed
@@ -67,10 +67,10 @@ Quick consistency checks:
 
 ```bash
 # All sns.set_theme calls should be identical
-grep 'sns.set_theme' .claude/skills/matplotlib-chart/patterns/*.md
+grep 'sns.set_theme' .claude/skills/matplotlib/patterns/*.md
 
 # All patterns should use dpi=150
-grep 'dpi=' .claude/skills/matplotlib-chart/patterns/*.md
+grep 'dpi=' .claude/skills/matplotlib/patterns/*.md
 ```
 
 ## Autonomous Commands
@@ -102,8 +102,8 @@ Deferred patterns not yet in `patterns/`:
 
 ## Reference
 
-- @.claude/skills/matplotlib-chart/SKILL.md — full skill workflow and persona
-- @.claude/skills/matplotlib-chart/style-reference.md — complete style specification
+- @.claude/skills/matplotlib/SKILL.md — full skill workflow and persona
+- @.claude/skills/matplotlib/style-reference.md — complete style specification
 - @docs/gallery/TEMPLATE.md — gallery entry template
 - @data/datasets.yaml — dataset manifest
 - @docs/BLOG-NARRATIVE.md — blog narrative arc and gallery design principles

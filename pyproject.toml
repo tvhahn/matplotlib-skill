@@ -3,9 +3,9 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "matplotlib-chart-skill"
+name = "matplotlib-skill"
 version = "0.1.0"
-description = "Source of truth for Tim's matplotlib-chart Claude Code skill and blog gallery documenting its evolution"
+description = "Source of truth for Tim's matplotlib Claude Code skill and blog gallery documenting its evolution"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
@@ -39,7 +39,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["matplotlib_chart_skill*"]
+include = ["matplotlib_skill*"]
 exclude = ["tests*"]
 
 [tool.pytest.ini_options]

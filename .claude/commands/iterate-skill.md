@@ -1,5 +1,5 @@
 ---
-description: Run a single evaluation-improvement-documentation cycle on the matplotlib-chart skill. Creates gallery entries and atomic commits.
+description: Run a single evaluation-improvement-documentation cycle on the matplotlib skill. Creates gallery entries and atomic commits.
 argument-hint: [--iterations N] [--quick] [focus area]
 disable-model-invocation: true
 allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash(cp *), Bash(ls *), Bash(docker *)
@@ -7,7 +7,7 @@ allowed-tools: Bash(uv run *), Bash(scripts/*), Bash(git *), Bash(mkdir *), Bash
 
 # Iterate Skill
 
-Run a single evaluation-improvement-documentation cycle on the matplotlib-chart skill.
+Run a single evaluation-improvement-documentation cycle on the matplotlib skill.
 
 ## Guardrails
 
@@ -47,9 +47,9 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 ### Step 1: Evaluate Current State
 
 1. Read the skill files:
-   - `.claude/skills/matplotlib-chart/SKILL.md`
-   - `.claude/skills/matplotlib-chart/style-reference.md`
-   - The pattern files in `.claude/skills/matplotlib-chart/patterns/`
+   - `.claude/skills/matplotlib/SKILL.md`
+   - `.claude/skills/matplotlib/style-reference.md`
+   - The pattern files in `.claude/skills/matplotlib/patterns/`
 
 2. Review the injected evaluation score above — note any failures or style compliance gaps.
 
@@ -87,7 +87,7 @@ Write the proposed changes BEFORE making them. Create a structured evaluation:
 
 ### Step 4: Apply Changes
 
-Make targeted edits to skill files in `.claude/skills/matplotlib-chart/`.
+Make targeted edits to skill files in `.claude/skills/matplotlib/`.
 
 ### Step 5: Verify
 

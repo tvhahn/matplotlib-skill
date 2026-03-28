@@ -1,5 +1,5 @@
 #!/bin/bash
-# Launch a Docker clean room to test chart output WITHOUT the matplotlib-chart skill.
+# Launch a Docker clean room to test chart output WITHOUT the matplotlib skill.
 #
 # Runs the same prompts as chart-test-container.sh but with NO skill installed.
 # Claude Code generates charts using only its built-in knowledge — no skill spec,
@@ -37,7 +37,7 @@ REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%H.%M")
 
 # --- Resolve devcontainer image + host path (for DooD) ---
-CONTAINER_ID=$(docker ps -qf "name=matplotlib-chart-skill" 2>/dev/null | head -1)
+CONTAINER_ID=$(docker ps -qf "name=matplotlib-skill" 2>/dev/null | head -1)
 if [ -n "$CONTAINER_ID" ]; then
     IMAGE=$(docker inspect --format='{{.Config.Image}}' "$CONTAINER_ID" 2>/dev/null || echo "")
     HOST_REPO_DIR=$(docker inspect "$CONTAINER_ID" \

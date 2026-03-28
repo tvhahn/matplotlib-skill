@@ -1,5 +1,5 @@
 ---
-description: Run baseline chart generation in clean rooms WITHOUT the matplotlib-chart skill — produces comparison charts using only Claude's built-in knowledge.
+description: Run baseline chart generation in clean rooms WITHOUT the matplotlib skill — produces comparison charts using only Claude's built-in knowledge.
 argument-hint: [--quick] [--fixed] [--tag TAG] ["custom prompt"]
 allowed-tools: Bash(scripts/*), Bash(ls *), Bash(docker *)
 ---
@@ -7,7 +7,7 @@ allowed-tools: Bash(scripts/*), Bash(ls *), Bash(docker *)
 # Baseline Charts (No Skill)
 
 Run the same 9 chart prompts used by `chart-test-container.sh`, but in clean rooms
-with NO matplotlib-chart skill installed. This produces a baseline showing what
+with NO matplotlib skill installed. This produces a baseline showing what
 Claude Code generates using only its built-in knowledge — no skill spec, no style
 reference, no pattern files.
 

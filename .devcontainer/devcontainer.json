@@ -1,5 +1,5 @@
 {
-  "name": "matplotlib-chart-skill",
+  "name": "matplotlib-skill",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "devcontainer",
   "shutdownAction": "none",

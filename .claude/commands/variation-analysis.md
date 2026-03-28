@@ -27,7 +27,7 @@ sorting) is expected to differ and is excluded.
 ## Current State
 
 **Current pattern code:**
-!`ls .claude/skills/matplotlib-chart/patterns/`
+!`ls .claude/skills/matplotlib/patterns/`
 
 **Current gallery entries:**
 !`ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -5 || echo "None"`
@@ -55,9 +55,9 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
    - P1: horizontal bar, P2: violin, P3: time series, P4: PR/ROC
    - P5: lollipop/dumbbell, P6: vertical bar, P7: heatmap, P8: multi-panel, P9: decision boundary
 
-2. Read the current pattern code from the matching file in `.claude/skills/matplotlib-chart/patterns/`
+2. Read the current pattern code from the matching file in `.claude/skills/matplotlib/patterns/`
 
-3. Read `.claude/skills/matplotlib-chart/style-reference.md` for palette/layout conventions
+3. Read `.claude/skills/matplotlib/style-reference.md` for palette/layout conventions
 
 4. Read `scripts/chart-test-container.sh` and extract the prompt pool array for this pattern (e.g., `P2_POOL`).
 
@@ -114,8 +114,8 @@ For each round R = 1 to N (where N = `--rounds` value, default 3, max 5):
 
 9. **Fix quality issues:** If issues are found:
     - Propose specific fixes for each issue
-    - Edit the pattern file in `.claude/skills/matplotlib-chart/patterns/` to improve guidance
-    - Edit `.claude/skills/matplotlib-chart/style-reference.md` if palette or layout conventions change
+    - Edit the pattern file in `.claude/skills/matplotlib/patterns/` to improve guidance
+    - Edit `.claude/skills/matplotlib/style-reference.md` if palette or layout conventions change
     - Fixes should clarify guidance or improve defaults — avoid adding prohibitions
     - Continue to next round
 

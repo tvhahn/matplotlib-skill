@@ -23,7 +23,7 @@ Fixes are applied between rounds if quality issues are found.
 ## Current State
 
 **Current pattern code:**
-!`ls .claude/skills/matplotlib-chart/patterns/`
+!`ls .claude/skills/matplotlib/patterns/`
 
 **Current gallery entries:**
 !`ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -5 || echo "None"`
@@ -51,9 +51,9 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
    - P1: horizontal bar, P2: violin, P3: time series, P4: PR/ROC
    - P5: lollipop/dumbbell, P6: vertical bar, P7: heatmap, P8: multi-panel, P9: decision boundary
 
-2. Read the current pattern code from the matching file in `.claude/skills/matplotlib-chart/patterns/`
+2. Read the current pattern code from the matching file in `.claude/skills/matplotlib/patterns/`
 
-3. Read `.claude/skills/matplotlib-chart/style-reference.md` for palette/layout conventions
+3. Read `.claude/skills/matplotlib/style-reference.md` for palette/layout conventions
 
 4. Select the test prompt:
    - If `--prompt "..."` was provided, use that
@@ -96,9 +96,9 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 ### Step 3: Apply Round 1 Fixes
 
-1. Edit the pattern file in `.claude/skills/matplotlib-chart/patterns/` to improve guidance on quality issues
+1. Edit the pattern file in `.claude/skills/matplotlib/patterns/` to improve guidance on quality issues
 
-2. Edit `.claude/skills/matplotlib-chart/style-reference.md` if palette or layout conventions change
+2. Edit `.claude/skills/matplotlib/style-reference.md` if palette or layout conventions change
 
 3. Fixes should clarify guidance or improve defaults — avoid adding prohibitions.
    Vague guidance (e.g., "use appropriate colors") does not help.

@@ -38,8 +38,8 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 1. Parse arguments: pattern list (default all 9), `--rounds N` (default 3, max 5)
 
 2. Read these files to provide context to subagents:
-   - `.claude/skills/matplotlib-chart/patterns/` — current pattern files
-   - `.claude/skills/matplotlib-chart/style-reference.md` — palette/layout conventions
+   - `.claude/skills/matplotlib/patterns/` — current pattern files
+   - `.claude/skills/matplotlib/style-reference.md` — palette/layout conventions
    - `scripts/chart-test-container.sh` — to extract prompt pools per pattern
 
 3. Determine the next gallery number from `docs/gallery/`:

@@ -1,4 +1,4 @@
-# Plan: Open-Source the matplotlib-chart Skill
+# Plan: Open-Source the matplotlib Skill
 
 ## Context
 
@@ -110,11 +110,11 @@ Create `.claude-plugin/manifest.json`:
 
 ```json
 {
-  "name": "matplotlib-chart",
+  "name": "matplotlib",
   "version": "1.0.0",
   "description": "Publication-quality matplotlib/seaborn charts with opinionated aesthetics",
-  "skills": ["skills/matplotlib-chart"],
-  "repository": "https://github.com/tvhhn/matplotlib-chart-skill",
+  "skills": ["skills/matplotlib"],
+  "repository": "https://github.com/tvhhn/matplotlib-skill",
   "license": "MIT",
   "author": "Tim VH"
 }
@@ -128,7 +128,7 @@ Add `license` field to align with Agent Skills open standard:
 
 ```yaml
 ---
-name: matplotlib-chart
+name: matplotlib
 description: "Generate publication-quality matplotlib/seaborn charts..."
 argument-hint: "[description of chart to create]"
 allowed-tools: Bash, Write, Read, Glob, Grep
@@ -141,7 +141,7 @@ license: MIT
 Consumer-first structure:
 
 ```markdown
-# matplotlib-chart — Claude Code Skill
+# matplotlib — Claude Code Skill
 
 Publication-quality matplotlib/seaborn charts with an opinionated aesthetic.
 
@@ -150,10 +150,10 @@ Publication-quality matplotlib/seaborn charts with an opinionated aesthetic.
 ## Install
 
 ### Plugin Marketplace (recommended)
-/plugin marketplace add tvhhn/matplotlib-chart-skill
+/plugin marketplace add tvhhn/matplotlib-skill
 
 ### Manual
-git clone <repo> && ln -s $(pwd)/.claude/skills/matplotlib-chart ~/.claude/skills/matplotlib-chart
+git clone <repo> && ln -s $(pwd)/.claude/skills/matplotlib ~/.claude/skills/matplotlib
 
 ### Lightweight Clone (skill only, ~3 MB)
 git clone --depth 1 <repo>
@@ -203,7 +203,7 @@ Brief guide: adding patterns, running tests, submitting gallery entries.
 | `README.md` | Complete rewrite (Step 6) |
 | `CLAUDE.md` | Update paths and gallery workflow (Step 7) |
 | `.claude-plugin/manifest.json` | New (Step 4) |
-| `.claude/skills/matplotlib-chart/SKILL.md` | Add `license` to frontmatter (Step 5) |
+| `.claude/skills/matplotlib/SKILL.md` | Add `license` to frontmatter (Step 5) |
 | `docs/blog/BLOG-NARRATIVE.md` | Move from `docs/` (Step 3) |
 | `docs/blog/outline/` | Move from `docs/specs/2026-03-24-blog-outline/` (Step 3) |
 | `docs/gallery/` | Remove ~40 entries (Step 2) |
