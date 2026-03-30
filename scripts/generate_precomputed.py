@@ -289,12 +289,13 @@ def generate_p6():
         clf = KNeighborsClassifier(n_neighbors=15)
         clf.fit(X, y)
 
-        # Mesh grid
-        h = 0.02
+        # Mesh grid — fixed point count for consistent dot density
+        n_grid = 50  # ~2,500 total mesh points, matches original inspiration
         x_min, x_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
         y_min, y_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
         xx0, xx1 = np.meshgrid(
-            np.arange(x_min, x_max, h), np.arange(y_min, y_max, h)
+            np.linspace(x_min, x_max, n_grid),
+            np.linspace(y_min, y_max, n_grid)
         )
         mesh_points = np.c_[xx0.ravel(), xx1.ravel()]
         yy_hat = clf.predict(mesh_points)

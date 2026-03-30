@@ -35,20 +35,10 @@ medians = df.groupby("category")["value"].median()
 for i, cat in enumerate(df["category"].unique()):
     med = medians[cat]
     ax.plot(med, i, marker="|", color="dimgrey", markersize=14, markeredgewidth=2, zorder=5)
-    ax.text(med, i - 0.35, f"{med:.1f}", ha="center", va="bottom",
+    ax.text(med, i - 0.45, f"{med:.1f}", ha="center", va="bottom",
             fontsize=10, color="dimgrey", weight="semibold")
 
 ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
-
-# --- Insight annotation — positioned below axes, never inside the data area ---
-medians_sorted = medians.sort_values(ascending=False)
-top_cat = medians_sorted.index[0]
-top_val = medians_sorted.iloc[0]
-if len(medians_sorted) > 1:
-    spread = medians_sorted.iloc[0] - medians_sorted.iloc[-1]
-    fig.text(0.98, 0.01,
-             f"{top_cat} has the highest median ({top_val:.1f}) — spread: {spread:.1f} across {n_cats} groups",
-             ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
 
 ax.grid(axis="x", alpha=0.7, linewidth=1)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
@@ -72,7 +62,7 @@ Apply style-reference invariants.
 - Format median annotations to match the data precision (`.1f` for continuous, `,.0f` for counts). Position labels above the marker (`va="bottom"`) to avoid overlapping strip points.
 - Use `density_norm="count"` for proportional widths when category sizes differ meaningfully.
 - Use classical titles that describe the metric (e.g., "Body Mass Distribution by Species"). Insight annotations carry findings, not the title. For multi-panel context, add bold-prefix: `r"$\bf{(a)}$"` before the description.
-- Always include an insight annotation below the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")`. Highlight the most notable comparison, widest spread, or outlier group — computed dynamically from data.
+- Do not add an insight annotation below the axes. The median markers and value labels provide sufficient context. Let the data speak for itself.
 - Adapt annotation format to the data domain: `$` prefix for currency, unit suffix (e.g., "g", "mpg") when the axis label alone doesn't suffice.
 - **Panel frame:** Consider adding a panel frame (`ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`) when violins float with significant white space above and below, especially with 3+ categories. Omit for compact 2-category charts or when the chart is embedded in a multi-panel layout that already provides framing.
 

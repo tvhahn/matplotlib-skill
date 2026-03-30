@@ -37,7 +37,7 @@ REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TIMESTAMP=$(TZ=America/Los_Angeles date +"%Y-%m-%d_%H.%M")
 
 # --- Resolve devcontainer image + host path (for DooD) ---
-CONTAINER_ID=$(docker ps -qf "name=matplotlib-skill" 2>/dev/null | head -1)
+CONTAINER_ID=$(docker ps -qf "name=matplotlib" 2>/dev/null | head -1)
 if [ -n "$CONTAINER_ID" ]; then
     IMAGE=$(docker inspect --format='{{.Config.Image}}' "$CONTAINER_ID" 2>/dev/null || echo "")
     HOST_REPO_DIR=$(docker inspect "$CONTAINER_ID" \

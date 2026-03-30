@@ -36,7 +36,7 @@ fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
 # probability-sized dots ONLY — never use pcolormesh or contourf
 colormap = np.array(colors[:len(class_names)])
 ax.scatter(mesh_points[:, 0], mesh_points[:, 1], c=colormap[yy_hat.ravel()],
-           alpha=0.3, s=40 * yy_prob.ravel()**3, linewidths=0)
+           alpha=0.3, s=25 * yy_prob.ravel(), linewidths=0)
 
 # contour lines at decision boundaries
 ax.contour(xx0, xx1, yy_hat,
@@ -73,7 +73,7 @@ legend1 = ax.legend(handles=class_handles, loc="center",
 prob_sizes = [0.4, 0.7, 1.0]
 prob_labels = ["Low", "Med", "High"]
 prob_handles = [Line2D([0], [0], marker="o", color="w", markerfacecolor="grey",
-                       markersize=s * 10, label=l) for s, l in zip(prob_sizes, prob_labels)]
+                       markersize=s * 8, label=l) for s, l in zip(prob_sizes, prob_labels)]
 ax.legend(handles=prob_handles, loc="center",
           bbox_to_anchor=(1.05, 0.65), frameon=True, facecolor="white",
           framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", title="Prob")
@@ -96,7 +96,7 @@ Apply style-reference invariants.
 - Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
 - Dynamic figsize is computed from data aspect ratio in the template. Do not hardcode `figsize=(8, 6)` — use the template's `data_aspect` computation.
 - Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
-- Adjust probability dot `s` scaling factor for mesh density. For very dense meshes (>5000 points), reduce `s` or increase the power exponent to keep dots visually distinct.
+- The precomputed mesh is ~50×50 (~2,500 dots). The `s=25 * prob` linear scaling is tuned for this density. Do not subsample or resize the mesh.
 - Use classical titles that describe the chart (e.g., "KNN Decision Boundary — Iris Species"). Insight annotations carry findings, not the title.
 - Always include an insight annotation: class count + sample size at minimum. If class_names are descriptive, mention the most/least separated classes. Position in lower-left using `transform=ax.transAxes`.
 
