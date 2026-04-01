@@ -1,81 +1,101 @@
-# matplotlib Skill
+# matplotlib -- Claude Code Skill
 
-A Claude Code skill that generates publication-quality matplotlib/seaborn charts matching Tim's personal aesthetic.
+Publication-quality matplotlib/seaborn charts with an opinionated aesthetic. Colorblind-accessible, despined, annotation-rich figures using DejaVu Sans, cubehelix/ColorBrewer palettes, and whitegrid styling.
 
-## Structure
+<p align="center">
+  <img src="docs/gallery/50-template-improvements-v2/P2-vertical-bar.png" width="32%" />
+  <img src="docs/gallery/50-template-improvements-v2/P7-heatmap.png" width="32%" />
+  <img src="docs/gallery/50-template-improvements-v2/P8-multi-panel.png" width="32%" />
+</p>
+
+## Install
+
+### Plugin Marketplace
 
 ```
-.claude/skills/matplotlib/  # Source of truth for skill files
-  SKILL.md                 # Persona, workflow, code generation rules
-  style-reference.md       # Full style spec (palettes, sizing, conventions)
-  patterns/                # 9 code patterns by chart type (one file per pattern)
-
-docs/gallery/              # Before/after captures at each iteration
-  TEMPLATE.md              # Blog capture template
-  00-original-inspiration/ # Source material from 4 inspiring projects
-  01-original/             # Baseline from original commit
-  02-current/              # After API modernization + visual polish
-  03-dpi-optimization/     # Verification DPI fix
-  04-consistency-audit/    # Pattern consistency fixes
-  05-verification-checklist/ # Phase 5 checklist rewrite
-  06-subplot-outlines/     # Subplot borders + RUL test data
-
-scratch/                   # Test scripts and working output
-  test_chart_patterns.py   # Generates all 8 testable patterns
-  figures/                 # Working output directory
+/plugin marketplace add tvhahn/matplotlib-skill
 ```
 
-## Skill Installation
+### Manual (auto-discovered by Claude Code)
 
-The skill lives in `.claude/skills/matplotlib/`, where Claude Code discovers it automatically in any clone or devcontainer. On the host, a symlink from `~/dotfiles/claude/skills/matplotlib/` keeps it globally available.
+```bash
+git clone https://github.com/tvhahn/matplotlib-skill.git
+cd matplotlib-skill
+# Claude Code auto-discovers .claude/skills/matplotlib/SKILL.md in any repo clone
+```
+
+### Global Install (available in all projects)
+
+```bash
+# Symlink so the skill is available everywhere
+ln -s /path/to/matplotlib-skill/.claude/skills/matplotlib ~/.claude/skills/matplotlib
+```
+
+### Lightweight Clone (skill only, ~3 MB)
+
+```bash
+git clone --depth 1 https://github.com/tvhahn/matplotlib-skill.git
+```
+
+## What It Does
+
+9 chart patterns, each with an opinionated template:
+
+| Pattern | Name | When to use |
+|---------|------|-------------|
+| P1 | Horizontal Bar | Ranked percentages, category comparisons |
+| P2 | Vertical Bar | Comparisons across categories, ranked values |
+| P3 | Time Series | Time series with rolling average |
+| P4 | Violin + Strip | Distribution comparisons |
+| P5 | Lollipop | Min/max/avg ranges, model comparison |
+| P6 | Decision Boundary | Classification boundaries, probability maps |
+| P7 | Heatmap | Correlation matrices, spectrograms |
+| P8 | Multi-Panel | Multi-panel grid layouts (2x2, 3x2, 3x3) |
+| P9 | PR/ROC | PR/ROC classification evaluation curves |
+
+## Design Philosophy
+
+1. Above all else, show the data
+2. Every element earns its ink
+3. Prefer position over color, color over size
+4. Grey is a color. White space is a feature.
+5. Despine, degrid, then add back only what the reader needs
+6. Annotate the insight, not just the axis
+7. Encode meaning twice -- never rely on color alone
+8. Consistency across panels; variety across charts
+9. The reader should never do arithmetic
+10. When in doubt, remove
 
 ## Datasets
 
-The skill ships with 39 datasets (10 from Tim's projects, 29 public references) in `data/raw/`. See [`data/SOURCES.md`](data/SOURCES.md) for full attribution and pattern mappings.
+Ships with 39 datasets for testing and demos:
+- **10 source project datasets** from Tim's research (bearing RUL predictions, arxiv paper labels, classifier comparisons, tool wear)
+- **29 public reference datasets** (penguins, gapminder, tips, iris, titanic, and more)
 
-**Source Project Datasets**
+See [`data/datasets.yaml`](data/datasets.yaml) for the full manifest with attribution, licenses, and pattern mappings.
 
-| Project | License | Description |
-|---|---|---|
-| [weibull-knowledge-informed-ml](https://github.com/tvhhn/weibull-knowledge-informed-ml) | MIT | Bearing RUL predictions, Weibull loss functions, spectrograms (8 CSVs + 38 HDF5) |
-| [arxiv-code-search](https://github.com/tvhhn/arxiv-code-search) | MIT | Paper labels with code-availability flags (4,665 rows) |
-| [Beautiful-Plots](https://github.com/tvhhn/Beautiful-Plots) | MIT | Classifier AUC comparisons, US birth patterns (2 CSVs) |
-| [ml-tool-wear](https://github.com/tvhhn/ml-tool-wear) | MIT | Tool wear cases with class labels (167 rows) |
+## How This Skill Was Built
 
-**Public Reference Datasets**
+This skill was developed iteratively across 50+ iterations, documented in [`docs/gallery/`](docs/gallery/). The curated 12 milestone entries on `master` show the key phase transitions. The full 51-entry history is preserved on the [`gallery-archive`](../../tree/gallery-archive) branch.
 
-| Dataset | License | Source | Description |
-|---|---|---|---|
-| penguins.csv | CC-0 | [Palmer Penguins](https://github.com/allisonhorst/palmerpenguins) | Body measurements of 3 penguin species (344 rows) |
-| gapminder.csv | CC-BY 4.0 | [Gapminder](https://www.gapminder.org/data/) | Life expectancy, GDP, population by country/year (3,313 rows) |
-| tips.csv | BSD | [seaborn-data](https://github.com/mwaskom/seaborn-data) | Restaurant tips with meal context (244 rows) |
-| global_temp.csv | Public domain | [NASA GISTEMP](https://data.giss.nasa.gov/gistemp/) | Monthly surface temperature anomalies (1,753 rows) |
-| car_crashes.csv | CC-BY 4.0 | [FiveThirtyEight](https://github.com/fivethirtyeight/data/tree/master/bad-drivers) | US state bad driver statistics (51 rows) |
-| breast_cancer.csv | CC-BY 4.0 | [UCI ML Repository](https://archive.ics.uci.edu/dataset/17) | Breast mass FNA diagnostic features (569 rows) |
-| healthexp.csv | CC-BY | [OECD](https://data.oecd.org/healthres/health-spending.htm) | Health expenditure per capita by country/year (274 rows) |
-| iowa_electricity.csv | Public domain | [US EIA](https://www.eia.gov/) | Iowa electricity generation by source (51 rows) |
-| iris.csv | CC-BY 4.0 | [UCI ML Repository](https://archive.ics.uci.edu/dataset/53) | Fisher's iris flower measurements (150 rows) |
-| mpg.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Auto fuel efficiency with engine and origin (392 rows) |
-| flights.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Monthly airline passengers 1949-1960 (144 rows) |
-| titanic.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Titanic passenger survival data (891 rows) |
-| geyser.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Old Faithful eruption durations and waits (272 rows) |
-| diamonds.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Diamond prices and quality attributes (2,000 rows) |
-| dowjones.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Dow Jones closing prices (649 rows) |
-| glue.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | GLUE benchmark NLP model scores (64 rows) |
-| fmri.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | fMRI brain signals by region and event (1,064 rows) |
-| planets.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | Exoplanet discoveries by method and year (1,035 rows) |
-| taxis.csv | BSD | [seaborn](https://github.com/mwaskom/seaborn-data) | NYC taxi ride fares and trip details (1,000 rows) |
-| wine.csv | CC-BY 4.0 | [UCI ML Repository](https://archive.ics.uci.edu/dataset/109) | Chemical analysis of wines from 3 cultivars (178 rows) |
-| diabetes.csv | CC-BY 4.0 | [scikit-learn](https://scikit-learn.org/) | Diabetes progression clinical measurements (442 rows) |
-| seattle_weather.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Seattle daily weather observations (1,461 rows) |
-| stocks.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Stock prices for 5 tech companies (560 rows) |
-| disasters.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Global disaster deaths by type and year (803 rows) |
-| co2_concentration.csv | BSD-3 | [Vega Datasets](https://github.com/vega/vega-datasets) | Atmospheric CO2 at Mauna Loa (741 rows) |
-| mtcars.csv | Public domain | [R Datasets](https://vincentarelbundock.github.io/Rdatasets/) | Motor Trend 1974 car performance (32 rows) |
-| chickweight.csv | Public domain | [R Datasets](https://vincentarelbundock.github.io/Rdatasets/) | Chick weight growth by diet (578 rows) |
-| world_happiness.csv | Public domain | [World Happiness Report](https://worldhappiness.report/) | Country happiness scores with factors (153 rows) |
-| country_stats.csv | CC0 | [Plotly datasets](https://github.com/plotly/datasets) | Gapminder 2007 country development snapshot (142 rows) |
+See [`docs/blog/`](docs/blog/) for the blog post about the process.
 
-## Gallery
+## Verification
 
-Each `docs/gallery/NN-name/` folder captures the skill's output at a specific iteration point, following the template in `docs/gallery/TEMPLATE.md`. This serves as material for a blog article about iteratively building a Claude Code skill.
+```bash
+# Generate charts in a Docker clean room (Docker required)
+scripts/chart-test-container.sh --quick            # 5 prompts, random from pools
+scripts/chart-test-container.sh                    # all 9 prompts, random from pools
+scripts/chart-test-container.sh --fixed            # all 9 prompts, original defaults
+
+# Static analysis (fast, no Docker)
+uv run scripts/evaluate_skill.py --check-renders
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on modifying patterns, adding new ones, and running tests.
+
+## License
+
+[MIT](LICENSE)

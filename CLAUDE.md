@@ -8,13 +8,13 @@ The skill generates publication-quality matplotlib/seaborn charts matching Tim's
 
 ## Blog Article
 
-This repo doubles as evidence for a blog article. See `docs/BLOG-NARRATIVE.md` for narrative arc and gallery design principles.
+This repo doubles as evidence for a blog article. See `docs/blog/building-a-claude-code-skill.md` for the blog post draft.
 
 ### Key Paths
 
 - `.claude/skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9
 - `data/` — datasets.yaml manifest, raw/ datasets
-- `scripts/` — chart-test-container.sh, evaluate_skill.py, test_chart_patterns.py
+- `scripts/` — chart-test-container.sh, evaluate_skill.py
 - `docs/gallery/` — iteration snapshots (see TEMPLATE.md)
 
 ## Skill Discovery
@@ -33,6 +33,8 @@ Each `docs/gallery/NN-name/` folder captures the skill's output at a specific it
 4. Copy relevant PNGs from `logs/clean-room/latest/` into the gallery folder
 5. Write `README.md` following `docs/gallery/TEMPLATE.md`
 6. Commit
+
+**Note:** The curated 12 entries on master represent phase transitions in the skill's development. 39 additional entries are preserved on the `gallery-archive` branch.
 
 ## Style Rules
 
@@ -59,8 +61,6 @@ scripts/chart-test-container.sh --full-archive     # keep data/ in workspace arc
 # Static analysis (fast, no Docker)
 uv run scripts/evaluate_skill.py --check-renders
 
-# Optional: syntax check of pattern file code blocks
-uv run scripts/test_chart_patterns.py
 ```
 
 Quick consistency checks:
@@ -106,4 +106,4 @@ Deferred patterns not yet in `patterns/`:
 - @.claude/skills/matplotlib/style-reference.md — complete style specification
 - @docs/gallery/TEMPLATE.md — gallery entry template
 - @data/datasets.yaml — dataset manifest
-- @docs/BLOG-NARRATIVE.md — blog narrative arc and gallery design principles
+- @docs/blog/building-a-claude-code-skill.md — blog post draft

@@ -1,5 +1,5 @@
 # Dataset manifest — covers all datasets in data/raw/
-# Used by scratch/test_chart_patterns.py --real-data to load appropriate data per pattern.
+# Used by chart test scripts to load appropriate data per pattern.
 
 # --- Source project datasets (from original inspiration projects) ---
 
