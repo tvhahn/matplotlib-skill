@@ -9,13 +9,11 @@ word_target: 1200-1500
 
 # I Taught Claude to Make Beautiful Charts. Then It Forgot How.
 
-Lego. I loved lego as a kid. But it always irked me when my friends would come over and build with a mish-mash of colours. Didn't they want to make their creations look good? Then, as a young professional, I cringed when colleagues would give a PowerPoint presentation to executives and not seem to notice how visually unappealing their presentation and charts were. Are some people just oblivious to aesthetics?
+I've always been the person who notices when a chart looks bad. Ugly PowerPoint slides, default Excel colours, unlabeled axes. It all bothered me. During my Master's at Queen's University, I would spend hours tweaking the smallest detail in a matplotlib chart before it was ready for a publication. See the lollipop chart below for the kind of thing I mean.
 
-It should come as no surprise then, that while working on my Master's at Queen's University, I took great pride in creating beautiful data visualizations. I would spend hours tweaking the smallest detail in a chart and getting it ready for a publication or presentation. It brought me great satisfaction, and I'm still proud of those charts I developed, mostly using matplotlib. See the lolipop chart below (and also featured in a blog post of its own) for an example of the kind of thing I'm talking about.
+![Lollipop chart showing top performing models by PR-AUC score](../gallery/00-original-inspiration/beautiful-plots/beautiful_lollipop.png)
 
-![Top performing models by PR-AUC score — lollipop chart with min/max/avg range, cubehelix palette, annotation-rich.](../gallery/00-original-inspiration/beautiful-plots/beautiful_lollipop.png)
-
-Fast forward to today, and I'm now using Claude Code to make data visualizations for work and personal projects. But the "default" charts that Claude Code makes with matplolib are, well, not great. With that, I determined to build an *opinionated* Claude Code skill that would build beautiful charts. Here's what I learned while building it over 50 iterations, and how the optimization process I built led to an unexpected outcome.
+Fast forward to today, and I'm using Claude Code (Anthropic's coding agent) to make data visualizations for work and personal projects. But the "default" charts that Claude Code makes with matplotlib are, well, not great. So I built an *opinionated* skill to fix that. Here's what I learned over 50 iterations, and how the optimization process I built led to an unexpected outcome.
 
 ---
 
@@ -28,22 +26,18 @@ The matplotlib skill that I've built has three main components:
 - Nine pattern templates (one per chart type)
 - A verification workflow
 
-All one has to do, then, to use the skill in Claude Code is to say something like "Make a chart using the matplotlib skill". The skill will determine the chart type based on the dataset and apply the appropriate styling and patterns that I like. I made it to look like the charts as I would like them. It's opinionated, and that's the point.
+To use it, you say something like "Make a chart using the matplotlib skill". The skill will determine the chart type based on the dataset and apply the appropriate styling and patterns that I like. I made it to look like the charts as I would like them. It's opinionated, and that's the point.
 
 Here's an example of what a chart looks like with the "vanilla" Claude Code, versus what it looks like with the matplotlib skill. Same data, same one-line prompt, but the skill's templates and style rules make it look much more polished and publication-ready.
 
 The defaults chart:
 
-![Default violin plot — vertical orientation, bold black title, colored violins (blue/orange/green), visible spines, box-plot insets, sample-size labels but no insight annotation.](no-skill-p4.png)
+![Default violin plot without the skill](no-skill-p4.png)
 
 And the improved chart with the skill:
 
-![With skill — horizontal violins in white/grey with strip overlay showing individual points, despined, median annotations (3,700 g, 3,700 g, 5,000 g), dimgrey text throughout.](skill-p4.png)
+![Violin plot with the skill applied](skill-p4.png)
 
-| Without the skill | With the skill |
-|:-:|:-:|
-| ![No skill — visible spines, default blue/orange/green, alphabetical order, no insight](../gallery/_00-baseline-no-skill/P02-iowa_electricity_2017.png) | ![With skill — despined, rocket palette, value-descending, "Renewables reached 75% of fossil fuel output by 2017"](../gallery/43-expert-panel-restructure/p2-vertical-bar.png) |
-| *Default matplotlib. Spines, default colors, no story.* | *Same data, one-line prompt. Despined, sorted, annotated.* |
 
 ---
 
@@ -75,28 +69,24 @@ Claude Code analyzed my charts across four projects and identified the recurring
 
 The first version worked, but it wasn't consistent. It was able to nail certain patterns (like the horizontal bar charts), but for other chart types it drifted. I entered the iteration loop: run the skill, look at the output, tweak the markdown pattern file with Claude Code, and repeat.
 
-But it was taking way too much time, and I'm lazy. Plus, I had been reading about leaning into the automation capabilities of Claude Code (and agents in general). My default work pattern should be having them do more, not less. I should be less involved in the loop, not more.
+But it was taking way too much time, and I'm lazy. My default work pattern should be having agents do more, not less.
 
-Around this time I read Andrej Karpathy's "autoresearch" tweet:
+Around this time I read Andrej Karpathy's "autoresearch" tweet — an autonomous loop that modifies code, evaluates a metric, keeps improvements, and discards regressions:
 
 https://x.com/karpathy/status/2030371219518931079
 
 Heck, why not do that for the matplotlib skill? 
 
-It worked, kinda. I had to create a scoring system to evaluate the quality of the charts, and that's not as straightforward as in Andrej's case where he's optimizing a single metric. How do you score a chart? I ended up with a composite that measured style compliance, visual quality, and how well the chart adapted to its dataset. I kicked it off overnight, and the scores climbed. But something was off.
+It worked, kinda. I had to create a scoring system to evaluate the quality of the charts, and that's not as straightforward as optimizing a single metric. How do you score a chart? I ended up with a composite that measured things like style compliance (did it despine?), visual quality (did it sort bars by value?), and how well the chart adapted to its dataset (did it add annotations?). I kicked it off overnight, and the scores climbed. But when I opened the charts, they looked like they'd been made by someone who'd read every rule and understood none of them.
 
-The charts kept refusing to add annotations. I'd look at the output and think, why isn't it annotating the insight? I was explicitly asking for it in the pattern files, but the automation kept stripping it out. 
+The charts were technically correct but lifeless. Annotations varied between runs. So did layout choices. The scoring system treated both as flaws. It rewarded consistency across parallel runs, so the system learned to ban creativity entirely.
 
-It took me a while to trace it back to the scoring system. The system rewarded consistency across parallel runs, but insight annotations are inherently creative — they varied between runs, and variation meant a lower score. So the automation learned to just... not annotate. I dug into the pattern files and found the smoking gun: a rule the automation had written saying "Do not add `ax.annotate()`."
+The fix was simple. I restructured each pattern file to have a small "Signature" (the 2-4 things that define its identity) and flexible "Guidance" for everything else. The charts came alive again, and the scores still improved — just in the direction of quality and style, not uniformity. Here's what one of these new charts looks like:
 
-| "Optimized" — technically correct | Fixed — alive again |
-|:-:|:-:|
-| ![P2 taxi fares — value labels but NO insight annotation (banned by automation)](../gallery/41-autoresearch-overnight-v7/p2-taxis.png) | ![P2 taxi fares — same aesthetic, now with "Queens leads — $3.6 higher avg fare than Bronx"](../gallery/50-template-improvements-v2/P2-vertical-bar.png) |
-| *Technically perfect. Says nothing.* | *Same skill, one rule removed. Now it tells you something.* |
+![Dow Jones Industrial Average chart with 1929 peak annotation](dowjones.png) 
+*With the consistency rule removed, the skill was able to add annotations again. It recognized the 1929 crash and annotated it.*
 
-The fix ended up being simple. I restructured each pattern file to have a small "Signature" (the 2-4 things that define its identity) and then flexible "Guidance" for everything else. The very next run, P2 added an insight annotation on its own. One rule removed — biggest visual improvement of the entire project.
-
-If there's one thing I took away from this whole process: your optimization metric becomes your product's personality. Measure uniformity, you get uniform. Measure quality and adaptiveness, you get charts that actually communicate.
+Your optimization metric becomes your product's personality. Measure uniformity, you get uniform. Measure quality and adaptiveness, you get charts that actually communicate.
 
 ---
 
@@ -106,5 +96,9 @@ If there's one thing I took away from this whole process: your optimization metr
 2. **Capture baselines.** You can't see improvement without a "before." I saved the skill's output at every iteration so I could see what was actually getting better and what was regressing.
 3. **Test in isolation.** I ran every test in a Docker container with nothing but the skill files and a dataset — no gallery, no git history, no prior outputs. If the skill can't reproduce your aesthetic from scratch, it's not encoding your taste. It's just pattern-matching from context.
 4. **Measure what matters.** Your scoring metric becomes your skill's personality. If you measure code uniformity, you get uniform code. If you measure visual quality, you get quality.
-5. **Rules are expensive.** Each constraint you add removes a degree of freedom. Keep identity items to 2–4 per pattern. Everything else is guidance, not law.
-6. **Know when to stop.** 50 iterations was too many. The skill was good enough at iteration 20. The last 30 taught me about automation, not about charts.
+5. **Know when to stop.** 50 iterations was too many. The skill was good enough at iteration 20. The last 30 taught me about automation, not about charts.
+6. **Rules are expensive.** Each constraint you add removes a degree of freedom. Keep identity items to 2–4 per pattern. Everything else is guidance, not law.
+
+---
+
+*The matplotlib skill is [open source on GitHub](https://github.com/tvhahn/matplotlib-skill). Contributions welcome.*
