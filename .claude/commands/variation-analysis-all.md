@@ -42,9 +42,9 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
    - `.claude/skills/matplotlib/style-reference.md` — palette/layout conventions
    - `scripts/chart-test-container.sh` — to extract prompt pools per pattern
 
-3. Determine the next gallery number from `docs/gallery/`:
+3. Determine the next gallery number from `gallery-archive/`:
    ```bash
-   ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -1
+   ls -1d gallery-archive/[0-9]* 2>/dev/null | tail -1
    ```
 
 4. Initialize results table:
@@ -78,7 +78,7 @@ Spawn an Agent (general-purpose) with a prompt containing:
      - Evaluate each chart against quality dimensions:
        identity preservation, visual quality, data-appropriateness, informativeness, pattern-specific checks
      - If all meet quality bar: stop rounds early. If issues found: fix the pattern file in `patterns/`, continue.
-   - Create gallery entry `docs/gallery/NN-pX-variation-analysis/`:
+   - Create gallery entry `gallery-archive/NN-pX-variation-analysis/`:
      - Copy representative PNGs (round1-A.png, round1-B.png, etc.)
      - Write README.md with: What Changed, Why, Prompts Used (table of tag→prompt),
        Method, Quality assessments per round, Files Modified, Lessons Learned
@@ -108,7 +108,7 @@ Re-read the pattern files in `patterns/` to get any modifications the subagent m
 
 #### 2e. Advance gallery number
 
-Check `docs/gallery/` again to determine the correct next gallery number
+Check `gallery-archive/` again to determine the correct next gallery number
 (the subagent may or may not have created an entry).
 
 ### Step 3: Print Final Summary

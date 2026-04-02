@@ -15,7 +15,8 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 - `.claude/skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9
 - `data/` — datasets.yaml manifest, raw/ datasets
 - `scripts/` — chart-test-container.sh, evaluate_skill.py
-- `docs/gallery/` — iteration snapshots (see TEMPLATE.md)
+- `docs/gallery/` — key iteration snapshots (00-original-inspiration, 50-template-improvements-v2, TEMPLATE.md)
+- `gallery-archive/` — all 51 iteration entries (local-only, git-excluded via `.git/info/exclude`)
 
 ## Skill Discovery
 
@@ -25,16 +26,16 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 
 ## Gallery Workflow
 
-Each `docs/gallery/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
+Each `gallery-archive/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
 
 1. Make skill changes in `.claude/skills/matplotlib/`
 2. Run `scripts/chart-test-container.sh --quick` (or full run without `--quick`) to generate charts in a clean room
-3. Create `docs/gallery/NN-name/` folder (next sequential number)
+3. Create `gallery-archive/NN-name/` folder (next sequential number)
 4. Copy relevant PNGs from `logs/clean-room/latest/` into the gallery folder
 5. Write `README.md` following `docs/gallery/TEMPLATE.md`
-6. Commit
+6. No commit needed — `gallery-archive/` is git-excluded
 
-**Note:** The curated 12 entries on master represent phase transitions in the skill's development. 39 additional entries are preserved on the `gallery-archive` branch.
+**Note:** `gallery-archive/` is excluded from git via `.git/info/exclude` (local-only, not shared on clone). It contains all 51 development iterations. Only `docs/gallery/00-original-inspiration/` and `docs/gallery/50-template-improvements-v2/` are tracked in git (referenced by blog post and README).
 
 ## Style Rules
 

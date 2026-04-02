@@ -25,7 +25,7 @@ Run a single evaluation-improvement-documentation cycle on the matplotlib skill.
 !`ls -1t logs/clean-room/ 2>/dev/null | head -5 || echo "No runs yet"`
 
 **Current gallery entries:**
-!`ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -5 || echo "None"`
+!`ls -1d gallery-archive/[0-9]* 2>/dev/null | tail -5 || echo "None"`
 
 **Git branch:**
 !`git branch --show-current`
@@ -133,9 +133,9 @@ Make targeted edits to skill files in `.claude/skills/matplotlib/`.
 
 ### Step 6: Document
 
-Determine the next gallery entry number by looking at `docs/gallery/` and create:
+Determine the next gallery entry number by looking at `gallery-archive/` and create:
 
-1. Create `docs/gallery/NN-description/` folder
+1. Create `gallery-archive/NN-description/` folder
 2. Copy relevant PNGs from the clean-room results directory (`logs/clean-room/latest/`) into the gallery folder
 3. Write `README.md` following `docs/gallery/TEMPLATE.md`. Include all Visual Evaluation
    observations from Step 5 in the appropriate sections.

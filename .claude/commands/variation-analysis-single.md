@@ -26,7 +26,7 @@ Fixes are applied between rounds if quality issues are found.
 !`ls .claude/skills/matplotlib/patterns/`
 
 **Current gallery entries:**
-!`ls -1d docs/gallery/[0-9]* 2>/dev/null | tail -5 || echo "None"`
+!`ls -1d gallery-archive/[0-9]* 2>/dev/null | tail -5 || echo "None"`
 
 **Git branch:**
 !`git branch --show-current`
@@ -143,9 +143,9 @@ ${ARGUMENTS ? `**User input:** ${ARGUMENTS}` : ""}
 
 ### Step 6: Gallery Entry
 
-1. Determine next gallery number from `docs/gallery/`
+1. Determine next gallery number from `gallery-archive/`
 
-2. Create `docs/gallery/NN-pX-variation-analysis/`
+2. Create `gallery-archive/NN-pX-variation-analysis/`
 
 3. Copy representative PNGs from each round (up to 9 total):
    - `round1-A.png`, `round1-B.png`, `round1-C.png`

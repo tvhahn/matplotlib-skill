@@ -76,7 +76,7 @@ See [`data/datasets.yaml`](data/datasets.yaml) for the full manifest with attrib
 
 ## How This Skill Was Built
 
-This skill was developed iteratively across 50+ iterations, documented in [`docs/gallery/`](docs/gallery/). The curated 12 milestone entries on `master` show the key phase transitions. The full 51-entry history is preserved on the [`gallery-archive`](../../tree/gallery-archive) branch.
+This skill was developed iteratively across 50+ iterations. Key milestone entries are in [`docs/gallery/`](docs/gallery/). The full 51-entry development history is in the local `gallery-archive/` folder (git-excluded).
 
 See [`docs/blog/`](docs/blog/) for the blog post about the process.
 
