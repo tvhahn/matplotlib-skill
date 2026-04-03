@@ -1,6 +1,6 @@
 # matplotlib -- Claude Code Skill
 
-Publication-quality matplotlib/seaborn charts from a one-line prompt. Colorblind-accessible, despined, annotation-rich figures using DejaVu Sans, cubehelix/ColorBrewer palettes, and whitegrid styling.
+Publication-quality matplotlib/seaborn charts from a one-line prompt. Colorblind-accessible, despined, annotation-rich figures using DejaVu Sans, cubehelix/ColorBrewer palettes, and whitegrid styling. Opinionated.
 
 <table>
 <tr>
