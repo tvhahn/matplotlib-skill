@@ -147,6 +147,12 @@ uv run scripts/evaluate_skill.py --check-renders
 
 ## Contributing
 
+Contributions are welcome — whether it's improving an existing pattern or adding an entirely new chart type. Some ideas to get started:
+
+- **Improve a pattern:** Refine annotations, spacing, or palette choices in any of the 9 existing patterns
+- **Add a new chart type:** Scatter plot, grouped bar chart, and `fill_between` area chart are all on the wishlist — or propose your own
+- **Add datasets:** New public datasets that pair well with existing or new patterns
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on modifying patterns, adding new ones, and running tests.
 
 ## License
