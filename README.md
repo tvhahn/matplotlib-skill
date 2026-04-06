@@ -136,7 +136,7 @@ claude --add-dir /path/to/matplotlib-skill
 
 ## How This Skill Was Built
 
-Built through 50 iterations of automated evaluation -- an AI refining its own visual taste. [Read the story &rarr;](docs/blog/building-a-claude-code-skill.md)
+Built through 50 iterations of automated evaluation -- an AI refining its own visual taste. [Read the story on my blog &rarr;](https://www.tvhahn.com/posts/building-a-claude-code-skill/)
 
 ## Datasets
 
