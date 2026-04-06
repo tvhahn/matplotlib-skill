@@ -60,13 +60,26 @@ Same data. Same prompt. The skill applies despined axes, cubehelix palettes, val
 ```bash
 git clone https://github.com/tvhahn/matplotlib-skill.git
 cd matplotlib-skill
-# Claude Code auto-discovers .claude/skills/matplotlib/SKILL.md in any repo clone
+# Claude Code auto-discovers skills/matplotlib/SKILL.md when working in this repo
 ```
 
 ### Global install (available in all projects)
 
 ```bash
-ln -s /path/to/matplotlib-skill/.claude/skills/matplotlib ~/.claude/skills/matplotlib
+ln -s /path/to/matplotlib-skill/skills/matplotlib ~/.claude/skills/matplotlib
+```
+
+### Per-session (no symlink needed)
+
+```bash
+claude --add-dir /path/to/matplotlib-skill
+```
+
+### Plugin install
+
+```bash
+/plugin marketplace add tvhahn/matplotlib-skill
+/plugin install matplotlib
 ```
 
 ## 9 Chart Patterns

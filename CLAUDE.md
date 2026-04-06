@@ -12,7 +12,7 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 
 ### Key Paths
 
-- `.claude/skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9
+- `skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9 (canonical; `.claude/skills/matplotlib` is a symlink)
 - `data/` — datasets.yaml manifest, raw/ datasets
 - `scripts/` — chart-test-container.sh, evaluate_skill.py
 - `docs/gallery/` — key iteration snapshots (00-original-inspiration, 50-template-improvements-v2, TEMPLATE.md)
@@ -20,7 +20,7 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 
 ## Skill Discovery
 
-- **In-repo:** Claude Code finds `.claude/skills/matplotlib/SKILL.md` directly
+- **In-repo:** Claude Code finds `skills/matplotlib/SKILL.md` (also via symlink at `.claude/skills/matplotlib/SKILL.md`)
 - **Global:** Two-hop symlink from `~/.claude/skills/` → `~/dotfiles/` → this repo (edits propagate instantly)
 - **Rule:** Never edit skill files in dotfiles or `~/.claude/skills/` directly
 
@@ -28,7 +28,7 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 
 Each `gallery-archive/NN-name/` folder captures the skill's output at a specific iteration point. To create a new gallery entry:
 
-1. Make skill changes in `.claude/skills/matplotlib/`
+1. Make skill changes in `skills/matplotlib/`
 2. Run `scripts/chart-test-container.sh --quick` (or full run without `--quick`) to generate charts in a clean room
 3. Create `gallery-archive/NN-name/` folder (next sequential number)
 4. Copy relevant PNGs from `logs/clean-room/latest/` into the gallery folder
@@ -39,7 +39,7 @@ Each `gallery-archive/NN-name/` folder captures the skill's output at a specific
 
 ## Style Rules
 
-All charts follow the aesthetic defined in `.claude/skills/matplotlib/style-reference.md`:
+All charts follow the aesthetic defined in `skills/matplotlib/style-reference.md`:
 
 - `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")` -- identical in every pattern
 - `sns.despine(left=True, bottom=True)` -- all spines removed
@@ -68,10 +68,10 @@ Quick consistency checks:
 
 ```bash
 # All sns.set_theme calls should be identical
-grep 'sns.set_theme' .claude/skills/matplotlib/patterns/*.md
+grep 'sns.set_theme' skills/matplotlib/patterns/*.md
 
 # All patterns should use dpi=150
-grep 'dpi=' .claude/skills/matplotlib/patterns/*.md
+grep 'dpi=' skills/matplotlib/patterns/*.md
 ```
 
 ## Autonomous Commands
@@ -103,8 +103,8 @@ Deferred patterns not yet in `patterns/`:
 
 ## Reference
 
-- @.claude/skills/matplotlib/SKILL.md — full skill workflow and persona
-- @.claude/skills/matplotlib/style-reference.md — complete style specification
+- @skills/matplotlib/SKILL.md — full skill workflow and persona
+- @skills/matplotlib/style-reference.md — complete style specification
 - @docs/gallery/TEMPLATE.md — gallery entry template
 - @data/datasets.yaml — dataset manifest
 - @docs/blog/building-a-claude-code-skill.md — blog post draft

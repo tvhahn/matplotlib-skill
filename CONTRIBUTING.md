@@ -10,14 +10,14 @@ cd matplotlib-skill
 uv sync
 ```
 
-Skill files live in `.claude/skills/matplotlib/`:
+Skill files live in `skills/matplotlib/` (also available via symlink at `.claude/skills/matplotlib/`):
 - `SKILL.md` -- persona, workflow, code generation rules
 - `style-reference.md` -- full style spec (palettes, sizing, conventions)
 - `patterns/P1-horizontal-bar.md` through `patterns/P9-pr-roc.md` -- one file per chart type
 
 ## Modifying a Pattern
 
-1. Edit the pattern file in `.claude/skills/matplotlib/patterns/`
+1. Edit the pattern file in `skills/matplotlib/patterns/`
 2. Run a clean-room test: `scripts/chart-test-container.sh --quick`
 3. Create a gallery entry in `docs/gallery/NN-name/` following `docs/gallery/TEMPLATE.md`
 4. Include before/after PNGs in your PR

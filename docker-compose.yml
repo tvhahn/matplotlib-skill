@@ -19,6 +19,7 @@ services:
     environment:
       - NODE_OPTIONS=--max-old-space-size=4096
       - CLAUDE_CONFIG_DIR=/home/node/.claude
+      - CLAUDE_CODE_NO_FLICKER=1
       - POWERLEVEL9K_DISABLE_GITSTATUS=true
     working_dir: /workspace
     command: sleep infinity
