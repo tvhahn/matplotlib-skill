@@ -56,6 +56,6 @@
   },
   "remoteUser": "node",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "bash -c 'cp .devcontainer/settings.json /home/node/.claude/settings.json 2>/dev/null || true && curl -fsSL https://raw.githubusercontent.com/ericbuess/claude-code-docs/main/install.sh | bash && uv sync || true'",
+  "postCreateCommand": "bash -c '{ [ -f /home/node/.claude/settings.json ] || cp .devcontainer/settings.json /home/node/.claude/settings.json 2>/dev/null || true; } && curl -fsSL https://raw.githubusercontent.com/ericbuess/claude-code-docs/main/install.sh | bash && uv sync || true'",
   "postStartCommand": "[ -f ~/.docker/config.json ] && jq 'del(.credsStore)' ~/.docker/config.json > /tmp/docker-config.json && mv /tmp/docker-config.json ~/.docker/config.json 2>/dev/null || true"
 }

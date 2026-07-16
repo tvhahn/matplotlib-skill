@@ -12,7 +12,9 @@ services:
     volumes:
       - .:/workspace:cached
       - claude-code-bashhistory:/commandhistory
-      - ${HOME}/.claude:/home/node/.claude:cached
+      # NAMED volume, never a ${HOME}/.claude bind mount — a host mount lets the
+      # postCreate settings.json seed clobber the real host ~/.claude/settings.json.
+      - claude-code-config:/home/node/.claude
       - codex-config:/home/node/.codex
       - /var/run/docker.sock:/var/run/docker.sock
       - ${SSH_AUTH_SOCK:-/dev/null}:/tmp/ssh-auth-host.sock
@@ -21,6 +23,8 @@ services:
       - CLAUDE_CONFIG_DIR=/home/node/.claude
       - CLAUDE_CODE_NO_FLICKER=1
       - POWERLEVEL9K_DISABLE_GITSTATUS=true
+      # Point bash/docker exec (not just zsh) at the forwarded host SSH agent so git push works.
+      - SSH_AUTH_SOCK=/tmp/ssh-auth-host.sock
     working_dir: /workspace
     command: sleep infinity
     networks:
@@ -33,6 +37,7 @@ services:
 
 volumes:
   claude-code-bashhistory:
+  claude-code-config:
   codex-config:
 
 networks:
