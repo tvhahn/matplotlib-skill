@@ -1,0 +1,92 @@
+# Benchmark prompt suite for scripts/benchmark.py
+#
+# Two kinds of prompts:
+#   pattern   — the request maps to one of the P1–P9 pattern files
+#   offpattern — realistic requests with no dedicated pattern (scatter, line,
+#               histogram, grouped bar) or a vague question where the chart
+#               type must be chosen. These test whether the skill generalises
+#               or forces data into the nearest template.
+#
+# `checks` are facts a correct chart must reflect. The judge verifies them
+# against the rendered PNG (e.g. a wrong groupby or a dropna() that discards
+# most rows will show up as wrong numbers).
+
+- id: p1-titanic
+  kind: pattern
+  pattern: P1
+  prompt: "horizontal bar chart of survival rate by passenger class from data/raw/public/titanic.csv"
+  checks:
+    - "Survival rates are ~63% (1st), ~47% (2nd), ~24% (3rd). Values near 68/80/50% mean rows were wrongly dropped by a blanket dropna()."
+
+- id: p2-mpg
+  kind: pattern
+  pattern: P2
+  prompt: "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv"
+  checks:
+    - "Five cylinder groups (3, 4, 5, 6, 8); 8-cylinder average is ~158 hp, 4-cylinder ~78 hp."
+
+- id: p3-globaltemp
+  kind: pattern
+  pattern: P3
+  prompt: "time series bar chart with rolling mean from data/raw/precomputed/p3/global_temp.csv — columns are year, value, rolling"
+  checks:
+    - "Covers ~1880 to ~2025 with recent years clearly warmest."
+
+- id: p4-penguins
+  kind: pattern
+  pattern: P4
+  prompt: "violin plot of penguin body mass by species from data/raw/public/penguins.csv"
+  checks:
+    - "Three species; Gentoo is clearly heaviest (median ~5000 g), Adelie and Chinstrap ~3700 g."
+
+- id: p5-glue
+  kind: pattern
+  pattern: P5
+  prompt: "lollipop chart of model score range across NLP tasks from data/raw/precomputed/p5/glue.csv — columns are name, min, max, avg"
+  checks:
+    - "Eight models; ERNIE has the highest average (~89.7)."
+
+- id: p7-mpg
+  kind: pattern
+  pattern: P7
+  prompt: "correlation heatmap from data/raw/precomputed/p7/mpg.csv — pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells"
+  checks:
+    - "5x5 matrix; mpg is strongly negatively correlated with weight/displacement/horsepower."
+
+- id: p8-chickweight
+  kind: pattern
+  pattern: P8
+  prompt: "multi-panel of chick weight over time from data/raw/public/chickweight.csv — one subplot per diet"
+  checks:
+    - "Four panels (one per diet), shared y-axis so diets are comparable."
+
+- id: p9-titanic
+  kind: pattern
+  pattern: P9
+  prompt: "PR and ROC curves from data/raw/precomputed/p9/titanic.npz — load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline"
+  checks:
+    - "Two panels (PR and ROC) with fold curves, an average curve, and a no-skill baseline."
+
+- id: x-stocks-line
+  kind: offpattern
+  prompt: "line chart of stock prices over time for each company in data/raw/public/stocks.csv"
+  checks:
+    - "A multi-line chart (not bars) with one line per symbol (AAPL, AMZN, GOOG, IBM, MSFT); dates on x-axis 2000–2010."
+
+- id: x-gapminder-scatter
+  kind: offpattern
+  prompt: "scatter plot of GDP per capita vs life expectancy in 2007 from data/raw/public/gapminder.csv, coloured by continent"
+  checks:
+    - "Points for ~180 countries in 2007 only; GDP per capita on a log scale is preferable; positive relationship visible."
+
+- id: x-taxis-hist
+  kind: offpattern
+  prompt: "histogram of taxi fares from data/raw/public/taxis.csv"
+  checks:
+    - "A histogram (not bars per category) of the fare column; right-skewed with most fares under $20."
+
+- id: x-titanic-grouped
+  kind: offpattern
+  prompt: "compare survival rates by passenger class and sex from data/raw/public/titanic.csv"
+  checks:
+    - "Both class and sex are shown. Female 1st-class survival ~97%, male 3rd-class ~14%. Large deviations suggest a blanket dropna()."

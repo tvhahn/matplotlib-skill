@@ -1,55 +1,56 @@
 # Horizontal Bar Chart
 
-**When to use:** Ranked percentages, category comparisons, survey results.
-**Palette:** `Blues_d` for neutral ranking, or `Greys_r` + `ACCENT_RED` for selective emphasis.
+**Use for:** one value per category, ranked — percentages, counts, scores; long category names.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-# Scale height for category count
-n_cats = df["category"].nunique()
-fig_h = max(4, 1 + n_cats * 0.7)
-fig, ax = plt.subplots(figsize=(max(4, fig_h * 0.6), fig_h), dpi=150)
+# --- Data: nominal categories sorted so the largest is on top ---
+df = df.sort_values("value", ascending=False)
+order = df["category"].tolist()
 
-sns.barplot(x="percent", y="category", hue="category", data=df, palette="Blues_d", legend=False, ax=ax)
+# --- Colour: one Blues_d shade; a darker shade marks the item(s) the takeaway is about ---
+blues = sns.color_palette("Blues_d", 6)
+highlight = {order[0]}
+colors = {c: (blues[5] if c in highlight else blues[2]) for c in order}
 
+n = len(df)
+fig, ax = plt.subplots(figsize=(7, 0.55 * n + 1.6), dpi=150)
+sns.barplot(data=df, x="value", y="category", hue="category", order=order,
+            palette=colors, legend=False, ax=ax)
+
+pad = df["value"].max() * 0.015
 for p in ax.patches:
-    space = 1.5
-    _x = p.get_x() + p.get_width() + space
-    _y = p.get_y() + p.get_height() / 2
-    value = p.get_width()
-    ax.text(_x, _y, f"{value:.1f}", ha="left", va="center",
-            weight="semibold", size=10, color="dimgrey")
+    ax.text(p.get_width() + pad, p.get_y() + p.get_height() / 2, f"{p.get_width():.1f}%",
+            ha="left", va="center", weight="semibold", size=11, color="dimgrey")
 
-# --- Insight annotation (highlight top item or notable gap) ---
-top = df.sort_values("percent", ascending=False).iloc[0]
-fig.text(0.98, 0.01, f'{top["category"]} leads at {top["percent"]:.1f}',
-         ha="right", va="bottom",
-         fontsize=9, color="dimgrey", style="italic")
+# --- Title + takeaway subtitle (computed from the data) ---
+top, last = df.iloc[0], df.iloc[-1]
+ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey",
+             weight="semibold", pad=26)
+ax.annotate(f'{top["category"]} is {top["value"] / last["value"]:.1f}x {last["category"]}',
+            xy=(0, 1), xycoords="axes fraction", xytext=(0, 8), textcoords="offset points",
+            ha="left", va="bottom", fontsize=10.5, color="dimgrey")
 
-ax.set_ylabel("")
 ax.set_xlabel("")
+ax.set_ylabel("")
+ax.set_xticks([])
 ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)
 ax.grid(False)
-ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-ax.set_xticks([])
-ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey", labelsize=11)
 sns.despine(left=True, bottom=True)
 ```
 
 Apply style-reference invariants.
 
 **Signature:**
-- Bar-end value labels with hidden x-ticks (`set_xticks([])`); the labels carry the numbers, not the axis.
-- Annotations use `color="dimgrey"`.
+- Bar-end value labels with the value axis hidden (`set_xticks([])`): the labels carry the numbers.
+- Blues_d family: one shade for all bars, a darker shade only for highlighted bars.
 
 **Guidance:**
-- Default `sns.barplot()` for the bar layer. Template shows `palette="Blues_d"` for neutral ranking. When one bar clearly dominates (e.g., top value >2× the median), consider `Greys_r` + `ACCENT_RED` (`"#bd0c0c"`) on the standout bar to reinforce the finding visually.
-- Scale `figsize` for category count: `(4, 7)` for 8-15 bars, `(6, 4)` for 3-5 bars, wider for 15+.
-- Use classical titles that describe the metric (e.g., "Collisions per Billion Miles by State"). Insight annotations carry findings, not the title.
-- Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix (e.g., "mpg") when the axis label alone doesn't suffice. Add unit prefixes/suffixes when values are ambiguous — omit when the title provides enough context.
-- Adjust annotation `size` proportionally if bars are very narrow or figure is compact.
-- Scale title `fontsize` with figure size (12 for compact figures, 14-16 for large ones).
-- Always include an insight annotation (e.g., top performer, notable gap between top-2). Position BELOW the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom")` — never inside the axes area where it can overlap data rows. Compute the finding dynamically — do not hardcode values.
-
-**Customize:** Replace `"Blues_d"` with a custom palette list for selective emphasis (e.g., one red bar among grey).
+- Sort nominal categories by value, largest on top. Keep natural order (age band, rating, education level) when the categories have one.
+- Highlight what the takeaway is about (the leader, an outlier, the user's own item). Highlight nothing if there is no single story; for a strong standout, `"#bdbdbd"` grey + `ACCENT_RED` on that bar is the louder alternative.
+- Write the subtitle from the data: a ratio, a gap, a share ("Basic plan: 24%, under half the Premium rate"). Drop it rather than restate a printed bar value.
+- Height ≈ `0.55 × n + 1.6` in; width so the longest label and value label fit. Wrap long category names with `textwrap.fill(name, 20)`.
+- Format labels for the data: `%` for rates, `$` and thousands separators for money, units where the title doesn't make them obvious. Add `n=` to labels when group sizes differ a lot.
+- More than ~15 categories: show the top N and say so in the title ("Top 10 States").

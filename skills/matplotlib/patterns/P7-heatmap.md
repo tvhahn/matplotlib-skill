@@ -1,86 +1,84 @@
 # Heatmap / Spectrogram
 
-**When to use:** Correlation matrices, frequency-time plots, spectrograms, pcolormesh data.
-**Palette:** `RdBu_r` for correlation heatmaps (diverging — positive/negative need distinct colors), `inferno` for spectrograms.
+**Use for:** correlation matrices, pivot tables (e.g. month × year), spectrograms and other `pcolormesh` grids.
 
-### Correlation Heatmap
+## Contents
+- Correlation heatmap / pivot table
+- Spectrogram (pcolormesh)
+
+## Correlation heatmap
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-# --- Dynamic figsize and annotation size for matrix dimensions ---
-n_vars = corr.shape[0]
-fig_w = max(6, 2 + n_vars * 1.2)    # wider for more columns
-fig_h = max(5, 1 + n_vars * 1.0)    # taller for more rows
-annot_size = max(7, 13 - n_vars)     # shrink text for large matrices
+corr = pd.read_csv("data.csv", index_col=0)
+# Lower triangle without the diagonal: drop the first row and last column, mask the rest
+tri = corr.iloc[1:, :-1]
+mask = np.triu(np.ones_like(tri, dtype=bool), k=1)
+n = tri.shape[0]
 
-fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
+fig, ax = plt.subplots(figsize=(max(6, 1.2 * n + 2), max(5, n + 1)), dpi=150)
+sns.heatmap(tri, mask=mask, annot=True, fmt=".2f", cmap="RdBu_r", vmin=-1, vmax=1, center=0,
+            square=True, linewidths=0.5, linecolor="white", ax=ax,
+            annot_kws={"size": max(7, 13 - n), "weight": "medium"},
+            cbar_kws={"shrink": 0.75, "label": "Pearson r"})
 
-sns.heatmap(corr, annot=True, fmt=".2f", cmap="RdBu_r", ax=ax,
-            vmin=-1, vmax=1, center=0,
-            linewidths=0.5, linecolor="white", square=True,
-            cbar_kws={"shrink": 0.8, "label": "Pearson r"},
-            annot_kws={"size": annot_size, "weight": "medium"})
+# Colorbar text follows the dimgrey rule
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(length=0, labelcolor="dimgrey")
+cbar.ax.yaxis.label.set_color("dimgrey")
+cbar.outline.set_visible(False)
 
-ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
+# --- Title + takeaway subtitle: the strongest relationship with the variable that matters ---
+target = corr.columns[0]  # or the variable the user asked about
+partner = corr[target].drop(target).abs().idxmax()
+ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey",
+             weight="semibold", pad=26)
+ax.annotate(f"{target} is most strongly related to {partner} (r = {corr.loc[target, partner]:.2f})",
+            xy=(0, 1), xycoords="axes fraction", xytext=(0, 8), textcoords="offset points",
+            ha="left", va="bottom", fontsize=10.5, color="dimgrey")
+
 ax.set_xticklabels(ax.get_xticklabels(), rotation=30, ha="right")
-ax.set_title("Correlation Matrix", fontsize=14, loc="left", pad=7, color="dimgrey")
-
-# --- Insight annotation (strongest correlation from data) ---
-mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
-upper = corr.where(mask)
-strongest_val = upper.abs().max().max()
-strongest_pair = upper.abs().stack().idxmax()
-fig.text(0.98, 0.01,
-         f"Strongest: {strongest_pair[0]} ↔ {strongest_pair[1]} (r = {corr.loc[strongest_pair]:.2f})",
-         ha="right", va="bottom", fontsize=9, color="dimgrey", style="italic")
-
+ax.grid(False)  # whitegrid lines would show through masked cells
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
 sns.despine(left=True, bottom=True)
 ```
 
 Apply style-reference invariants.
 
 **Signature:**
-- Correlation heatmaps: `cmap="RdBu_r"` with `vmin=-1, vmax=1, center=0`. For non-correlation heatmaps (pivot tables), use `cmap="rocket"` without vmin/vmax/center.
-- Always annotate cells: `annot=True, fmt=".2f"`. Do not set annotation `color` — let seaborn auto-contrast.
-- `square=True` for correlation matrices.
+- Correlations: `cmap="RdBu_r"`, `vmin=-1, vmax=1, center=0`, `square=True`. Pivot tables (non-correlation values): `cmap="rocket"` without vmin/vmax/center.
+- Annotated cells (`annot=True`); let seaborn pick the text colour for contrast.
 
 **Guidance:**
-- Use classical titles that describe the chart (e.g., "Feature Correlation Matrix"). Insight annotations carry findings, not the title.
-- Default: add a colorbar label (e.g., `"Pearson r"`) and an insight annotation below the chart (`fig.text(...)` or subtitle) highlighting the strongest or most notable correlation. Consider omitting the insight only for very large matrices (>15×15) where a single finding is not representative.
-- Default: no additional colorbar label beyond the cbar. Consider adding one when the heatmap shows a non-obvious metric.
-- Default: show full matrix. Consider masking with `np.triu`/`np.tril` when the user requests it or the matrix is large (>15×15) and symmetric.
-- `ax.grid(False)` is NOT needed for `sns.heatmap` — seaborn handles this internally.
-- Data is typically pre-computed: load with `pd.read_csv(path, index_col=0)`. Allow `.corr()` when the user provides raw data.
-- Dynamic figsize and annotation size are computed from matrix dimensions in the template. Do not hardcode these.
-- Reduce `linewidths` to 0.3 or omit for matrices >12×12.
-- Omit tick label `rotation` for short labels (<6 chars).
-- **Panel frame:** Correlation heatmaps do not need a panel frame — the cell grid creates its own visual boundary. For spectrograms (`pcolormesh`), add a panel frame (`ax.patch.set_edgecolor("lightgrey")`, `ax.patch.set_linewidth(0.8)`) to define the panel edges, especially for multi-panel layouts.
+- Symmetric correlation matrices: show the lower triangle without the diagonal (as in the template). Pivot tables: show the full grid.
+- Format cells to the data: `.2f` for correlations, `,.0f` for counts; skip `annot` above ~15×15 and say so in the subtitle.
+- Subtitle names the relationship that answers the question — usually the target variable's strongest partner, not just the largest off-diagonal value.
+- Rotate x labels only when they are long (≥ 6 characters). Reduce `linewidths` to 0.3 above 12×12.
+- Label the colorbar with the metric ("Pearson r", "Orders (thousands)").
+- Data is usually pre-computed: `pd.read_csv(path, index_col=0)`. Compute `.corr(numeric_only=True)` when given raw data.
+- No panel frame — the cells form their own edge.
 
-### Spectrogram (pcolormesh)
+## Spectrogram (pcolormesh)
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-fig, ax = plt.subplots(1, 2, figsize=(11, 4), dpi=150)
-
-ax[0].pcolormesh(time_axis, freq_axis, data, cmap="inferno",
-                 vmax=vmax_val, shading="auto")
-ax[0].set_ylabel("Frequency (Hz)")
-ax[0].set_xlabel("Runtime (days)")
-ax[0].grid(False)
-ax[0].tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-ax[0].set_title(r"$\bf{(a)}$" + " Spectrogram", loc="left", fontsize=12, pad=7)
-
-ax[1].pcolormesh(time_axis, bins, binned_data, cmap="inferno",
-                 vmax=vmax_val2, shading="auto")
-ax[1].set_xlabel("Runtime (days)")
-ax[1].set_ylabel("Frequency Bin")
-ax[1].grid(False)
-ax[1].tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-ax[1].set_title(r"$\bf{(b)}$" + " Binned", loc="left", fontsize=12, pad=7)
-
+fig, axes = plt.subplots(1, 2, figsize=(11, 4), dpi=150)
+panels = [(time_axis, freq_axis, data, "Frequency (Hz)", "Spectrogram"),
+          (time_axis, bins, binned_data, "Frequency bin", "Binned")]
+for i, (ax, (x, yv, z, ylabel, title)) in enumerate(zip(axes, panels)):
+    ax.pcolormesh(x, yv, z, cmap="inferno", shading="auto",
+                  vmax=np.percentile(z, 99))  # clip outliers so structure is visible
+    ax.set_xlabel("Runtime (days)", color="dimgrey")
+    ax.set_ylabel(ylabel, color="dimgrey")
+    ax.set_title(r"$\bf{(" + chr(ord("a") + i) + r")}$" + f"  {title}",
+                 loc="left", fontsize=12, pad=7, color="dimgrey")
+    ax.grid(False)
+    ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
+    ax.patch.set_edgecolor("lightgrey")
+    ax.patch.set_linewidth(0.8)
 sns.despine(left=True, bottom=True, right=True)
 ```
 
-**Customize:** Adjust `vmax` on spectrograms to control color scaling. For spectrograms with dark backgrounds, use white text for panel labels.
+**Guidance:** set `vmax` (a high percentile) so a few spikes don't wash out the rest; use white text for labels placed over the dark map.

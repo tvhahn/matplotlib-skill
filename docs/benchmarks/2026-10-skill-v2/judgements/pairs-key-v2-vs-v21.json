@@ -1,0 +1,20 @@
+{
+  "claude-haiku-4-5__p4-penguins/A": "v2",
+  "claude-haiku-4-5__p4-penguins/B": "v21",
+  "claude-haiku-4-5__p8-chickweight/A": "v2",
+  "claude-haiku-4-5__p8-chickweight/B": "v21",
+  "claude-haiku-4-5__x-gapminder-scatter/A": "v21",
+  "claude-haiku-4-5__x-gapminder-scatter/B": "v2",
+  "claude-haiku-4-5__x-stocks-line/A": "v2",
+  "claude-haiku-4-5__x-stocks-line/B": "v21",
+  "claude-sonnet-5-5__p4-penguins/A": "v2",
+  "claude-sonnet-5-5__p4-penguins/B": "v21",
+  "claude-sonnet-5-5__p8-chickweight/A": "v2",
+  "claude-sonnet-5-5__p8-chickweight/B": "v21",
+  "claude-sonnet-5-5__p9-titanic/A": "v2",
+  "claude-sonnet-5-5__p9-titanic/B": "v21",
+  "claude-sonnet-5-5__x-gapminder-scatter/A": "v2",
+  "claude-sonnet-5-5__x-gapminder-scatter/B": "v21",
+  "claude-sonnet-5-5__x-stocks-line/A": "v2",
+  "claude-sonnet-5-5__x-stocks-line/B": "v21"
+}

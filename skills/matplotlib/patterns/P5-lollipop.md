@@ -1,108 +1,68 @@
 # Lollipop / Dumbbell Chart
 
-**When to use:** Showing min/max/avg ranges, model comparison across k-folds.
-**Palette:** Cubehelix for dots, grey for connecting lines, dimgrey for text.
+**Use for:** min/avg/max ranges per item — model scores across folds or tasks, price ranges by grade.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-# --- Data ---
+# --- Data: best average on top ---
 df = pd.read_csv("data.csv").dropna(subset=["name", "min", "max", "avg"])
 df = df.sort_values("avg", ascending=True).reset_index(drop=True)
 
-# --- Palette (default: two-tone cubehelix) ---
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
-darkblue = pal[5]   # min/max dots
-lightblue = pal[2]  # avg dots
+dark, light = pal[5], pal[2]  # min/max dots, avg dots
 
-# --- Dynamic figsize and format ---
-n_items = len(df)
-max_val = df["max"].max()
-# Detect annotation format from data magnitude
-if max_val < 10:
-    fmt = ".2f"      # small decimal values (e.g., carats, percentages)
-elif max_val < 100:
-    fmt = ".1f"      # medium values (e.g., mpg, scores)
-else:
-    fmt = ",.0f"     # large integers (e.g., dollars, population)
-# Scale width for annotation text; scale height for item count
-fig_w = max(8, 10 + max(0, len(f"{max_val:{fmt}}") - 4) * 0.5)
-fig_h = max(3.5, 1.0 + n_items * 0.9)
+n = len(df)
+fmt = ".2f" if df["max"].max() < 10 else ".1f" if df["max"].max() < 100 else ",.0f"
+fig, ax = plt.subplots(figsize=(10, 0.85 * n + 1.8), dpi=150)
+DOT = 150
 
-fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
+# Faint full-width guide per row, then the range line
+ax.hlines(y=df.index, xmin=df["min"].min() * 0.98, xmax=df["max"].max() * 1.02,
+          color="lightgrey", lw=1, zorder=0)
+ax.hlines(y=df.index, xmin=df["min"], xmax=df["max"], color="grey", alpha=0.4, lw=4, zorder=1)
+ax.scatter(df["min"], df.index, s=DOT, color=dark, edgecolors="white", zorder=3, label="Min/Max")
+ax.scatter(df["max"], df.index, s=DOT, color=dark, edgecolors="white", zorder=3)
+ax.scatter(df["avg"], df.index, s=DOT, color=light, edgecolors="white", zorder=4, label="Average")
 
-DOT_SIZE = 150
+for i, r in df.iterrows():
+    ax.annotate(f'{r["avg"]:{fmt}}', xy=(r["avg"], i), xytext=(0, 9), textcoords="offset points",
+                ha="center", va="bottom", fontsize=10, color="dimgrey", weight="medium")
+    for x in (r["min"], r["max"]):
+        ax.annotate(f"{x:{fmt}}", xy=(x, i), xytext=(0, -9), textcoords="offset points",
+                    ha="center", va="top", fontsize=8.5, color="dimgrey")
 
-# connecting lines (draw first, behind dots)
-ax.hlines(y=df["name"], xmin=df["min"], xmax=df["max"],
-          color="grey", alpha=0.4, lw=4, zorder=0)
+ax.set_yticks(df.index, df["name"])
+ax.set_xlabel("Score (units)", fontsize=12, labelpad=8, color="dimgrey")
+ax.set_ylabel("")
 
-# min/max dots
-ax.scatter(x=df["min"], y=df["name"], s=DOT_SIZE,
-           color=darkblue, edgecolors="white", label="Min/Max", zorder=3)
-ax.scatter(x=df["max"], y=df["name"], s=DOT_SIZE,
-           color=darkblue, edgecolors="white", zorder=3)
-
-# avg dots (on top)
-ax.scatter(x=df["avg"], y=df["name"], s=DOT_SIZE,
-           color=lightblue, edgecolors="white", label="Average", zorder=4)
-
-# avg value annotations — REQUIRED (centered above each avg dot)
-for i in range(df.shape[0]):
-    ax.text(x=df["avg"].iloc[i], y=i + 0.15, s=f'{df["avg"].iloc[i]:{fmt}}',
-            ha="center", va="bottom", size=10,
-            color="dimgrey", weight="medium")
-
-# min/max value annotations — REQUIRED (below each dot, smaller text)
-for i in range(df.shape[0]):
-    ax.text(x=df["min"].iloc[i], y=i - 0.15, s=f'{df["min"].iloc[i]:{fmt}}',
-            ha="center", va="top", size=8.5,
-            color="dimgrey", weight="normal")
-    ax.text(x=df["max"].iloc[i], y=i - 0.15, s=f'{df["max"].iloc[i]:{fmt}}',
-            ha="center", va="top", size=8.5,
-            color="dimgrey", weight="normal")
+# --- Title + takeaway subtitle; legend across the top ---
+best, widest = df.iloc[-1], df.loc[(df["max"] - df["min"]).idxmax()]
+ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey",
+             weight="semibold", pad=46)
+ax.annotate(f'{best["name"]} has the best average; {widest["name"]} varies most '
+            f'({widest["max"] - widest["min"]:{fmt}} from min to max)',
+            xy=(0, 1), xycoords="axes fraction", xytext=(0, 28), textcoords="offset points",
+            ha="left", va="bottom", fontsize=10.5, color="dimgrey")
+ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2, frameon=True, facecolor="white",
+          framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey", fontsize=10)
 
 ax.grid(False)
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey", labelsize=11)
 sns.despine(left=True, bottom=True)
-ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-ax.set_ylabel("")
-ax.set_xlabel("Descriptive X-Axis Label (units)", fontsize=12, labelpad=8, color="dimgrey")
-ax.set_title("Chart Title", fontsize=14, loc="left", pad=7, color="dimgrey")
-
-# --- Insight annotation — positioned below axes, never inside the data area ---
-df["range"] = df["max"] - df["min"]
-top = df.loc[df["avg"].idxmax()]
-widest = df.loc[df["range"].idxmax()]
-fig.text(0.98, 0.01,
-         f'{top["name"]} leads — widest spread in {widest["name"]} ({widest["range"]:{fmt}})',
-         ha="right", va="bottom",
-         fontsize=9, color="dimgrey", style="italic")
-
-# Legend — REQUIRED (2 entries: "Min/Max" and "Average")
-ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
-         labelcolor="dimgrey", loc="lower right", fontsize=11)
 ```
 
 Apply style-reference invariants.
 
 **Signature:**
-- Cubehelix palette: `pal[5]` (dark) for min/max dots, `pal[2]` (light) for avg dots.
-- Three separate `ax.scatter()` calls: one for min dots, one for max dots, one for avg dots.
-- Connecting lines: `ax.hlines()` from min to max.
+- Two-tone cubehelix: `pal[5]` for all min/max dots, `pal[2]` for all average dots.
+- Separate `ax.scatter()` layers for min, max, and average, joined by an `ax.hlines()` range line.
 
 **Guidance:**
-- Always use two-tone coloring: all min/max dots `pal[5]`, all avg dots `pal[2]`. Do NOT assign per-item colors or substitute other colors (e.g., coral, orange) — the two-tone cubehelix look is the pattern's visual identity.
-- Annotate all three values per row by default: avg above, min/max below. All annotations `color="dimgrey"`.
-- Default 2 legend items: "Average" and "Min/Max". Add more if the data has additional series that need identification.
-- Use classical titles that describe the metric (e.g., "Health Spending Range by Country"). Insight annotations carry findings, not the title.
-- Set a descriptive x-axis label — do not leave it empty.
-- Scale figsize height for item count: `max(3.5, 1.0 + n_items * 0.9)` — compact for 3–4 items, tall for 7+.
-- Scale `DOT_SIZE` with figure size or data density (100-200 range).
-- Add unit prefixes (e.g., `$`) when values are currency or otherwise ambiguous without units.
-- Adjust annotation `size` proportionally if figure is compact or labels overlap.
-- Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix (e.g., "mpg", "yr") when the axis label alone doesn't suffice. Use `f'{value:.2f}'` for decimal data, `f'{value:,.0f}'` for large integers.
-- Move legend to avoid occlusion if data extends into the lower-right corner.
-- Omit min/max labels if the user says "clean" or "minimal".
-- Always include an insight annotation (e.g., top performer, widest range, or notable gap). Position BELOW the axes using `fig.text(0.98, 0.01, ..., ha="right", va="bottom")` — never inside the axes area where it can overlap data rows.
-
-**Customize:** Add leading lines with `ax.plot([x_end + 0.02, x_label], [i, i], lw=1, color="grey", alpha=0.4, zorder=0)`. Add classifier name text at left margin.
+- Keep the two-tone scheme for every row; don't colour items individually.
+- Sort by average, best on top (or by the user's key metric).
+- Label averages by default. Min/max labels help with ≤ 8 rows; with more rows, or when the user wants it clean, drop them and keep the axis.
+- Add a reference line where one exists (naive baseline, target, overall average) as a dashed `"#d73027"` `axvline` at `alpha=0.5`, labelled along the line.
+- Subtitle states the comparison (best item, widest range, items overlapping the leader). Annotate an individual row with `ax.annotate` when the story is about one item.
+- Height ≈ `0.85 × n + 1.8` in. `DOT` 100–200 depending on rows.
+- Use units in the x label; `$`/`%` in value labels where they clarify.

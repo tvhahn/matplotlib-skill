@@ -1,0 +1,319 @@
+[
+  {
+    "id": "p1-titanic",
+    "kind": "pattern",
+    "pattern": "P1",
+    "prompt": "horizontal bar chart of survival rate by passenger class from data/raw/public/titanic.csv",
+    "checks": [
+      "Survival rates are ~63% (1st), ~47% (2nd), ~24% (3rd). Values near 68/80/50% mean rows were wrongly dropped by a blanket dropna()."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.046329800000000004,
+    "turns": 3,
+    "duration_s": 10.7,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "survival_by_class.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I saved the horizontal bar chart to `figures/survival_by_class.png`. I didn't open the image to check how it looks.\n\nSurvival rate by passenger class:\n- **First:** 63.0%\n- **Second:** 47.3%\n- **Third:** 24.2%\n\nFirst class is at the top of the chart. Each bar is labeled with its percentage.",
+    "checker": {}
+  },
+  {
+    "id": "p2-mpg",
+    "kind": "pattern",
+    "pattern": "P2",
+    "prompt": "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv",
+    "checks": [
+      "Five cylinder groups (3, 4, 5, 6, 8); 8-cylinder average is ~158 hp, 4-cylinder ~78 hp."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.0455534,
+    "turns": 3,
+    "duration_s": 9.2,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "avg_horsepower_by_cylinders.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I saved the vertical bar chart to `figures/avg_horsepower_by_cylinders.png`. Each bar is labeled with its value. I didn't open the image to check how it looks. Rows with missing horsepower are skipped in the averages.\n\n| Cylinders | Average horsepower |\n|---|---|\n| 3 | 99 |\n| 4 | 78 |\n| 5 | 82 |\n| 6 | 102 |\n| 8 | 158 |\n\nHorsepower rises with cylinder count, with 8-cylinder cars well ahead. The 3-cylinder bar is out of pattern, since it averages more than the 4- and 5-cylinder bars. The 3-cylinder group in this dataset is only a handful of cars.",
+    "checker": {}
+  },
+  {
+    "id": "p3-globaltemp",
+    "kind": "pattern",
+    "pattern": "P3",
+    "prompt": "time series bar chart with rolling mean from data/raw/precomputed/p3/global_temp.csv \u2014 columns are year, value, rolling",
+    "checks": [
+      "Covers ~1880 to ~2025 with recent years clearly warmest."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.0717294,
+    "turns": 6,
+    "duration_s": 13.3,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "global_temp.png",
+      "plot_global_temp.py"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 3,
+      "Read": 2
+    },
+    "final_message": "I made the chart: annual bars for `value`, with the `rolling` column drawn as a black line over them. The bars are red when the anomaly is above zero and blue when it's below.\n\nThe rolling line runs from about 1885 to 2021. It leaves out the first 4 and last 5 years because the `rolling` column is empty there. I left it that way rather than filling the gaps.\n\nFiles are in `figures/`:\n- `global_temp.png`\n- `plot_global_temp.py`",
+    "checker": {}
+  },
+  {
+    "id": "p4-penguins",
+    "kind": "pattern",
+    "pattern": "P4",
+    "prompt": "violin plot of penguin body mass by species from data/raw/public/penguins.csv",
+    "checks": [
+      "Three species; Gentoo is clearly heaviest (median ~5000 g), Adelie and Chinstrap ~3700 g."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.0469468,
+    "turns": 3,
+    "duration_s": 13.4,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "penguins_body_mass_violin.png",
+      "penguins_violin.py"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I made the violin plot of body mass by species. I didn't open the image to check how it looks.\n\nEach violin is labeled with its species and sample size, and a black line marks the median. Rows with no body mass are dropped.\n\nFiles are in `figures/`:\n- `penguins_body_mass_violin.png`\n- `penguins_violin.py` (the script that generates it)",
+    "checker": {}
+  },
+  {
+    "id": "p5-glue",
+    "kind": "pattern",
+    "pattern": "P5",
+    "prompt": "lollipop chart of model score range across NLP tasks from data/raw/precomputed/p5/glue.csv \u2014 columns are name, min, max, avg",
+    "checks": [
+      "Eight models; ERNIE has the highest average (~89.7)."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.065431,
+    "turns": 4,
+    "duration_s": 14.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "glue_score_range_lollipop.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2,
+      "Read": 1
+    },
+    "final_message": "I made the lollipop chart: each model gets a horizontal bar from its lowest to its highest task score. Blue dots mark the minimum, red dots the maximum, and black diamonds the average. Models are sorted by average score, with ERNIE at the top.\n\nThe newer models (ERNIE, T5, RoBERTa, BERT) score higher and vary less across tasks. The BiLSTM variants range widely, from about 12\u201332 at the low end up to about 82\u201389 at the high end.\n\nSaved to `figures/glue_score_range_lollipop.png`.",
+    "checker": {}
+  },
+  {
+    "id": "p7-mpg",
+    "kind": "pattern",
+    "pattern": "P7",
+    "prompt": "correlation heatmap from data/raw/precomputed/p7/mpg.csv \u2014 pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells",
+    "checks": [
+      "5x5 matrix; mpg is strongly negatively correlated with weight/displacement/horsepower."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.0487832,
+    "turns": 3,
+    "duration_s": 10.2,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "mpg_correlation_heatmap.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I made the correlation heatmap and saved it to `figures/mpg_correlation_heatmap.png`. I haven't opened the image to check how it looks.\n\nIt loads the matrix with `pd.read_csv(index_col=0)`. The five variables are mpg, displacement, horsepower, weight and acceleration. Each cell shows its value to two decimals, on a red-blue scale fixed from -1 to 1 with a colorbar. Labels switch to white on the darker cells so they stay readable.\n\nThe script is at `/tmp/claude-0/h.py`, outside the project.",
+    "checker": {}
+  },
+  {
+    "id": "p8-chickweight",
+    "kind": "pattern",
+    "pattern": "P8",
+    "prompt": "multi-panel of chick weight over time from data/raw/public/chickweight.csv \u2014 one subplot per diet",
+    "checks": [
+      "Four panels (one per diet), shared y-axis so diets are comparable."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.0470656,
+    "turns": 3,
+    "duration_s": 9.4,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "chickweight_by_diet.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I made a four-panel figure, one subplot per diet, and saved it to `figures/chickweight_by_diet.png`. I didn't open the image after saving, so I haven't checked how it looks.\n\nEach panel shows every chick's weight over time as a thin grey line, with the diet's mean as a thick red line. The panels share both axes so the diets are directly comparable. Each title gives the number of chicks on that diet.\n\nI ran the script from `/tmp/p.py` and didn't save a copy in the project.",
+    "checker": {}
+  },
+  {
+    "id": "p9-titanic",
+    "kind": "pattern",
+    "pattern": "P9",
+    "prompt": "PR and ROC curves from data/raw/precomputed/p9/titanic.npz \u2014 load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline",
+    "checks": [
+      "Two panels (PR and ROC) with fold curves, an average curve, and a no-skill baseline."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.0618648,
+    "turns": 4,
+    "duration_s": 11.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_pr_roc.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2,
+      "Read": 1
+    },
+    "final_message": "I plotted the precision\u2013recall and ROC curves side by side and saved them to `figures/titanic_pr_roc.png`. I checked the rendered image.\n\nThe file has 5 runs in each of the `*_array` entries. Each panel draws the 5 runs as thin light lines and the average as a thick line. The PR panel has a dashed baseline at 0.68, the positive-class rate from `baseline`. The ROC panel has a dashed chance diagonal.\n\nThe mean PR curve sits mostly between 0.7 and 0.8 precision, above the baseline. The mean ROC curve is above the diagonal, though the individual runs are noisy.",
+    "checker": {}
+  },
+  {
+    "id": "x-gapminder-scatter",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "scatter plot of GDP per capita vs life expectancy in 2007 from data/raw/public/gapminder.csv, coloured by continent",
+    "checks": [
+      "Points for ~180 countries in 2007 only; GDP per capita on a log scale is preferable; positive relationship visible."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.045486200000000004,
+    "turns": 3,
+    "duration_s": 10.4,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "gdp_vs_lifeexp_2007.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I made the scatter plot of GDP per capita against life expectancy for 2007, with one colour per continent. I haven't opened the image to check how it looks.\n\nI put GDP per capita on a log scale. On a linear axis the points bunch up at the low end, and a log axis spreads them out so the trend is easier to see.\n\nThe plot is saved at `figures/gdp_vs_lifeexp_2007.png`.",
+    "checker": {}
+  },
+  {
+    "id": "x-stocks-line",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "line chart of stock prices over time for each company in data/raw/public/stocks.csv",
+    "checks": [
+      "A multi-line chart (not bars) with one line per symbol (AAPL, AMZN, GOOG, IBM, MSFT); dates on x-axis 2000\u20132010."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.045939,
+    "turns": 3,
+    "duration_s": 8.5,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "stocks_line.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I plotted monthly prices over time for all five companies (MSFT, AMZN, IBM, GOOG, AAPL) as one line chart. Each line is labeled at its right end and there is also a legend. I didn't open the saved image to check it, so I haven't seen how it looks.\n\nSaved to `figures/stocks_line.png`.",
+    "checker": {}
+  },
+  {
+    "id": "x-taxis-hist",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "histogram of taxi fares from data/raw/public/taxis.csv",
+    "checks": [
+      "A histogram (not bars per category) of the fare column; right-skewed with most fares under $20."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.045583399999999996,
+    "turns": 3,
+    "duration_s": 8.2,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "taxi_fare_hist.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "I made a histogram of the 1,000 taxi fares and saved it to `figures/taxi_fare_hist.png`. I haven't opened the image to check how it looks.\n\nThe distribution is right-skewed:\n- **Typical fare:** the median is $9.50 and the mean is $12.68.\n- **Spread:** most fares fall between $6.50 and $15.00 (the middle half of trips), and the full range is $2.50 to $56.13.\n\nThe chart uses 40 bins, with a dashed line marking the median.",
+    "checker": {}
+  },
+  {
+    "id": "x-titanic-grouped",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "compare survival rates by passenger class and sex from data/raw/public/titanic.csv",
+    "checks": [
+      "Both class and sex are shown. Female 1st-class survival ~97%, male 3rd-class ~14%. Large deviations suggest a blanket dropna()."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": null,
+    "cost_usd": 0.052788600000000005,
+    "turns": 3,
+    "duration_s": 11.0,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_class_sex.png"
+    ],
+    "skill_invoked": [],
+    "skill_files_read": [],
+    "tool_counts": {
+      "Bash": 2
+    },
+    "final_message": "Survival was much higher for women than for men in every class, and it fell with class for both sexes. I charted it as grouped bars with sample sizes labelled.\n\n| Class | Female | Male |\n|---|---|---|\n| 1st | 96.8% (91/94) | 36.9% (45/122) |\n| 2nd | 92.1% (70/76) | 15.7% (17/108) |\n| 3rd | 50.0% (72/144) | 13.5% (47/347) |\n\n- **Sex:** The gap is largest in 1st and 2nd class, at about 60 and 76 percentage points. In 3rd class it is about 36 points.\n- **Class:** Women in 1st and 2nd class survived at nearly the same rate (97% and 92%), but 3rd-class women survived at only 50%.\n- **Men:** Only 1st-class men did notably better, at 37%. Men in 2nd and 3rd class survived at 16% and 14%.\n- **Caveat:** 3rd-class men are the largest group (347), while 1st-class and 2nd-class women are small (94 and 76), so their rates are less precise.\n\nThe chart is saved at `figures/titanic_survival_class_sex.png`.",
+    "checker": {}
+  }
+]

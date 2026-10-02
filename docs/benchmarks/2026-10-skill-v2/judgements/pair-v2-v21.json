@@ -1,0 +1,11 @@
+[
+  {"run": "claude-haiku-4-5__p4-penguins", "winner": "A", "margin": "slight", "why": "Near-identical violins; A's median labels (with units) sit above the strip points while B's '3,700' labels sit on top of the dots."},
+  {"run": "claude-haiku-4-5__p8-chickweight", "winner": "B", "margin": "slight", "why": "Near-identical panels; B uses clean integer day ticks (0,5,...,20) instead of A's fussy 2.5-step ticks, and shows x ticks on every panel."},
+  {"run": "claude-haiku-4-5__x-gapminder-scatter", "winner": "A", "margin": "clear", "why": "B colours Europe and Africa in the same red (and Americas in a near-red salmon), so continents are hard to tell apart, while A's six hues are distinct."},
+  {"run": "claude-haiku-4-5__x-stocks-line", "winner": "A", "margin": "clear", "why": "B's subtitle is visibly broken by a mathtext bug ('6to230' in italics) and makes a dubious claim, whereas A is clean apart from a pale-yellow AMZN line."},
+  {"run": "claude-sonnet-5-5__p4-penguins", "winner": "B", "margin": "slight", "why": "Near-identical; B's median labels have a halo and read cleanly over the points, while A's '5,000 g' and '3,700 g' are partly obscured by darker dots (A's subtitle is marginally more accurate)."},
+  {"run": "claude-sonnet-5-5__p8-chickweight", "winner": "A", "margin": "slight", "why": "Essentially identical; A starts the shared y-axis at 0, giving an honest growth baseline."},
+  {"run": "claude-sonnet-5-5__p9-titanic", "winner": "A", "margin": "slight", "why": "Essentially identical; A labels the no-skill baseline value (0.68) and states the average AUC in the footer."},
+  {"run": "claude-sonnet-5-5__x-gapminder-scatter", "winner": "B", "margin": "clear", "why": "A colours Europe and Africa in the same red and Asia in a near-red orange, while B gives every continent a distinct hue, making the colour encoding readable."},
+  {"run": "claude-sonnet-5-5__x-stocks-line", "winner": "B", "margin": "slight", "why": "B's log scale untangles the four low-priced stocks that A crushes into an unreadable band near zero, though B has sparse $10/$100 ticks and a peak label crowding the subtitle."}
+]

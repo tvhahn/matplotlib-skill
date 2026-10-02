@@ -1,75 +1,56 @@
 # Vertical Bar Chart
 
-**When to use:** Comparisons across categories, ranked values, model scores.
-**Palette:** `"rocket"` for ≥5 bars (sequential ranking). For ≤4 categorical bars, slice `DIVERGING_COLORBLIND`: `["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n]`.
-**Bar order:** Sort by value descending so the tallest bar is on the left.
+**Use for:** one value per category with few, short category names, or categories with a natural order (years, sizes, ratings).
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
 
-df_sorted = df.sort_values("value", ascending=False)
+# --- Data: aggregate in pandas; natural order if one exists, else sort by value ---
+df = raw.dropna(subset=["category", "value"]).groupby("category", as_index=False)["value"].mean()
+natural_order = pd.api.types.is_numeric_dtype(df["category"])
+df = df.sort_values("category" if natural_order else "value", ascending=natural_order)
+order = df["category"].tolist()
+n = len(df)
 
-# --- Dynamic figsize and format ---
-n_bars = df_sorted.shape[0]
-max_val = df_sorted["value"].max()
-# Detect annotation format from data magnitude
-if max_val < 10:
-    fmt = ".2f"      # small decimal values (e.g., carats, proportions)
-elif max_val < 100:
-    fmt = ".1f"      # medium values (e.g., mpg, scores)
-else:
-    fmt = ",.0f"     # large integers (e.g., dollars, MWh)
-# Scale width for bar count: compact for ≤4, wider for many bars
-fig_w = max(6, 4 + n_bars * 1.0)
+# --- Palette: ≤4 bars DIVERGING_COLORBLIND; ≥5 rocket with the near-white end trimmed ---
+pal = ["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n] if n <= 4 else sns.color_palette("rocket", n + 2)[:n]
+if natural_order and n >= 5:
+    pal = [sns.color_palette("rocket", 6)[2]] * n  # one colour: x position already encodes order
 
-fig, ax = plt.subplots(figsize=(fig_w, 6), dpi=150)
+fmt = ".2f" if df["value"].max() < 10 else ".1f" if df["value"].max() < 100 else ",.0f"
+fig, ax = plt.subplots(figsize=(max(6, 4 + n * 0.9), 6), dpi=150)
+sns.barplot(data=df, x="category", y="value", hue="category", order=order,
+            palette=pal, legend=False, ax=ax)
+for container in ax.containers:
+    ax.bar_label(container, fmt=f"{{:{fmt}}}", padding=3, weight="semibold",
+                 size=12, color="dimgrey")
 
-# Palette selection: DIVERGING_COLORBLIND for ≤4 bars, "rocket" for ≥5
-pal = ["#d73027", "#fc8d59", "#fee090", "#4575b4"][:n_bars] if n_bars <= 4 else "rocket"
+# --- Title + takeaway subtitle (computed from the data) ---
+hi, lo = df.loc[df["value"].idxmax()], df.loc[df["value"].idxmin()]
+ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey",
+             weight="semibold", pad=26)
+ax.annotate(f'{hi["category"]} averages {hi["value"] / lo["value"]:.1f}x {lo["category"]}',
+            xy=(0, 1), xycoords="axes fraction", xytext=(0, 8), textcoords="offset points",
+            ha="left", va="bottom", fontsize=10.5, color="dimgrey")
 
-sns.barplot(x="category", y="value", hue="category", data=df_sorted, palette=pal,
-           order=df_sorted["category"].tolist(), legend=False, ax=ax)
-
-for p in ax.patches:
-    value = p.get_height()
-    space = df_sorted["value"].max() * 0.02
-    _x = p.get_x() + p.get_width() / 2
-    _y = p.get_y() + value + space
-    ax.text(_x, _y, f"{value:{fmt}}", ha="center", va="bottom",
-            weight="semibold", size=12, color="dimgrey")
-ax.set_title("Chart Title", loc="left", fontsize=14, pad=7)
-
-# --- Insight annotation ---
-top = df_sorted.iloc[0]
-runner_up = df_sorted.iloc[1] if len(df_sorted) > 1 else top
-gap = top["value"] - runner_up["value"]
-ax.text(0.98, 0.98, f'{top["category"]} leads — {gap:{fmt}} ahead of {runner_up["category"]}',
-        transform=ax.transAxes, ha="right", va="top",
-        fontsize=9, color="dimgrey", style="italic")
-
+ax.set_xlabel("Category label", fontsize=12, labelpad=8, color="dimgrey")
+ax.set_ylabel("")
+ax.set_yticks([])
+ax.grid(False)
+ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey", labelsize=12)
 sns.despine(left=True, bottom=True)
-ax.grid(False)  # omit grid — bar-end value labels carry the numbers
-ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-ax.set_xlabel("")
-ax.set_ylabel("Descriptive Y-Axis Label (units)", fontsize=13, labelpad=10, color="dimgrey")
 ```
 
 Apply style-reference invariants.
 
 **Signature:**
-- Sort data descending by value before plotting.
-- Palette family: `DIVERGING_COLORBLIND` for ≤4 bars, `"rocket"` for ≥5 bars.
+- Bar-end value labels with the value axis hidden: the labels carry the numbers.
+- Palette family: `DIVERGING_COLORBLIND` for ≤ 4 bars, `rocket` for ≥ 5.
 
 **Guidance:**
-- Always read data from the CSV file using `pd.read_csv()` — never hardcode data values inline. If the data needs aggregation (groupby, filter by year, etc.), perform it in pandas after loading.
-- Default `sns.barplot()` for the bar layer. Always pass `order=df_sorted["column"].tolist()` to enforce descending sort — seaborn ignores DataFrame order and re-sorts by category name without this. Template shows bar-end labels via `ax.patches` loop with `color="dimgrey"`, `weight="semibold"`.
-- Always include an insight annotation (e.g., top performer, gap between #1 and #2). Position in upper-right using `transform=ax.transAxes`. Compute findings dynamically from the data — do not hardcode values.
-- Use classical titles that describe the metric (e.g., "Net Electricity Generation by Source"). Insight annotations carry findings, not the title.
-- Omit y-axis grid (`ax.grid(False)`) when bar-end value labels are present — the labels carry the numbers, making grid lines redundant ink.
-- Widen `figsize` to `(12, 6)` for >8 bars if labels would overlap.
-- Add unit suffixes when values are ambiguous without axis context — omit when y-axis label or title is sufficient.
-- Adapt annotation format to the data domain: `$` prefix for currency, `%` suffix for rates, unit suffix when the y-axis label alone doesn't suffice. Use `f"{value:,.0f}"` for integers, `f"{value:.2f}"` for decimals.
-- Scale `fontsize` on ylabel and title proportionally to figure size.
-- Rotate x-tick labels with `ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")` when labels overlap.
-
-**Customize:** For rotated x-labels, add `ax.set_xticklabels(ax.get_xticklabels(), rotation=90)`. For ≥5 bars, switch palette to `"rocket"`.
+- Order: natural order for ordinal or numeric categories (shoe sizes, months, star ratings 1–5); descending by value for nominal ones. Always pass `order=` — seaborn otherwise sorts alphabetically.
+- When x position already encodes order, a rocket gradient adds nothing: use a single rocket shade, and optionally a darker one for the bar the takeaway is about.
+- Label the x-axis with what the categories are ("Star rating"); put units in the title or value labels, since the value axis is hidden.
+- Show `n=` under tick labels (`f"{cat}\nn={count}"`) when some groups are tiny — readers should know a bar rests on 3 observations.
+- Long or many labels (> 8 bars): rotate 30–45° with `ha="right"`, or switch to P1.
+- Subtitle states a computed comparison (ratio, gap, trend across the order). Annotate a single bar with `ax.annotate` instead when the story is about one item.

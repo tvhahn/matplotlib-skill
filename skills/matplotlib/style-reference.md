@@ -1,296 +1,212 @@
 # Style Reference
 
-Complete aesthetic specification for Tim's publication-quality matplotlib/seaborn charts.
-Claude reads this file as reference material when generating chart code.
+The aesthetic every chart follows. Read it before writing chart code.
 
-## Identity vs. Defaults
+## Contents
+- Invariants (every chart)
+- Identity vs. defaults
+- Colour: choosing a palette, palette definitions
+- Spines, grid, panel frames
+- Typography, titles and takeaways
+- Annotations
+- Legends
+- Multi-panel conventions
+- Figure sizing
+- Saving
 
-This spec distinguishes two kinds of values:
+## Invariants
 
-**Identity tokens (immutable)** — these define the visual signature and must not change:
-- Palette hex codes and family assignments (Blues_d, RdBu_r, DIVERGING_COLORBLIND, cubehelix, etc.)
-- Font family: DejaVu Sans
-- Despine convention: `sns.despine(left=True, bottom=True)`
-- Annotation color: `"dimgrey"`
-- Legend frame: `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"`
-- Tick styling: `length=0, labelcolor="dimgrey"`
-- DPI: 150 standard / 300 publication
-- Save format: PDF+PNG with `bbox_inches="tight"`
-- Panel frame (when used): `ax.patch` with `edgecolor="lightgrey"`, `linewidth=0.8`
-
-**Default values (flexible)** — these appear in templates as good starting points but should adapt to data properties:
-- `fontsize` on titles, labels, annotations — scale with figure size and content density
-- `alpha` on overlapping elements — adjust for data density
-- `figsize` tuples — scale for category count, label length, panel count
-- `pad`, `labelpad`, `wspace`, `hspace` — adjust for content spacing needs
-- `DOT_SIZE`, `linewidth`, `s` — scale for data volume and figure size
-- Format strings (`f"{value:.1f}"`, `f"{value:,.0f}"`) — match data type and precision
-
-When a pattern template shows a specific numeric value (e.g., `fontsize=14`, `alpha=0.55`, `DOT_SIZE=150`), treat it as a sensible default, not an immutable constraint. Adapt based on data properties, figure size, and content density. Only values listed in a pattern's **Signature** section define the visual identity.
-
-## Invariants Shorthand
-
-Pattern files say "Apply style-reference invariants" instead of repeating these.
-Every chart MUST include:
+Every chart includes these. Pattern files say "Apply style-reference invariants"
+instead of repeating them.
 
 1. `sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")`
-2. `sns.despine(left=True, bottom=True)`
-3. `dpi=150` (300 only on explicit publication request)
-4. `bbox_inches="tight"` on every `savefig`; PDF+PNG dual save
+2. `sns.despine(left=True, bottom=True)` — all spines removed
+3. `ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")`
+4. All text other than data colours is `"dimgrey"`: title, axis labels, annotations, legend text, colorbar label and ticks
 5. Legend frame: `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey"`
-6. Annotation color: `"dimgrey"`
-7. Tick styling: `ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")`
-8. Data: read from CSV/NPZ; apply `df.dropna()` after loading
+6. `savefig(..., dpi=150, bbox_inches="tight")` to both PDF and PNG (300 DPI only on explicit publication request; PNG only for "quick"/"exploratory")
+7. Data is read from the file and aggregated in code; missing values are dropped only in the plotted columns (`df.dropna(subset=[...])`)
 
-## Base Configuration
+## Identity vs. defaults
 
-Always inline this style setup block at the top of the plotting section:
+**Identity (keep):** the palette families and hex codes below, DejaVu Sans, the
+despine convention, dimgrey text, the legend frame, zero-length ticks, 150/300 DPI,
+PDF+PNG with tight bbox, and the lightgrey panel frame when one is used.
+
+**Defaults (adapt):** font sizes, alpha, figsize, padding and spacing, marker and
+line sizes, number formats. Template values are starting points; scale them to
+category count, label length, value range, and point density. Only a pattern's
+**Signature** items are fixed.
+
+## Colour
+
+### Choosing a palette
+
+Match the palette to what colour encodes:
+
+| Colour encodes | Use | Avoid |
+|---|---|---|
+| Nothing (one series) | One colour: `pal[3]` cubehelix, a mid `Blues_d` shade, or grey | Gradients that only repeat bar length |
+| Emphasis on one or two items | Grey (`#bdbdbd`) for the rest + `ACCENT_RED` or `#4575b4` | Many saturated colours |
+| Unordered categories (≤ 6) | `CATEGORICAL`, taken in order; add marker or line style from the 4th category on | Sequential palettes (cubehelix, rocket, Blues) — adjacent shades are indistinguishable |
+| Ordered magnitude / rank | Sequential: cubehelix, `Blues_d`, `rocket` | — |
+| Signed values around zero | Diverging: `RdBu_r` centred at 0, or red/blue from `DIVERGING_COLORBLIND` | — |
+
+With more than six categories, colour stops working: highlight the few that matter
+and grey the rest, facet (P8), or label directly. When a sequential palette's light
+end nears white, trim it: `sns.color_palette("rocket", n + 2)[:n]`.
+
+### Palette definitions
 
 ```python
-sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
-```
-
-Then override with per-axes cleanup (despine, grid off, tick marks off) as shown below.
-
-## Color Palettes
-
-### DIVERGING_COLORBLIND
-```python
-["#d73027", "#fc8d59", "#fee090", "#4575b4"]
-# redish, orangeish, yellowish, blueish
-```
-**Use for:** Comparisons, predicted-vs-actual, classification boundaries, multi-class overlays.
-Source: ColorBrewer RdYlBu diverging, confirmed colorblind-safe.
-
-### CUBEHELIX_6
-```python
+DIVERGING_COLORBLIND = ["#d73027", "#fc8d59", "#fee090", "#4575b4"]  # red, orange, yellow, blue (ColorBrewer RdYlBu)
 pal = sns.cubehelix_palette(6, rot=-0.25, light=0.7)
-# Hex: ['#90c1c6', '#72a5b4', '#58849f', '#446485', '#324465', '#1f253f']
+# ['#90c1c6', '#72a5b4', '#58849f', '#446485', '#324465', '#1f253f']; pal[3] medium, pal[5] darkest
+CATEGORICAL = ["#d73027", "#4575b4", "#555555", "#fc8d59", "#91bfdb", "#1f253f"]
+# red, blue, dark grey, orange, light blue, navy — ordered so the first 3 are maximally distinct
+ACCENT_RED = "#bd0c0c"                    # emphasis on one element among grey
+TRAFFIC_LIGHT = ["#33a02c", "#fdbf6f", "#e31a1c"]  # pass / warn / fail
+# Named seaborn/matplotlib maps:
+# "Blues_d"  ranked horizontal bars     "rocket"  ranked vertical bars, pivot heatmaps
+# "RdBu_r"   correlation heatmaps (vmin=-1, vmax=1, center=0)
+# "inferno"  spectrograms / pcolormesh   "Greys_r" monochrome bars
 ```
-**Use for:** General sequential data, line plots, lollipop charts, PR/ROC curves.
-Access individual colors with `pal[3]` (medium), `pal[5]` (darkest).
 
-### GREYSCALE
-```python
-pal = sns.color_palette("Greys_r")
-```
-**Use for:** Monochromatic bar charts, neutral backgrounds.
-Pair with `ACCENT_RED` for selective emphasis on one bar.
+`#fee090` (yellow) is too light for thin lines or small markers on white; use it
+only for filled areas or swap in `#555555`.
 
-### BLUES_D
-```python
-palette="Blues_d"
-```
-**Use for:** Ranked/percentage horizontal bar charts. Pass directly to seaborn `palette=` parameter.
+## Spines, grid, panel frames
 
-### ROCKET
-```python
-palette="rocket"
-```
-**Use for:** Vertical bar charts showing ranked scores. Not for correlation heatmaps (use `RdBu_r` instead).
-
-### RdBu_r
-```python
-cmap="RdBu_r"
-```
-**Use for:** Correlation heatmaps. Diverging palette — positive correlations show red/warm, negative show blue/cool. Always pair with `vmin=-1, vmax=1, center=0`.
-
-### INFERNO
-```python
-cmap="inferno"
-```
-**Use for:** Spectrograms, heatmaps via `pcolormesh`. Pass to `cmap=` parameter.
-
-### ACCENT_RED
-```python
-"#bd0c0c"
-```
-**Use for:** Selective emphasis on a single bar or element among otherwise grey/neutral items.
-
-### TRAFFIC_LIGHT
-```python
-["#33a02c", "#fdbf6f", "#e31a1c"]
-# green, amber, red
-```
-**Use for:** Pass/warn/fail status indicators, threshold-based coloring.
-
-## Spine & Grid Rules
-
-Remove all spines and grid by default, then selectively re-enable:
+Despine everything, then add back only what the reader needs:
 
 ```python
 sns.despine(left=True, bottom=True)
-ax.grid(False)
+ax.grid(False)                                  # default when values are labelled
+ax.grid(axis="y", alpha=0.7, linewidth=1)       # value axis only, when no value labels
 ```
 
-When a single-axis grid improves readability (e.g., bar charts):
-```python
-ax.grid(alpha=0.7, linewidth=1, axis="x")  # horizontal bars (omit when value labels are present)
-ax.grid(alpha=0.7, linewidth=1, axis="y")  # vertical bars
-```
+Horizontal bars with value labels: no grid, a baseline instead —
+`ax.axvline(0, color="lightgrey", linewidth=0.8, zorder=0)`.
+Spectrograms and heatmaps: `sns.despine(left=True, bottom=True, right=True)`.
 
-For horizontal bar charts with value labels, disable grid but add a baseline:
-```python
-ax.axvline(x=0, color="lightgrey", linewidth=0.8, zorder=0)  # anchors bar origins
-ax.grid(False)
-```
-
-For spectrograms/heatmaps, also remove the right spine:
-```python
-sns.despine(left=True, bottom=True, right=True)
-```
-
-### Panel Frames
-
-A subtle rectangular border around an axes background patch. This frames the
-chart visually without re-enabling axis spines:
+**Panel frame** — a lightgrey border from the axes patch (spines stay off):
 
 ```python
-for ax in axes_list:
-    ax.patch.set_edgecolor("lightgrey")
-    ax.patch.set_linewidth(0.8)
+ax.patch.set_edgecolor("lightgrey")
+ax.patch.set_linewidth(0.8)
 ```
 
-Apply **after** `sns.despine()`. Spines remain removed; the border comes from
-the axes background patch, not the spine objects.
+Use for multi-panel layouts, curves or point clouds that float in the plot area, and
+bounded axes such as 0–1 probabilities. Omit for bars, lollipops, and heatmaps,
+which define their own edges.
 
-**When to use a frame:**
-- Multi-panel layouts (always — frames separate panels visually)
-- Charts where data floats in the coordinate space without touching the edges (curves, violin shapes, scatter clouds)
-- Charts with bounded semantic axes (e.g., 0–1 probability ranges)
+## Typography, titles and takeaways
 
-**When to omit a frame:**
-- Bar charts (bars anchor to a baseline, creating their own visual edge)
-- Lollipop charts (lines span the chart width, creating horizontal structure)
-- Heatmaps (the cell grid creates its own visual boundary)
-- Any chart where data elements fill the plot area
+- DejaVu Sans throughout (set by `sns.set_theme`)
+- Title 12–16 pt, `loc="left"`, `color="dimgrey"`, `weight="semibold"`
+- Axis labels 11–13 pt, dimgrey; include units: "Revenue ($M)"
+- Value labels `"semibold"`/`"medium"`; descriptive text `"normal"`
+- Math with raw strings: `r"$R^2$"`, panel labels `r"$\bf{(a)}$"`
+- Escape literal dollar signs in any text as `\$` (`f"\${v:,.0f}"`): two unescaped `$` in one string switch on mathtext and render "$6 to $230" as italic "6to230"
 
-The pattern's Guidance section provides chart-type-specific recommendations. When not specified, omit the frame (the existing default).
+**Title + subtitle.** The title names what is plotted ("On-Time Rate by
+Airline"). When the chart has a clear takeaway, state it in a one-line subtitle
+directly under the title, where the reader starts:
 
-## Typography
-
-- **Font family:** DejaVu Sans (set via `sns.set_theme(font="DejaVu Sans")`)
-- **Title size:** 12-16pt depending on figure complexity
-- **Axis label size:** 12-14pt
-- **Annotation text color:** `"dimgrey"` -- used for value labels, descriptions, score annotations
-- **Annotation weight:** `"medium"` or `"semibold"` for values, `"normal"` for descriptions
-- **LaTeX notation:** Use raw strings for math: `r"$R^2$"`, `r"$\bf{(a)}$"`
-
-## Figure Sizing Lookup
-
-| Chart Type | figsize | Notes |
-|---|---|---|
-| Single bar chart | (4, 7) | Narrow, tall for horizontal bars |
-| Side-by-side bars (2 panel) | (14, 7) | Wide for comparison |
-| Correlation bars (stacked 2 panel) | (10, 12) | Tall for stacked vertical |
-| Violin + strip (2 panel) | (12, 5) | Wide, short |
-| Time series (2x2 grid) | (11, 8) | Square-ish |
-| Time series (3x3 grid) | (14, 12) | Large square |
-| Spectrogram (1x2) | (11, 4) | Wide, short |
-| PR/ROC curves (1x2) | (12, 6) | Wide, moderate height |
-| Lollipop chart | (10, 6) | Moderate |
-| Decision boundary | (8, 6) | Moderate with aspect=1 |
-| Simple single panel | (10, 6) | General default |
-
-## Saving Convention
-
-Always save with tight bounding box.
-
-**Standard render** (default):
 ```python
-plt.savefig("./figures/chart_name.pdf", dpi=150, bbox_inches="tight")
-plt.savefig("./figures/chart_name.png", dpi=150, bbox_inches="tight")
+ax.set_title("On-Time Rate by Airline", loc="left", fontsize=14,
+             color="dimgrey", weight="semibold", pad=26)
+ax.annotate("Only two airlines beat the 80% target; the worst misses it by 14 points",
+            xy=(0, 1), xycoords="axes fraction", xytext=(0, 8),
+            textcoords="offset points", ha="left", va="bottom",
+            fontsize=10.5, color="dimgrey")
 ```
 
-**Publication render** (only when user explicitly requests "publication", "300 DPI", or "high resolution"):
+Increase `pad` if the subtitle wraps to two lines. For multi-panel figures, put the
+takeaway under `fig.suptitle` with `fig.text`, and check the spacing.
+
+## Annotations
+
+An annotation earns its place when it tells the reader something they would not
+get from the marks and axis alone: a comparison ("3x"), a turning point, a record,
+an outlier, a caveat. Place it **at the data it describes**:
+
 ```python
-plt.savefig("./figures/chart_name.pdf", dpi=300, bbox_inches="tight")
-plt.savefig("./figures/chart_name.png", dpi=300, bbox_inches="tight")
+ax.annotate(f"Peak: {peak_val:,.0f} ({peak_year})", xy=(peak_year, peak_val), xytext=(-60, 10),
+            textcoords="offset points", ha="right", fontsize=10, color="dimgrey",
+            arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8))
 ```
 
-**Exploratory render** (user says "quick plot"):
+- Compute annotated values from the data; never type them in.
+- One to three annotations per panel. If every mark is labelled, the reader cannot
+  tell what matters.
+- Don't restate a value that is already printed on a bar.
+- Avoid a detached footer sentence in a figure corner; use the subtitle or put the
+  note at the data.
+- Supporting marks (raw points, fold curves, context lines): grey, `alpha≈0.4`.
+
+**Value labels on bar ends** (horizontal bars):
+
 ```python
-plt.savefig("./figures/chart_name.png", dpi=150, bbox_inches="tight")
+for p in ax.patches:
+    ax.text(p.get_width() + pad, p.get_y() + p.get_height() / 2, f"{p.get_width():.1f}%",
+            ha="left", va="center", weight="semibold", size=11, color="dimgrey")
 ```
 
-## Legend Convention
+`ax.bar_label(container, fmt=..., padding=3, color="dimgrey")` is equivalent and
+handles grouped bars. Match format to data: `f"{v:,.0f}"` large integers,
+`f"{v:.2f}"` small decimals, `$` for currency, `%` for rates.
+
+**Metric box** (RMSE/R², AUC) in the top-left of a panel:
+
+```python
+ax.text(0.03, 0.95, f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}", transform=ax.transAxes,
+        va="top", ha="left", fontsize=9, color="dimgrey")
+```
+
+## Legends
 
 ```python
 ax.legend(frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey",
-          labelcolor="dimgrey", bbox_to_anchor=(0.6, 1.05), ncol=2, fontsize="x-large")
+          labelcolor="dimgrey", loc="upper left")
 ```
 
-- **Always:** `frameon=True, facecolor="white", framealpha=0.8, edgecolor="lightgrey"` (white box with subtle outline)
-- **Text color:** `labelcolor="dimgrey"` inline in the legend constructor (requires mpl>=3.3)
-- **Position:** `bbox_to_anchor` for outside placement, or `loc="lower right"` / `loc="upper left"` for inside
+- Prefer direct labels (text at line ends, labels on bars) when there are few series;
+  then drop the legend rather than showing both.
+- Place the legend where it covers no data — an empty corner, or outside with
+  `bbox_to_anchor`. A horizontal legend above the plot (`ncol=n`) works well for
+  2–4 entries.
+- Single-series charts need no legend.
 
-## Subplot Convention
+## Multi-panel conventions
 
-### Bold letter prefixes in titles
+- Bold panel letters in titles: `ax.set_title(r"$\bf{(a)}$" + "  Description", loc="left", fontsize=12)`,
+  generated with `chr(ord("a") + i)`.
+- `gridspec.GridSpec(rows, cols)`; tune `wspace`/`hspace` to the content.
+- Share y-limits when panels show the same metric so they can be compared.
+- y-label on the left column only, x-label on the bottom row only.
+- Hide unused grid cells with `ax.set_visible(False)`.
+
+## Figure sizing
+
+| Chart | figsize |
+|---|---|
+| Horizontal bars | (6–8, 0.5 × n + 1.5) |
+| Vertical bars | (max(6, 4 + n), 6) |
+| Line / time series | (11, 6) |
+| Scatter | (10, 6.5) |
+| Violin + strip | (10–12, 1.2 × n + 2) |
+| Lollipop | (10, 0.9 × n + 1) |
+| Heatmap | (1.2 × n + 2, n + 1) |
+| PR/ROC pair | (12, 5.5) |
+| Grids 2x2 / 3x2 / 3x3 | (10, 8) / (14, 9) / (14, 12) |
+
+## Saving
+
 ```python
-ax.set_title(r"$\bf{(a)}$" + " Description Here", loc="left", fontsize=12)
+Path("./figures").mkdir(exist_ok=True)
+for ext in ("pdf", "png"):
+    fig.savefig(f"./figures/chart_name.{ext}", dpi=150, bbox_inches="tight")
 ```
 
-Use counter-based generation for grids:
-```python
-labels = [chr(ord('a') + i) for i in range(n_panels)]
-# produces: ['a', 'b', 'c', ...]
-```
-
-### GridSpec for complex layouts
-```python
-from matplotlib import gridspec
-
-fig = plt.figure(figsize=(14, 12), dpi=150)
-gs = gridspec.GridSpec(3, 3)
-ax1 = plt.subplot(gs[0, 0])
-# ...
-# Adjust wspace/hspace for content density — no single "right" value
-gs.update(wspace=0.3, hspace=0.4)
-```
-
-### Title padding
-```python
-ax.set_title("Title", pad=7)
-```
-
-## Annotation Patterns
-
-### Value labels on bar ends
-```python
-for p in ax.patches:
-    space = 0.5
-    _x = p.get_x() + p.get_width() + space
-    _y = p.get_y() + p.get_height() / 2
-    value = p.get_width()
-    ax.text(_x, _y, f"{value:.1f} %", ha="left", va="center",
-            weight="semibold", size=12)
-```
-
-### Metric text box (RMSE/R2)
-```python
-x_min, x_max = ax.get_xlim()
-y_min, y_max = ax.get_ylim()
-print_text = f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}"
-ax.text(
-    (x_max - x_min) * 0.03 + x_min,
-    y_max - (y_max - y_min) * 0.05,
-    print_text,
-    fontsize=9, fontweight="normal",
-    verticalalignment="top", horizontalalignment="left",
-    bbox={"facecolor": "gray", "alpha": 0.0, "pad": 6},
-)
-```
-
-### Supporting visual elements
-Use `alpha=0.4` for scatter points, background lines, and other non-primary elements:
-```python
-ax.scatter(x, y, alpha=0.4, c="grey", edgecolors="none", s=2)
-```
-
-### Remove tick marks and soften tick labels
-```python
-ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-```
-
-The `labelcolor="dimgrey"` keeps tick labels consistent with annotations and legend text. Apply to all patterns.
+Publication request: `dpi=300`. Quick/exploratory: PNG only.

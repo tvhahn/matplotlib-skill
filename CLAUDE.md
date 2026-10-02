@@ -12,9 +12,10 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 
 ### Key Paths
 
-- `skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9 (canonical; `.claude/skills/matplotlib` is a symlink)
+- `skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9 + other-charts.md, scripts/check_figure.py (canonical; `.claude/skills/matplotlib` is a symlink)
 - `data/` — datasets.yaml manifest, raw/ datasets
-- `scripts/` — chart-test-container.sh, evaluate_skill.py
+- `scripts/` — benchmark.py (+ benchmark_prompts.yaml, judge_rubric.md), chart-test-container.sh, evaluate_skill.py
+- `tests/test_patterns.py` — executes every pattern template on real data and lints the figure
 - `docs/gallery/` — key iteration snapshots (00-original-inspiration, 50-template-improvements-v2, TEMPLATE.md)
 - `gallery-archive/` — all 51 iteration entries (local-only, git-excluded via `.git/info/exclude`)
 
@@ -52,7 +53,21 @@ All charts follow the aesthetic defined in `skills/matplotlib/style-reference.md
 ## Verification
 
 ```bash
-# Primary: Claude Code generates charts from minimal prompts (Docker required)
+# Primary (no Docker): multi-model benchmark in isolated clean rooms outside the repo
+uv run scripts/benchmark.py --label v2                          # 12 prompts × Sonnet/Opus/Haiku
+uv run scripts/benchmark.py --label quick --models claude-sonnet-5-5 --only p1-titanic,x-stocks-line
+uv run scripts/benchmark.py --label noskill --no-skill --models claude-sonnet-5-5
+uv run scripts/benchmark.py --recheck logs/bench/v2             # re-score with current checker
+# Then judge PNGs with vision subagents using scripts/judge_rubric.md
+
+# Pattern templates must run clean (fast, no Claude calls)
+uv run --no-project --with pytest --with matplotlib --with seaborn --with pandas --with numpy \
+    pytest tests/test_patterns.py -q
+
+# Lint any chart script (also what the skill runs in its workflow)
+uv run skills/matplotlib/scripts/check_figure.py path/to/chart.py
+
+# Docker clean room (original harness)
 scripts/chart-test-container.sh                    # all 9 prompts, random from pools
 scripts/chart-test-container.sh --quick            # 5 prompts, random from pools
 scripts/chart-test-container.sh --fixed            # all 9 prompts, original defaults
@@ -96,10 +111,11 @@ grep 'dpi=' skills/matplotlib/patterns/*.md
 
 ## Future Work
 
-Deferred patterns not yet in `patterns/`:
-- Scatter plot (standalone, not decision-boundary)
-- Grouped bar chart
-- `fill_between` area chart
+`patterns/other-charts.md` covers line, scatter, histogram, and grouped bar with short templates.
+Candidates for full patterns if usage warrants: stacked/100% bar, `fill_between` area, slope chart.
+
+Benchmark isolation note: Claude Code discovers skills in ancestor directories, so clean rooms
+must live outside this repo (benchmark.py uses /tmp/matplotlib-skill-bench).
 
 ## Reference
 

@@ -113,6 +113,7 @@ claude --add-dir /path/to/matplotlib-skill
 | P7 Heatmap | Correlation matrices, spectrograms |
 | P8 Multi-Panel | Multi-panel grid layouts (2x2, 3x2, 3x3) |
 | P9 PR/ROC | PR/ROC classification evaluation curves |
+| Other charts | Line, scatter, histogram, grouped bar (`patterns/other-charts.md`) |
 
 ## Design Philosophy
 
@@ -148,7 +149,16 @@ See [`data/datasets.yaml`](data/datasets.yaml) for the full manifest with attrib
 
 ## Verification
 
+Every chart the skill makes is linted by `skills/matplotlib/scripts/check_figure.py`, which runs the script and measures text collisions, legends covering data, labels spilling into other panels, and style drift — things that are easy to miss in a downsized PNG.
+
 ```bash
+# Multi-model benchmark in isolated clean rooms (no Docker; needs the claude CLI)
+uv run scripts/benchmark.py --label mytest --models claude-sonnet-5-5,claude-opus-5-5,claude-haiku-4-5
+
+# Every pattern template runs on real data and passes the checker
+uv run --no-project --with pytest --with matplotlib --with seaborn --with pandas --with numpy \
+    pytest tests/test_patterns.py -q
+
 # Generate charts in a Docker clean room (Docker required)
 scripts/chart-test-container.sh --quick            # 5 prompts, random from pools
 scripts/chart-test-container.sh                    # all 9 prompts, random from pools
@@ -163,7 +173,7 @@ uv run scripts/evaluate_skill.py --check-renders
 Contributions are welcome — whether it's improving an existing pattern or adding an entirely new chart type. Some ideas to get started:
 
 - **Improve a pattern:** Refine annotations, spacing, or palette choices in any of the 9 existing patterns
-- **Add a new chart type:** Scatter plot, grouped bar chart, and `fill_between` area chart are all on the wishlist — or propose your own
+- **Add a new chart type:** Line, scatter, histogram, and grouped bar have short templates in `other-charts.md`; stacked bars, `fill_between` area charts, and slope charts are on the wishlist
 - **Add datasets:** New public datasets that pair well with existing or new patterns
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on modifying patterns, adding new ones, and running tests.

@@ -1,7 +1,6 @@
-# Decision Boundary / Scatter
+# Decision Boundary
 
-**When to use:** Classification visualization, probability maps, cluster visualization.
-**Palette:** Colorblind diverging (`#d73027`, `#4575b4`, `#fc8d59`).
+**Use for:** a classifier's decision regions and confidence over two features. For an ordinary scatter plot use `other-charts.md`.
 
 ```python
 from matplotlib.lines import Line2D
@@ -33,7 +32,7 @@ fig_h = base * max(1.0, 1.0 / data_aspect)
 
 fig, ax = plt.subplots(figsize=(fig_w, fig_h), dpi=150)
 
-# probability-sized dots ONLY — never use pcolormesh or contourf
+# probability-sized background dots (the pattern's look; not contourf/pcolormesh)
 colormap = np.array(colors[:len(class_names)])
 ax.scatter(mesh_points[:, 0], mesh_points[:, 1], c=colormap[yy_hat.ravel()],
            alpha=0.3, s=25 * yy_prob.ravel(), linewidths=0)
@@ -49,17 +48,19 @@ ax.scatter(X[:, 0], X[:, 1], c=colormap[y], s=50,
 
 ax.set_ylabel(r"$x_1$")
 ax.set_xlabel(r"$x_0$")
-ax.set_aspect(1)  # mandatory — decision boundaries must be square
+ax.set_aspect(1)
 ax.grid(False)
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")
-ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7)
+ax.set_title("Decision Boundary", fontsize=14, loc="left", pad=7, color="dimgrey", weight="semibold")
 
-# --- Insight annotation (per-class counts from data) ---
-class_counts = [np.sum(y == i) for i in range(len(class_names))]
-counts_str = " · ".join(f"{n} ({c})" for n, c in zip(class_names, class_counts))
-ax.text(0.02, 0.02, f"{len(class_names)} classes · {counts_str}",
-        transform=ax.transAxes, ha="left", va="bottom",
-        fontsize=9, color="dimgrey", style="italic")
+# --- Insight: how many points fall in another class's region (nearest mesh cell) ---
+ix = np.abs(xx0[0][None, :] - X[:, [0]]).argmin(axis=1)
+iy = np.abs(xx1[:, 0][None, :] - X[:, [1]]).argmin(axis=1)
+wrong = yy_hat[iy, ix] != y
+ax.scatter(X[wrong, 0], X[wrong, 1], s=110, facecolors="none", edgecolors="dimgrey",
+           linewidths=1.2, zorder=4)
+ax.text(0.02, 0.02, f"{wrong.sum()} of {len(y)} points (circled) fall in another class's region",
+        transform=ax.transAxes, ha="left", va="bottom", fontsize=9.5, color="dimgrey")
 
 # class legend
 class_handles = [Line2D([0], [0], marker="o", color="w", markerfacecolor=c,
@@ -86,7 +87,7 @@ Apply style-reference invariants.
 
 **Signature:**
 - Colors: DIVERGING_COLORBLIND `["#d73027", "#4575b4", "#fc8d59"]`. For 2-class, use `["#d73027", "#4575b4"]`.
-- Background uses probability-sized dots — not `contourf` or `pcolormesh` filled regions.
+- Background of probability-sized dots, not `contourf`/`pcolormesh` fills.
 - Two separate legends: class legend and confidence legend. Use `ax.add_artist()` to keep both visible.
 - `set_aspect(1)` for square proportions.
 
@@ -94,10 +95,9 @@ Apply style-reference invariants.
 - Default: load pre-computed data from NPZ (`xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names`). Allow sklearn import when the user provides raw data and explicitly requests fitting.
 - Position legends outside with `bbox_to_anchor`; adjust positions to avoid occlusion with the data.
 - Contour lines use `colors=colors[:len(class_names)]` — the same DIVERGING_COLORBLIND hex codes, not grey or black.
-- Dynamic figsize is computed from data aspect ratio in the template. Do not hardcode `figsize=(8, 6)` — use the template's `data_aspect` computation.
+- Size the figure from the data aspect ratio as the template does, so `set_aspect(1)` doesn't leave large empty margins.
 - Use descriptive feature names instead of `$x_0$`/`$x_1$` when feature names are available and meaningful.
-- The precomputed mesh is ~50×50 (~2,500 dots). The `s=25 * prob` linear scaling is tuned for this density. Do not subsample or resize the mesh.
+- `s=25 * prob` suits a ~50×50 mesh; scale `s` inversely with mesh density for finer meshes.
 - Use classical titles that describe the chart (e.g., "KNN Decision Boundary — Iris Species"). Insight annotations carry findings, not the title.
-- Always include an insight annotation: class count + sample size at minimum. If class_names are descriptive, mention the most/least separated classes. Position in lower-left using `transform=ax.transAxes`.
+- The template circles points that sit in another class's region and counts them — a finding the reader can't get from the legend. Move the note to whichever corner is empty.
 
-**Customize:** Assumes `xx0`, `xx1`, `yy_hat`, `yy_prob`, `X`, `y`, `class_names` are already in memory.

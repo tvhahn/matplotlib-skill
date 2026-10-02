@@ -1,0 +1,2216 @@
+[
+  {
+    "id": "p1-titanic",
+    "kind": "pattern",
+    "pattern": "P1",
+    "prompt": "horizontal bar chart of survival rate by passenger class from data/raw/public/titanic.csv",
+    "checks": [
+      "Survival rates are ~63% (1st), ~47% (2nd), ~24% (3rd). Values near 68/80/50% mean rows were wrongly dropped by a blanket dropna()."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.08504990000000001,
+    "turns": 10,
+    "duration_s": 41.8,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_by_class.pdf",
+      "titanic_survival_by_class.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P1-horizontal-bar.md",
+      "bash: python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p1-titanic/workspace/.claude/skills/matplotlib/scripts/check_figu"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Read": 4,
+      "Write": 1,
+      "Bash": 2
+    },
+    "final_message": "**Step 7: Report**\n\n\u2705 All checks passed! The chart is publication-ready.\n\n**Files created:**\n- `/tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p1-titanic/workspace/titanic_survival_by_class.py` \u2014 reproducible script\n- `./figures/titanic_survival_by_class.pdf` and `.png` \u2014 chart at 150 DPI\n\n**Takeaway:**\nFirst Class passengers had a 63% survival rate \u2014 2.6\u00d7 the 24.2% rate for Third Class. The stark gradient across classes reflects historical accounts of evacuation priority and lifeboat access during the disaster.\n\n**What I see:**\n- Title and subtitle clearly state what is shown\n- Three bars ranked top-to-bottom by survival rate\n- First Class (highest) highlighted in darker blue; other classes in lighter blue\n- Value labels at bar ends so no axis reading needed\n- Clean baseline at 0; no grid clutter\n\nOne improvement I'd make next: add sample sizes (e.g., \"63.0% (n=136)\") to the value labels so readers know whether these percentages are based on large or small groups \u2014 First Class had only 216 passengers aboard.",
+    "checker": {
+      "titanic_survival_by_class.py": {
+        "error": "Chart saved to ./figures/titanic_survival_by_class.pdf and .png\n{\n  \"script\": \"titanic_survival_by_class.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        7.0,\n        3.25\n      ],\n      \"n_axes\": 1,\n      \"issues\": [],\n      \"saved_as\": [\n        \"titanic_survival_by_class.pdf\",\n        \"titanic_survival_by_class.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "p2-mpg",
+    "kind": "pattern",
+    "pattern": "P2",
+    "prompt": "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv",
+    "checks": [
+      "Five cylinder groups (3, 4, 5, 6, 8); 8-cylinder average is ~158 hp, 4-cylinder ~78 hp."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.08985370000000001,
+    "turns": 10,
+    "duration_s": 47.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "horsepower_by_cylinders.pdf",
+      "horsepower_by_cylinders.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P2-vertical-bar.md",
+      "bash: python3 .claude/skills/matplotlib/scripts/check_figure.py plot_hp_by_cyl.py"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Read": 3,
+      "Bash": 3,
+      "Write": 1
+    },
+    "final_message": "rity:** Title and values match the data; bars start at zero with natural cylinder order (3\u20138). **Principles:** Position encodes order; subtitle states a computed comparison (8-cyl vs. 4-cyl, 2.0x ratio); value labels eliminate need for mental arithmetic. **Layout:** Balanced whitespace, no overlaps. **Pattern match:** P2 signature present \u2014 bar-end labels, hidden value axis, single colour, takeaway annotation.\n\n## 7. Report\n\n```\n\u2713 1. Understand the request and the one thing the reader should take away\n\u2713 2. Read style-reference.md and the matching pattern file\n\u2713 3. Inspect the data (columns, dtypes, missing values, category order)\n\u2713 4. Write the script into the working directory and run it\n\u2713 5. Run check_figure.py and fix every ERROR\n\u2713 6. Look at the PNG and fix what the checker cannot see (\u2264 3 rounds total)\n\u2713 7. Report files, the takeaway, and one improvement you would make next\n```\n\n**Files saved:**\n- `plot_hp_by_cyl.py` (reproducible script)\n- `./figures/horsepower_by_cylinders.pdf`\n- `./figures/horsepower_by_cylinders.png`\n\n**Takeaway:** Engine power scales steadily with cylinder count. 8-cylinder engines deliver about **2.0\u00d7 the average horsepower** of 4-cylinder engines (158 vs. 78 hp). The 3-cylinder segment is a small outlier at 99 hp.\n\n**One improvement:** Add sample size labels under x-ticks (e.g., `3\\nn=4`) to show that the 3-cylinder group is tiny (only 4 cars), which is why it's not the clear minimum \u2014 the takeaway would then emphasize the main progression: 4\u21926\u21928.",
+    "checker": {
+      "plot_hp_by_cyl.py": {
+        "script": "plot_hp_by_cyl.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              8.5,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "horsepower_by_cylinders.pdf",
+              "horsepower_by_cylinders.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p3-globaltemp",
+    "kind": "pattern",
+    "pattern": "P3",
+    "prompt": "time series bar chart with rolling mean from data/raw/precomputed/p3/global_temp.csv \u2014 columns are year, value, rolling",
+    "checks": [
+      "Covers ~1880 to ~2025 with recent years clearly warmest."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.10107770000000002,
+    "turns": 11,
+    "duration_s": 56.9,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "global_temp_timeseries.pdf",
+      "global_temp_timeseries.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P3-time-series.md",
+      "bash: python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p3-globaltemp/workspace/.claude/skills/matplotlib/scripts/check_f"
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Skill": 1,
+      "Bash": 3,
+      "Write": 1
+    },
+    "final_message": "placed\n- Bars (1880\u20132025) colored red (warming) and blue (cooling) relative to zero baseline\n- Dark rolling mean line smoothly shows the 10-year trend\n- Record annotation (+1.28\u00b0C, 2024) points to the highest bar\n\n**Integrity check:**\n- \u2713 Correct data: annual temperature anomalies 1880\u20132025\n- \u2713 Axes sensible: \u20130.5 to +1.25\u00b0C range fits all data\n- \u2713 Reference line at zero (anomaly baseline)\n- \u2713 P3 pattern signature intact: diverging bar colors, dark rolling line, legend built from Patch + Line2D\n\n**Principles:**\n- \u2713 Trend unmistakable: rolling mean rises from \u20130.25\u00b0C (1920s) to +1.0\u00b0C (2020s)\n- \u2713 Takeaway obvious: global temperature warming accelerates, especially post-1990\n- \u2713 All text dimgrey; bars transparent so overlaps visible; no mental arithmetic needed\n\n---\n\n## 7. Report\n\n**Files saved:**\n- `./figures/global_temp_timeseries.pdf`\n- `./figures/global_temp_timeseries.png`\n\n**Takeaway:** \nGlobal temperatures show a strong warming trend over 145 years. The 10-year rolling mean rises ~1.3\u00b0C from the coldest period (1905) to the warmest recent years (2024), with acceleration visible from 1980 onward. Annual variability (blue/red bars) remains substantial, but the dominant signal is unambiguous warming.\n\n**One refinement for next time:**\nAdd a subtle annotation or shading for a turning point (e.g., ~1910\u20131940, where cooling transitioned to warming) to deepen the historical narrative. Current chart shows the long-term trend; a second annotation would emphasize the regime shift.",
+    "checker": {
+      "global_temp_timeseries.py": {
+        "error": "\u2713 Saved to ./figures/global_temp_timeseries.{pdf,png}\n{\n  \"script\": \"global_temp_timeseries.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        11.0,\n        6.0\n      ],\n      \"n_axes\": 1,\n      \"issues\": [],\n      \"saved_as\": [\n        \"global_temp_timeseries.pdf\",\n        \"global_temp_timeseries.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "p4-penguins",
+    "kind": "pattern",
+    "pattern": "P4",
+    "prompt": "violin plot of penguin body mass by species from data/raw/public/penguins.csv",
+    "checks": [
+      "Three species; Gentoo is clearly heaviest (median ~5000 g), Adelie and Chinstrap ~3700 g."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.10892459999999998,
+    "turns": 13,
+    "duration_s": 49.0,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "penguin_body_mass_violin.pdf",
+      "penguin_body_mass_violin.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P4-violin-strip.md",
+      "bash: uv run /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p4-penguins/workspace/.claude/skills/matplotlib/scripts/check_fig",
+      "bash: uv run penguin_body_mass_violin.py && uv run /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p4-penguins/workspace/.clau"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Read": 5,
+      "Write": 1,
+      "Bash": 3,
+      "Edit": 1
+    },
+    "final_message": "- [x] 6. Look at the PNG and fix what the checker cannot see (\u2264 3 rounds total)\n- [x] 7. Report files, the takeaway, and one improvement you would make next\n\n**Files saved:**\n- `./penguin_body_mass_violin.py` \u2014 reproducible script\n- `./figures/penguin_body_mass_violin.pdf` and `.png` \u2014 publication-quality figures\n\n**Takeaway:** Gentoo penguins are distinctly heavier (median 5,000g) than both Adelie and Chinstrap species (both median 3,700g) \u2014 a 1,300g difference. Gentoo also shows the widest range in body mass, suggesting more physiological diversity within the species.\n\n**Visual summary:**\n- White violins show the full distribution of body mass for each species\n- Individual grey points reveal every penguin's mass, with jitter to prevent overlap\n- Red median markers + values make the center of each distribution easy to spot\n- Ordering from top to bottom emphasizes that Gentoo is heaviest\n\n**One improvement:** Add group size (n) to the y-axis labels (e.g., \"Gentoo\\n(n=123)\") since the sample sizes differ and readers often wonder whether smaller distributions reflect fewer observations or tighter variation.",
+    "checker": {
+      "penguin_body_mass_violin.py": {
+        "script": "penguin_body_mass_violin.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              11.0,
+              5.7
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "penguin_body_mass_violin.pdf",
+              "penguin_body_mass_violin.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p5-glue",
+    "kind": "pattern",
+    "pattern": "P5",
+    "prompt": "lollipop chart of model score range across NLP tasks from data/raw/precomputed/p5/glue.csv \u2014 columns are name, min, max, avg",
+    "checks": [
+      "Eight models; ERNIE has the highest average (~89.7)."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.09371660000000001,
+    "turns": 11,
+    "duration_s": 54.9,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "glue_model_scores.pdf",
+      "glue_model_scores.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P5-lollipop.md",
+      "bash: python .claude/skills/matplotlib/scripts/check_figure.py plot_glue_scores.py"
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Skill": 1,
+      "Write": 1,
+      "Bash": 2
+    },
+    "final_message": "l 8 models, scores match CSV, title matches content\n- **Integrity:** Axis 0\u2013100 appropriate for scores, range lines present, sorted perfectly (ERNIE 89.7 on top = best average)\n- **Principles:** Two-tone cubehelix (dark min/max, light average) distinguishes without color-only encoding; range visualization shows consistency; subtitle states the two key findings (best and widest); no arithmetic needed\n- **Layout:** Clean spacing, annotations well-placed (average above dot, min/max below), legend in upper left doesn't obstruct data\n- **Pattern:** P5 Signature intact \u2014 cubehelix palette, horizontal hlines + scatter layers, sorted by average\n\nThe story emerges clearly: **modern transformers cluster at top-right (high average, narrow range), while BiLSTM variants at bottom-left show lower averages and much wider task-by-task variance.**\n\n---\n\n## 7. Report\n\n**Files saved:**\n- `figures/glue_model_scores.pdf` (publication, 300 DPI)\n- `figures/glue_model_scores.png` (publication, 300 DPI)\n\n**Takeaway:** ERNIE achieves the best average (89.7), but newer models (BERT, RoBERTa, T5, ERNIE) show convergence\u2014high averages *and* narrow ranges. BiLSTM baseline exhibits the widest variance (71.2 points), indicating performance volatility across GLUE tasks, whereas pre-trained transformers are consistent.\n\n**One refinement:** Could add a reference line at the overall mean score to highlight how each model compares to the aggregate baseline, especially for models below the mean (BiLSTM variants).",
+    "checker": {
+      "plot_glue_scores.py": {
+        "script": "plot_glue_scores.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              8.6
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "glue_model_scores.pdf",
+              "glue_model_scores.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              300
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p7-mpg",
+    "kind": "pattern",
+    "pattern": "P7",
+    "prompt": "correlation heatmap from data/raw/precomputed/p7/mpg.csv \u2014 pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells",
+    "checks": [
+      "5x5 matrix; mpg is strongly negatively correlated with weight/displacement/horsepower."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.0922609,
+    "turns": 10,
+    "duration_s": 48.7,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "p7_mpg_correlation.pdf",
+      "p7_mpg_correlation.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P7-heatmap.md",
+      "bash: python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p7-mpg/workspace/.claude/skills/matplotlib/scripts/check_figure.p"
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Skill": 1,
+      "Write": 1,
+      "Bash": 2
+    },
+    "final_message": "Perfect! **Fidelity & Integrity verified:**\n- \u2713 Correct 5\u00d75 correlation matrix loaded\n- \u2713 Symmetric values (displacement\u2013mpg: \u22120.81 both ways)\n- \u2713 Diagonal is 1.0 (self-correlation)\n- \u2713 Title matches content; subtitle identifies the key finding\n\n**Principles (P7 heatmap):**\n- \u2713 Full grid with annotated cells (fmt=\".2f\")\n- \u2713 Diverging colormap (RdBu_r) centered at 0 clearly encodes sign\n- \u2713 Strongest relationship highlighted in subtitle (MPG\u2013weight: r = \u22120.83)\n- \u2713 Colorbar labeled \"Pearson r\"\n- \u2713 Grid off (no whitegrid artifacts)\n\n**Layout & pattern:**\n- \u2713 Balanced spacing, not cramped\n- \u2713 Despined; dimgrey text throughout\n- \u2713 Variable names readable; colorbar positioned\n- \u2713 Signature P7 elements all present\n\n## 7. Report\n\n\u2705 **Files saved:**\n- `./figures/p7_mpg_correlation.pdf`\n- `./figures/p7_mpg_correlation.png`\n\n**Takeaway:** The heatmap reveals that **weight is the dominant correlate of MPG** (r = \u22120.83), a negative relationship showing heavier vehicles are less fuel-efficient. Engine size (displacement, horsepower) are strongly intercorrelated (r \u2248 0.90), while acceleration is weakly related to fuel economy.\n\n**One improvement next:** If the focus were fuel-efficiency prediction, I could highlight only the MPG row to reduce visual noise and draw the reader's eye directly to what drives efficiency. This would work well for stakeholders focused on the target variable rather than the full correlation structure.",
+    "checker": {
+      "p7_mpg_correlation.py": {
+        "error": "Saved to ./figures/p7_mpg_correlation.{pdf,png}\n{\n  \"script\": \"p7_mpg_correlation.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        8.0,\n        6.0\n      ],\n      \"n_axes\": 1,\n      \"issues\": [],\n      \"saved_as\": [\n        \"p7_mpg_correlation.pdf\",\n        \"p7_mpg_correlation.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "p8-chickweight",
+    "kind": "pattern",
+    "pattern": "P8",
+    "prompt": "multi-panel of chick weight over time from data/raw/public/chickweight.csv \u2014 one subplot per diet",
+    "checks": [
+      "Four panels (one per diet), shared y-axis so diets are comparable."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.12516410000000003,
+    "turns": 13,
+    "duration_s": 75.2,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "chickweight_by_diet.pdf",
+      "chickweight_by_diet.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P8-multi-panel.md",
+      "bash: python3 .claude/skills/matplotlib/scripts/check_figure.py plot_chickweight.py",
+      "bash: python3 plot_chickweight.py && python3 .claude/skills/matplotlib/scripts/check_figure.py plot_chickweight.py"
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Skill": 1,
+      "Bash": 4,
+      "Write": 1,
+      "Edit": 1
+    },
+    "final_message": "left column, \"Age (days)\" on bottom row\n- Lightgrey panel borders\n\n**Fidelity:** \u2713 Correct data, plausible values. Diet 3 endpoint = 270 g matches the data.\n\n**Integrity:** \u2713 Shared axis limits make diets directly comparable. All start ~40\u201350 g (hatch weight), end 178\u2013270 g.\n\n**Principles:**\n- Data visible: \u2713 Grey individual lines show chick-to-chick variation; dark mean line is the story\n- Position encodes comparison: \u2713 Final weight differences are obvious vertically\n- Annotation at data: \u2713 End-value labels with arrows point precisely to mean values\n- Consistent panels: \u2713 All four follow the same design (mean + individuals)\n\n**Layout:** \u2713 Balanced, no overlap, sufficient whitespace.\n\n**Pattern (P8):** \u2713 Bold panel labels, y-label on left only, x-label on bottom only, shared y-axis, cross-panel takeaway.\n\nNo visual fixes needed.\n\n## 7. Report\n\n\u2705 **Files saved:**\n- `./figures/chickweight_by_diet.pdf`\n- `./figures/chickweight_by_diet.png`\n\n**Takeaway:** Diet 3 produces chicks that grow fastest and heaviest (270 g by day 21), 1.5\u00d7 heavier than Diet 1. The shared y-axis reveals that all diets produce a similar sigmoidal growth curve, but Diet 3 operates at a consistently higher trajectory. Diet 4 outperforms Diet 1 by ~34%.\n\n**One improvement for next time:** Add a reference line (e.g., `ax.axhline(200, color=\"lightgrey\", linewidth=0.8, zorder=0)`) to highlight a benchmark weight \u2014 this would let readers quickly estimate how many chicks in each diet exceed a production threshold.",
+    "checker": {
+      "plot_chickweight.py": {
+        "error": "Saved: ./figures/chickweight_by_diet.pdf, .png\n{\n  \"script\": \"plot_chickweight.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        10.0,\n        8.0\n      ],\n      \"n_axes\": 4,\n      \"issues\": [\n        {\n          \"severity\": \"WARN\",\n          \"message\": \"annotation '215 g' sits on 1 data points in panel 1 \\u2014 offset it or use ax.annotate() with an arrow\"\n        },\n        {\n          \"severity\": \"WARN\",\n          \"message\": \"annotation '270 g' sits on 4 data points in panel 2 \\u2014 offset it or use ax.annotate() with an arrow\"\n        },\n        {\n          \"severity\": \"WARN\",\n          \"message\": \"annotation '239 g' sits on 2 data points in panel 3 \\u2014 offset it or use ax.annotate() with an arrow\"\n        }\n      ],\n      \"saved_as\": [\n        \"chickweight_by_diet.pdf\",\n        \"chickweight_by_diet.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [\n    {\n      \"severity\": \"WARN\",\n      \"message\": \"annotation '215 g' sits on 1 data points in panel 1 \\u2014 offset it or use ax.annotate() with an arrow\"\n    },\n    {\n      \"severity\": \"WARN\",\n      \"message\": \"annotation '270 g' sits on 4 data points in panel 2 \\u2014 offset it or use ax.annotate() with an arrow\"\n    },\n    {\n      \"severity\": \"WARN\",\n      \"message\": \"annotation '239 g' sits on 2 data points in panel 3 \\u2014 offset it or use ax.annotate() with an arrow\"\n    }\n  ],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "p9-titanic",
+    "kind": "pattern",
+    "pattern": "P9",
+    "prompt": "PR and ROC curves from data/raw/precomputed/p9/titanic.npz \u2014 load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline",
+    "checks": [
+      "Two panels (PR and ROC) with fold curves, an average curve, and a no-skill baseline."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.12448359999999999,
+    "turns": 13,
+    "duration_s": 59.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "pr_roc_curves.pdf",
+      "pr_roc_curves.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P9-pr-roc.md",
+      "bash: python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p9-titanic/workspace/.claude/skills/matplotlib/scripts/check_figu",
+      "bash: python plot_pr_roc.py && python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/p9-titanic/workspace/.claude/skills/matp"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Read": 4,
+      "Bash": 4,
+      "Write": 1,
+      "Edit": 1
+    },
+    "final_message": "Perfect! \u2713 No overlaps or style drift.\n\n## 7. Report\n\n**Files saved:**\n- `./figures/pr_roc_curves.pdf`\n- `./figures/pr_roc_curves.png`\n\n**Takeaway:**  \nThe Titanic survival classifier shows modest discriminative ability across the 5-fold CV splits. The average AP of 0.767 indicates good precision-recall tradeoff, but the AUC of 0.664 reveals weak separation from random guessing (baseline 0.676, the class prevalence). Individual folds vary considerably (AUC 0.561\u20130.786), suggesting the model's performance is sensitive to the training split. The curves show the classifier is more conservative in positive predictions (initial precision drop) but eventually captures most positives (high recall tail).\n\n**One improvement for next:** The caption could note that baseline on the PR curve represents the positive class rate (67.6%), making it a calibration reference\u2014helpful context for practitioners interpreting the tradeoff.",
+    "checker": {
+      "plot_pr_roc.py": {
+        "error": "\u2713 Saved ./figures/pr_roc_curves.pdf and .png\n{\n  \"script\": \"plot_pr_roc.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        12.0,\n        5.5\n      ],\n      \"n_axes\": 2,\n      \"issues\": [],\n      \"saved_as\": [\n        \"pr_roc_curves.pdf\",\n        \"pr_roc_curves.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "x-gapminder-scatter",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "scatter plot of GDP per capita vs life expectancy in 2007 from data/raw/public/gapminder.csv, coloured by continent",
+    "checks": [
+      "Points for ~180 countries in 2007 only; GDP per capita on a log scale is preferable; positive relationship visible."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.12396610000000001,
+    "turns": 15,
+    "duration_s": 65.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "gapminder_scatter.pdf",
+      "gapminder_scatter.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: uv run ./.claude/skills/matplotlib/scripts/check_figure.py plot_gapminder_2007.py",
+      "bash: python plot_gapminder_2007.py && uv run ./.claude/skills/matplotlib/scripts/check_figure.py plot_gapminder_2007.py",
+      "bash: python plot_gapminder_2007.py && uv run ./.claude/skills/matplotlib/scripts/check_figure.py plot_gapminder_2007.py"
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Skill": 1,
+      "Bash": 5,
+      "Write": 1,
+      "Edit": 2
+    },
+    "final_message": "Perfect! The chart shows:\n\n- **Title + subtitle:** Clear, spaced properly\n- **Data:** All 183 countries from 2007, correctly filtered\n- **Encoding:** GDP per capita (log scale x-axis), life expectancy (y-axis), continent (color + marker shape)\n- **Legend:** 6 continents, ordered by median life expectancy\n- **Insight:** Strong positive relationship; wealthy nations (Europe, Oceania) cluster at high life expectancy; Africa dominates the low-wealth, lower-life-expectancy region\n- **Style:** Despined, whitegrid, dimgrey text, panel frame, white-edged markers\n\n### 7. Report\n\n\u2713 **Checklist complete. Files saved:**\n- `./figures/gapminder_scatter.pdf`\n- `./figures/gapminder_scatter.png`\n\n**Takeaway:** There is a strong positive relationship between GDP per capita and life expectancy in 2007\u2014wealthier nations consistently achieve longer lifespans\u2014with distinct continental clusters (Europe and Oceania at the high end, Africa at the low end).\n\n**One improvement:** Add a trend line (least-squares fit) to quantify the relationship strength, labeled with R\u00b2 if the user wants an explicit measure of how tightly GDP predicts life expectancy.",
+    "checker": {
+      "plot_gapminder_2007.py": {
+        "error": "Saved figures/gapminder_scatter.pdf and .png\n{\n  \"script\": \"plot_gapminder_2007.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        10.0,\n        6.5\n      ],\n      \"n_axes\": 1,\n      \"issues\": [],\n      \"saved_as\": [\n        \"gapminder_scatter.pdf\",\n        \"gapminder_scatter.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "x-stocks-line",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "line chart of stock prices over time for each company in data/raw/public/stocks.csv",
+    "checks": [
+      "A multi-line chart (not bars) with one line per symbol (AAPL, AMZN, GOOG, IBM, MSFT); dates on x-axis 2000\u20132010."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.24697159999999996,
+    "turns": 28,
+    "duration_s": 110.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "stocks_line.pdf",
+      "stocks_line.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: python3 .claude/skills/matplotlib/scripts/check_figure.py plot_stocks.py",
+      "bash: python3 plot_stocks.py && python3 .claude/skills/matplotlib/scripts/check_figure.py plot_stocks.py",
+      "bash: python3 plot_stocks.py && python3 .claude/skills/matplotlib/scripts/check_figure.py plot_stocks.py",
+      "bash: python3 plot_stocks.py && python3 .claude/skills/matplotlib/scripts/check_figure.py plot_stocks.py",
+      "bash: python3 plot_stocks.py && python3 .claude/skills/matplotlib/scripts/check_figure.py plot_stocks.py"
+    ],
+    "tool_counts": {
+      "Read": 6,
+      "Skill": 1,
+      "Bash": 10,
+      "Write": 2,
+      "Edit": 7
+    },
+    "final_message": "klist:**\n- [x] 1. Understand the request and the one thing the reader should take away\n- [x] 2. Read style-reference.md and the matching pattern file\n- [x] 3. Inspect the data (columns, dtypes, missing values, category order)\n- [x] 4. Write the script into the working directory and run it\n- [x] 5. Run check_figure.py and fix every ERROR\n- [x] 6. Look at the PNG and fix what the checker cannot see (\u2264 3 rounds total)\n- [x] 7. Report files, the takeaway, and one improvement you would make next\n\n## Step 7: Report\n\n**Files created:**\n- `plot_stocks.py` \u2014 the reproducible script\n- `figures/stocks_line.pdf` (22 KB)\n- `figures/stocks_line.png` (111 KB)\n\n**Takeaway:**\nThe chart reveals dramatically different trajectories for five tech stocks during 2000\u20132009. Google (GOOG) emerged as the clear outperformer after its IPO in 2004, climbing to $560 by 2009. Apple (AAPL) showed strong growth especially after 2005, reaching $223. Amazon (AMZN) and IBM remained flat around $125\u2013130 throughout. Microsoft (MSFT) started high in 2000 but declined steadily, ending near $28. The contrast between GOOG's explosive growth and MSFT's decline tells the story of the Web 2.0 shift in market leadership.\n\n**One improvement for next time:**\nI'd add a subtle annotation highlighting the 2008 financial crisis dip (visible in all lines) with a horizontal line or shaded region, since it's a notable turning point visible in the data. This would help readers understand the broader context of the price movements.",
+    "checker": {
+      "plot_stocks.py": {
+        "script": "plot_stocks.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              11.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "stocks_line.pdf",
+              "stocks_line.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-taxis-hist",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "histogram of taxi fares from data/raw/public/taxis.csv",
+    "checks": [
+      "A histogram (not bars per category) of the fare column; right-skewed with most fares under $20."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.09575149999999999,
+    "turns": 11,
+    "duration_s": 46.8,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "taxi_fares.pdf",
+      "taxi_fares.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: python3 .claude/skills/matplotlib/scripts/check_figure.py plot_taxi_fares.py"
+    ],
+    "tool_counts": {
+      "Read": 4,
+      "Skill": 1,
+      "Bash": 3,
+      "Write": 1
+    },
+    "final_message": "ows fare in dollars\n- No left or bottom spines; grid on y-axis only\n\n**Verification:**\n\u2713 Right data (fare column from 1000 taxi rides)  \n\u2713 Sensible axis ranges; bars start at zero  \n\u2713 Clear right-skewed distribution (peak at $8\u201310, tail to $56)  \n\u2713 Median annotation at the data it describes  \n\u2713 Pattern signature elements present (single fill, median line, label)\n\n```\n- [x] 1. Understand the request and the one thing the reader should take away\n- [x] 2. Read style-reference.md and the matching pattern file\n- [x] 3. Inspect the data (columns, dtypes, missing values, category order)\n- [x] 4. Write the script into the working directory and run it\n- [x] 5. Run check_figure.py and fix every ERROR\n- [x] 6. Look at the PNG and fix what the checker cannot see (\u2264 3 rounds total)\n- [x] 7. Report files, the takeaway, and one improvement you would make next\n```\n\n### 7. Report\n\n**Files:** `plot_taxi_fares.py` script; `figures/taxi_fares.pdf` and `figures/taxi_fares.png`\n\n**Takeaway:** Most NYC taxi fares cluster tightly in the $6\u201315 range, with a sharp peak at the median of $9.50. The distribution is heavily right-skewed, with occasional long-distance or special-circumstance fares reaching $56, showing the core pricing model serves short trips efficiently while outliers represent exceptions.\n\n**One improvement:** Annotate the mode (most frequent bin at ~$8\u201310) to highlight where typical fares concentrate\u2014that gives readers both the central tendency (median) and the most common price point.",
+    "checker": {
+      "plot_taxi_fares.py": {
+        "error": "Saved taxi_fares.pdf and taxi_fares.png to ./figures/\n{\n  \"script\": \"plot_taxi_fares.py\",\n  \"run_error\": null,\n  \"figures\": [\n    {\n      \"size_in\": [\n        10.0,\n        5.5\n      ],\n      \"n_axes\": 1,\n      \"issues\": [],\n      \"saved_as\": [\n        \"taxi_fares.pdf\",\n        \"taxi_fares.png\"\n      ],\n      \"formats\": [\n        \"pdf\",\n        \"png\"\n      ],\n      \"dpi\": [\n        150\n      ]\n    }\n  ],\n  \"issues\": [],\n  \"errors\": 0\n}\n"
+      }
+    }
+  },
+  {
+    "id": "x-titanic-grouped",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "compare survival rates by passenger class and sex from data/raw/public/titanic.csv",
+    "checks": [
+      "Both class and sex are shown. Female 1st-class survival ~97%, male 3rd-class ~14%. Large deviations suggest a blanket dropna()."
+    ],
+    "model": "claude-haiku-4-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.12910919999999998,
+    "turns": 14,
+    "duration_s": 65.2,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_by_class_sex.pdf",
+      "titanic_survival_by_class_sex.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/x-titanic-grouped/workspace/.claude/skills/matplotlib/scripts/che",
+      "bash: python titanic_survival_by_class_sex.py && python /tmp/matplotlib-skill-bench/v2/claude-haiku-4-5/x-titanic-grouped/work"
+    ],
+    "tool_counts": {
+      "Read": 5,
+      "Skill": 1,
+      "Write": 1,
+      "Bash": 3,
+      "Edit": 2
+    },
+    "final_message": "97%, 37%, 92%, 16%, 50%, 14%); legend in upper right; y-axis marked in 25% intervals from 0% to 100%.\n\n**Fidelity:** \u2713 Correct data and columns; title matches content; percentages plausible (first-class women 97%, third-class men 14%).\n\n**Integrity:** \u2713 Axis range 0\u2013100% is sensible; bars start at zero; all six values labeled.\n\n**Principles:** \u2713 Female-vs-male comparison encoded by position (adjacent bars); the subtitle annotates the key insight at the data itself; color alone is not the only distinction; no arithmetic required.\n\n**Layout:** \u2713 Clean spacing between title and subtitle; legend in empty corner; bars well-spaced.\n\n## Files & Takeaway\n\n**Saved:**\n- `./figures/titanic_survival_by_class_sex.pdf`\n- `./figures/titanic_survival_by_class_sex.png`\n\n**Takeaway:** Women were prioritized for evacuation across all three passenger classes. First-class women had the highest survival rate at 97%, while male survival rates varied steeply by class (37% first, 16% second, 14% third). Third-class women's 50% survival rate, while much higher than third-class men, reveals the combined effect of the \"women first\" evacuation order and the economic barriers faced by lower-class passengers.\n\n**One improvement:** Add a secondary axis or small annotation noting the absolute passenger counts (e.g., \"n=144 first-class women\") to contextualize whether the percentages represent similar-sized groups. This would help readers judge whether the high percentages are based on large or small samples.",
+    "checker": {
+      "titanic_survival_by_class_sex.py": {
+        "script": "titanic_survival_by_class_sex.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              9.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "titanic_survival_by_class_sex.pdf",
+              "titanic_survival_by_class_sex.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p1-titanic",
+    "kind": "pattern",
+    "pattern": "P1",
+    "prompt": "horizontal bar chart of survival rate by passenger class from data/raw/public/titanic.csv",
+    "checks": [
+      "Survival rates are ~63% (1st), ~47% (2nd), ~24% (3rd). Values near 68/80/50% mean rows were wrongly dropped by a blanket dropna()."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.2503042,
+    "turns": 8,
+    "duration_s": 36.2,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_by_class.pdf",
+      "titanic_survival_by_class.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p1-titanic/workspace; S=.claude/skills/matplotlib; cat $S/style-refere",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p1-titanic/workspace; sed -n '/## Typography/,/## Saving/p' .claude/sk",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p1-titanic/workspace; uv run titanic_survival_by_class.py && uv run .c"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Write": 1,
+      "Read": 1
+    },
+    "final_message": "I've made the chart: a horizontal bar chart of Titanic survival rate by passenger class. The figure checker found no overlaps or style problems, and I looked over the PNG myself.\n\n**Files:**\n- `titanic_survival_by_class.py` \u2014 the script; run it again with `uv run titanic_survival_by_class.py`\n- `figures/titanic_survival_by_class.png`\n- `figures/titanic_survival_by_class.pdf`\n\n**What it shows:** first-class passengers survived at 2.6 times the rate of third class. The rates are 63% for first class, 47% for second and 24% for third. The script works these numbers out from the CSV rather than typing them in.\n\n**How it's laid out:**\n- **Order:** the classes run First, Second, Third from top to bottom. That's their natural order, and it also happens to go from highest to lowest rate.\n- **Highlight:** the First class bar is darker because the subtitle is about it.\n- **Numbers:** each bar has its percentage at the end, so there's no x-axis.\n- **Group sizes:** each label shows how many passengers are in that class. They vary a lot: 491 in third class against 184 in second.\n\n**Next step I'd suggest:** split each class by sex, with a grouped bar or one panel each. Class and sex together explain survival much better than class alone: almost all first-class women survived, but only a small share of third-class men did. I can add that, or change the colours, labels or size.",
+    "checker": {
+      "titanic_survival_by_class.py": {
+        "script": "titanic_survival_by_class.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              7.0,
+              3.45
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "titanic_survival_by_class.pdf",
+              "titanic_survival_by_class.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p2-mpg",
+    "kind": "pattern",
+    "pattern": "P2",
+    "prompt": "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv",
+    "checks": [
+      "Five cylinder groups (3, 4, 5, 6, 8); 8-cylinder average is ~158 hp, 4-cylinder ~78 hp."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.2222386,
+    "turns": 6,
+    "duration_s": 31.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "horsepower_by_cylinders.pdf",
+      "horsepower_by_cylinders.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p2-mpg/workspace; S=.claude/skills/matplotlib; cat $S/style-reference.",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p2-mpg/workspace; cat > horsepower_by_cylinders.py <<'EOF'\n# /// scrip"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 2,
+      "Read": 1
+    },
+    "final_message": "I made the bar chart of average horsepower by number of cylinders. The style checker found no problems, and I looked over the PNG to check it.\n\n**Files**\n- `horsepower_by_cylinders.py`: the script that reads `data/raw/public/mpg.csv` and works out the averages (run it with `uv run horsepower_by_cylinders.py`)\n- `figures/horsepower_by_cylinders.png` and `figures/horsepower_by_cylinders.pdf`\n\n**What the chart shows:** 8-cylinder cars average 158 hp, twice the 78 hp of 4-cylinder cars. The 8-cylinder bar is the darker one. The 3-cylinder group (99 hp) is higher than the 4- and 5-cylinder groups, but it has only 4 cars. That's why each label shows the group size: the 3- and 5-cylinder bars rest on just 4 and 3 cars. The bars are in cylinder order, and each one shows its value on top.\n\n**Possible next step:** add the individual cars as faint dots over each bar. That would show how widely horsepower varies within each group and make the small 3- and 5-cylinder groups obvious. I can also add \"hp\" to the labels or change the colours if you'd like.",
+    "checker": {
+      "horsepower_by_cylinders.py": {
+        "script": "horsepower_by_cylinders.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              8.5,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "horsepower_by_cylinders.pdf",
+              "horsepower_by_cylinders.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p3-globaltemp",
+    "kind": "pattern",
+    "pattern": "P3",
+    "prompt": "time series bar chart with rolling mean from data/raw/precomputed/p3/global_temp.csv \u2014 columns are year, value, rolling",
+    "checks": [
+      "Covers ~1880 to ~2025 with recent years clearly warmest."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.2891492,
+    "turns": 8,
+    "duration_s": 43.3,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "global_temp_timeseries.pdf",
+      "global_temp_timeseries.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p3-globaltemp/workspace; S=.claude/skills/matplotlib; cat $S/style-ref",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p3-globaltemp/workspace; mkdir -p figures; cat > global_temp_timeserie"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 1
+    },
+    "final_message": "I've made the bar chart with the rolling-mean line. It runs and the style checker found no problems.\n\n**Files**\n- Script: `global_temp_timeseries.py`\n- Charts: `figures/global_temp_timeseries.png` and `figures/global_temp_timeseries.pdf`\n\n**What it shows:** Each year (1880\u20132025) is a bar, red above zero and blue below, with the rolling mean drawn as a dark line. Every year since 1976 has been above zero, a run of 49 years. The rolling mean climbs from \u22120.22 \u00b0C (1885) to +1.02 \u00b0C (2021), and the record year is 2024 at +1.28 \u00b0C. Those two points are labelled where they occur on the chart.\n\n**Two assumptions you should know about:**\n- **Rolling window:** the file doesn't say what window the `rolling` column uses. I checked it against the values: it is a centred 10-year mean, which is why the line runs only from 1885 to 2021. The legend says this.\n- **Baseline and units:** the file doesn't name the reference period behind the anomalies, so I used zero as the dividing line between red and blue and labelled the y-axis \u00b0C. If you know the baseline (for example the 1951\u20131980 average), I'd add it to the subtitle so readers know what \"above zero\" means.\n\nOne possible next step is to also label 1940\u201345, a short warm spell that's visible in the chart. Tell me if you'd like that, a 300 DPI version for publication, or any other changes.",
+    "checker": {
+      "global_temp_timeseries.py": {
+        "script": "global_temp_timeseries.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              14.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "global_temp_timeseries.pdf",
+              "global_temp_timeseries.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p4-penguins",
+    "kind": "pattern",
+    "pattern": "P4",
+    "prompt": "violin plot of penguin body mass by species from data/raw/public/penguins.csv",
+    "checks": [
+      "Three species; Gentoo is clearly heaviest (median ~5000 g), Adelie and Chinstrap ~3700 g."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.278904,
+    "turns": 8,
+    "duration_s": 38.8,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "penguins_body_mass_violin.pdf",
+      "penguins_body_mass_violin.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p4-penguins/workspace/.claude/skills/matplotlib; cat style-reference.m",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p4-penguins/workspace; cat > penguins_body_mass_violin.py <<'EOF'\n# //",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p4-penguins/workspace; sed -i 's/ha=\"center\", va=\"bottom\", fontsize=10"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 2
+    },
+    "final_message": "I made the violin plot. It shows that Gentoo penguins are much heavier than the other two species, while Adelie and Chinstrap are almost the same.\n\n**Files**\n- `penguins_body_mass_violin.py`: the script that makes the chart (run it with `uv run penguins_body_mass_violin.py`)\n- `figures/penguins_body_mass_violin.png` and `figures/penguins_body_mass_violin.pdf`\n\n**What the chart shows**\n- Each species gets a white violin with every penguin drawn as a black dot on top.\n- A red tick marks each species' median, with the value printed above it.\n- The species are sorted by median, and each label includes its count, since the groups differ in size: Adelie n=151, Gentoo n=123, Chinstrap n=68.\n- I dropped only the 2 rows with no body mass recorded.\n\n**Takeaway:** Gentoo has a median of 5,000 g, about 1,300 g more than Adelie and Chinstrap, which both sit at 3,700 g. Chinstrap's range is narrower, and Adelie's is spread fairly evenly from about 2,850 to 4,775 g.\n\n**Check results:** the style checker found no errors. It gave two warnings because the white backing behind the median labels covers a few dots. I kept the backing so the labels stay readable, and I checked the image to make sure nothing important is hidden.\n\n**Next improvement I'd make:** split each violin by sex. Males and females differ a lot in weight within each species, and that difference is likely what makes Adelie's spread so wide. I can add that, or render a 300 DPI version for publication, if you'd like.",
+    "checker": {
+      "penguins_body_mass_violin.py": {
+        "script": "penguins_body_mass_violin.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              11.0,
+              5.7
+            ],
+            "n_axes": 1,
+            "issues": [
+              {
+                "severity": "WARN",
+                "message": "annotation '3,700 g' sits on 2 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+              }
+            ],
+            "saved_as": [
+              "penguins_body_mass_violin.pdf",
+              "penguins_body_mass_violin.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "severity": "WARN",
+            "message": "annotation '3,700 g' sits on 2 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+          }
+        ],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p5-glue",
+    "kind": "pattern",
+    "pattern": "P5",
+    "prompt": "lollipop chart of model score range across NLP tasks from data/raw/precomputed/p5/glue.csv \u2014 columns are name, min, max, avg",
+    "checks": [
+      "Eight models; ERNIE has the highest average (~89.7)."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.26692499999999997,
+    "turns": 7,
+    "duration_s": 40.1,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "glue_lollipop.pdf",
+      "glue_lollipop.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p5-glue/workspace/.claude/skills/matplotlib; cat style-reference.md pa",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p5-glue/workspace; cat > glue_lollipop.py <<'EOF'\n# /// script\n# requi"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 1
+    },
+    "final_message": "2. Read style-reference.md + P5-lollipop.md\n- [x] 3. Inspect data: 8 models, no missing values\n- [x] 4. Write and run glue_lollipop.py\n- [x] 5. check_figure.py: no overlaps, collisions or style problems\n- [x] 6. Visual check: good on the first round\n- [x] 7. Report\n```\n\n**Files**\n- `glue_lollipop.py`: the script that rebuilds the chart.\n- `figures/glue_lollipop.png` and `figures/glue_lollipop.pdf`: the chart, at 150 DPI.\n\n**How to read it:** each row is one model, sorted with the best average on top. The two dark dots are its lowest and highest task scores, joined by a grey line. The lighter diamond is its average. A \"Spread\" column on the right gives max minus min for each model, so you don't have to work it out.\n\n**Takeaway:** ERNIE leads with an average of 89.7. The bigger change is at the bottom of each range: ERNIE's weakest task scores 75.2, against 11.6 for plain BiLSTM, a gain of 64 points. The spread shrinks from 71 points to 23. Top scores improve much less (82.8 to 97.8), so most of the average gain comes from doing better on the hardest tasks. There's also a clear gap between the BiLSTM models (spreads of 57\u201371) and the transformer models from BERT onward (spreads of 23\u201334).\n\n**Next improvement:** add a thin divider and a short label between the BiLSTM models and the transformer models, so that gap shows up without the reader having to compare the spread numbers. I can also re-render at 300 DPI for publication, or drop the min/max number labels for a cleaner look.",
+    "checker": {
+      "glue_lollipop.py": {
+        "script": "glue_lollipop.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              8.6
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "glue_lollipop.pdf",
+              "glue_lollipop.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p7-mpg",
+    "kind": "pattern",
+    "pattern": "P7",
+    "prompt": "correlation heatmap from data/raw/precomputed/p7/mpg.csv \u2014 pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells",
+    "checks": [
+      "5x5 matrix; mpg is strongly negatively correlated with weight/displacement/horsepower."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.22237300000000002,
+    "turns": 6,
+    "duration_s": 29.5,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "mpg_correlation_heatmap.pdf",
+      "mpg_correlation_heatmap.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p7-mpg/workspace; S=.claude/skills/matplotlib; cat $S/style-reference.",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p7-mpg/workspace; cat > mpg_correlation_heatmap.py <<'EOF'\n# /// scrip"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 2,
+      "Read": 1
+    },
+    "final_message": ".read_csv(index_col=0)`, with every cell annotated. The figure checker found no overlaps or style problems, and I looked over the PNG.\n\n**Files:**\n- Script: `mpg_correlation_heatmap.py`\n- Figures: `figures/mpg_correlation_heatmap.png` and `figures/mpg_correlation_heatmap.pdf` (150 DPI)\n\n**Design:**\n- **Cells:** the matrix is symmetric, so only the lower triangle is shown, without the diagonal of 1s. Each cell shows its value to two decimals.\n- **Colour:** red-to-blue scale, fixed from \u22121 to +1 with white at 0, so red means positive and blue means negative.\n- **Subtitle:** it picks out mpg's strongest correlation from the data. That turned out to be weight, so it reads \"Heavier cars get fewer miles per gallon: mpg vs. weight, r = \u22120.83\". The wording \"Heavier cars\" is fixed text in the script, so it would need editing for a different dataset.\n\n**Takeaway:** mpg falls with every size and power variable: \u22120.83 with weight, \u22120.81 with displacement and \u22120.78 with horsepower. Those three are also strongly tied to each other (0.86 to 0.93), so they largely measure the same thing: how big the car is. Acceleration is the only variable that moves in the same direction as mpg, and only moderately (+0.42).\n\n**Next improvement:** reorder the variables by clustering so weight, displacement and horsepower sit together as one red block, which makes the \"it's all about size\" point easier to see. I can also make a 300 DPI version for publication, or show the full matrix instead of the triangle.",
+    "checker": {
+      "mpg_correlation_heatmap.py": {
+        "script": "mpg_correlation_heatmap.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              6.8,
+              5.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "mpg_correlation_heatmap.pdf",
+              "mpg_correlation_heatmap.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p8-chickweight",
+    "kind": "pattern",
+    "pattern": "P8",
+    "prompt": "multi-panel of chick weight over time from data/raw/public/chickweight.csv \u2014 one subplot per diet",
+    "checks": [
+      "Four panels (one per diet), shared y-axis so diets are comparable."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.32685320000000007,
+    "turns": 10,
+    "duration_s": 51.8,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "chickweight_by_diet.pdf",
+      "chickweight_by_diet.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p8-chickweight/workspace/.claude/skills/matplotlib; cat style-referenc",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p8-chickweight/workspace; uv run chickweight_by_diet.py && uv run .cla",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p8-chickweight/workspace; python - <<'E'\np=\"chickweight_by_diet.py\"; s"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Write": 1,
+      "Edit": 1,
+      "Read": 1
+    },
+    "final_message": "d per diet; takeaway = which diet grows fastest\n- [x] 2. Read style-reference.md and P8-multi-panel.md\n- [x] 3. Inspect data (578 rows, no missing values, 4 diets, 50 chicks, days 0\u201321)\n- [x] 4. Write and run script\n- [x] 5. Checker: no errors; label-overlap warnings handled with a white outline\n- [x] 6. Look at PNG: layout, shared y-axis and labels OK\n- [x] 7. Report\n```\n\n**Files**\n- `chickweight_by_diet.py` (run with `uv run chickweight_by_diet.py`)\n- `figures/chickweight_by_diet.png` and `figures/chickweight_by_diet.pdf` (150 DPI)\n\n**What the chart shows**\n- Each chick is a thin grey line, and each diet's daily average is a dark line on top. The day-21 average is labelled in each panel.\n- All four panels share the same y-axis, so you can compare them directly.\n- **Main finding:** Diet 3 chicks average **270 g** by day 21, which is **93 g more than Diet 1** (178 g). Diet 4 is next at 239 g, then Diet 2 at 215 g.\n- Diets 3 and 4 pull ahead from about day 10. Diet 2 has the widest spread, including one chick that barely grows.\n- **Caveat:** Diet 1 has twice as many chicks (20 vs. 10), and some chicks drop out before day 21 (16 of 20 remain in Diet 1, 9 of 10 in Diet 4). Each panel notes this. The day-21 averages only include the chicks still in the study, so Diet 1's figure may be slightly off.\n\n**Next improvement:** add a shaded band around each average line showing how uncertain it is. Diet 1's larger sample would then show visibly as a tighter band than the 10-chick diets.",
+    "checker": {
+      "chickweight_by_diet.py": {
+        "script": "chickweight_by_diet.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              8.0
+            ],
+            "n_axes": 4,
+            "issues": [
+              {
+                "severity": "WARN",
+                "message": "annotation '178 g' sits on 35 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+              },
+              {
+                "severity": "WARN",
+                "message": "annotation '215 g' sits on 12 data points in panel 1 \u2014 offset it or use ax.annotate() with an arrow"
+              },
+              {
+                "severity": "WARN",
+                "message": "annotation '270 g' sits on 14 data points in panel 2 \u2014 offset it or use ax.annotate() with an arrow"
+              },
+              {
+                "severity": "WARN",
+                "message": "annotation '239 g' sits on 16 data points in panel 3 \u2014 offset it or use ax.annotate() with an arrow"
+              }
+            ],
+            "saved_as": [
+              "chickweight_by_diet.pdf",
+              "chickweight_by_diet.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "severity": "WARN",
+            "message": "annotation '178 g' sits on 35 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+          },
+          {
+            "severity": "WARN",
+            "message": "annotation '215 g' sits on 12 data points in panel 1 \u2014 offset it or use ax.annotate() with an arrow"
+          },
+          {
+            "severity": "WARN",
+            "message": "annotation '270 g' sits on 14 data points in panel 2 \u2014 offset it or use ax.annotate() with an arrow"
+          },
+          {
+            "severity": "WARN",
+            "message": "annotation '239 g' sits on 16 data points in panel 3 \u2014 offset it or use ax.annotate() with an arrow"
+          }
+        ],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p9-titanic",
+    "kind": "pattern",
+    "pattern": "P9",
+    "prompt": "PR and ROC curves from data/raw/precomputed/p9/titanic.npz \u2014 load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline",
+    "checks": [
+      "Two panels (PR and ROC) with fold curves, an average curve, and a no-skill baseline."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.3035714,
+    "turns": 7,
+    "duration_s": 43.9,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_pr_roc.pdf",
+      "titanic_pr_roc.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p9-titanic/workspace; S=.claude/skills/matplotlib; cat $S/style-refere",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/p9-titanic/workspace; cat > titanic_pr_roc.py <<'EOF'\n# /// script\n# r"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 1
+    },
+    "final_message": "cross folds; the takeaway is how much the model beats no-skill\n- [x] 2. Read style-reference.md and the PR/ROC pattern file\n- [x] 3. Inspect the data: 5 folds \u00d7 100 points, recall already ascending, baseline 0.676\n- [x] 4. Write the script into the working directory and run it\n- [x] 5. Run check_figure.py: no overlaps, collisions or style drift\n- [x] 6. Look at the PNG: one visual round, nothing to fix\n- [x] 7. Report\n```\n\n**Files**\n- `titanic_pr_roc.py` (the script)\n- `figures/titanic_pr_roc.png` and `figures/titanic_pr_roc.pdf` (150 DPI)\n\n**What it shows**\n- **(a) Precision-recall:** average AP is 0.767. The no-skill line sits at 0.676 because 67.6% of cases are positive, so the model is only about 9 points better than guessing. Individual folds range from 0.678 to 0.819.\n- **(b) ROC:** average AUC is 0.664, and individual folds range from 0.561 to 0.786. One fold is barely better than random, so the results change a lot depending on how the data is split.\n- The subtitle states this takeaway, and each panel has a caption with the average and the range across folds.\n\n**Labelling issue:** the file doesn't say which class is \"positive\". A 67.6% positive rate is higher than either Titanic survival (about 38%) or death (about 62%), so I left the class out of the title. If you tell me which class it is, I'll add it.\n\n**What I'd do next:** add a small dot-plot strip showing the AP and AUC for each fold. That would make the spread easier to see than the overlapping grey fold lines.",
+    "checker": {
+      "titanic_pr_roc.py": {
+        "script": "titanic_pr_roc.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              12.0,
+              5.5
+            ],
+            "n_axes": 2,
+            "issues": [],
+            "saved_as": [
+              "titanic_pr_roc.pdf",
+              "titanic_pr_roc.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-gapminder-scatter",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "scatter plot of GDP per capita vs life expectancy in 2007 from data/raw/public/gapminder.csv, coloured by continent",
+    "checks": [
+      "Points for ~180 countries in 2007 only; GDP per capita on a log scale is preferable; positive relationship visible."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.31210679999999996,
+    "turns": 8,
+    "duration_s": 45.9,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "gapminder_gdp_lifeexp_2007.pdf",
+      "gapminder_gdp_lifeexp_2007.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-gapminder-scatter/workspace; S=.claude/skills/matplotlib; cat $S/sty",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-gapminder-scatter/workspace; mkdir -p figures; cat > gapminder_scatt",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-gapminder-scatter/workspace; python - <<'EOF'\np=\"gapminder_scatter_2"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 2
+    },
+    "final_message": "P per capita against life expectancy for 2007, with each continent in its own colour and marker shape. The layout checker found no problems, and I looked over the image myself.\n\n**What it shows:** the richer a country is, the longer people tend to live there. The correlation is r = 0.80, with GDP plotted on a log scale. African countries sit mostly in the poor, short-lived corner at the bottom left. I labelled three countries:\n- **Swaziland** has the lowest life expectancy, at 40 years, even though its income is middle-of-the-range at $4,513.\n- **Japan** has the highest, at 83 years.\n- **Qatar** is the richest country by far, at $82,011, but its life expectancy is only 76 years.\n\n**Things to know:**\n- **More countries than usual:** this version of the dataset has 183 countries in 2007, not the usual 142. It also has a sixth group called \"FSU\" (former Soviet Union countries). I plotted all six groups as they are in the file.\n- **Log scale:** I put GDP per capita on a log scale because it ranges from $278 to $82,011. On a normal scale, most countries would be squeezed against the left edge.\n- **Legend:** it's in the empty top-left corner, so it doesn't cover any points.\n\n**Next improvement:** size each point by population, like the classic Gapminder chart. China and India would then stand out, and the chart would show how many people each country stands for.\n\nFiles are in `./figures/`:\n- gapminder_scatter_2007.py\n- gapminder_gdp_lifeexp_2007.png\n- gapminder_gdp_lifeexp_2007.pdf",
+    "checker": {
+      "gapminder_scatter_2007.py": {
+        "script": "gapminder_scatter_2007.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              6.5
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "gapminder_gdp_lifeexp_2007.pdf",
+              "gapminder_gdp_lifeexp_2007.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-stocks-line",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "line chart of stock prices over time for each company in data/raw/public/stocks.csv",
+    "checks": [
+      "A multi-line chart (not bars) with one line per symbol (AAPL, AMZN, GOOG, IBM, MSFT); dates on x-axis 2000\u20132010."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.2929944,
+    "turns": 8,
+    "duration_s": 49.3,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "stocks_line.pdf",
+      "stocks_line.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-stocks-line/workspace/.claude/skills/matplotlib; cat style-reference",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-stocks-line/workspace; cat > stocks_line.py <<'EOF'\n# /// script\n# r",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-stocks-line/workspace; sed -i 's/min_gap = 0.07/min_gap = 0.09/; s/x"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 1
+    },
+    "final_message": "s (AAPL, AMZN, GOOG, IBM, MSFT), one line per company, using monthly prices from January 2000 to March 2010.\n\n![chart](figures/stocks_line.png)\n\n**What it shows:** AAPL went up 8.6x, from $25.94 to $223, and passed both IBM and AMZN after 2007. MSFT ended 28% below where it started. GOOG's prices only begin in August 2004, when it listed, and it peaked at $707 in October 2007.\n\n**Choices I made:**\n- **Log price axis:** prices run from about $6 to $707. On a normal scale, MSFT and early AAPL would be squashed flat along the bottom. On a log scale, equal distances mean equal percentage changes, so you can compare growth between companies. The axis label says it's a log scale.\n- **Names at the line ends:** each line has the company name and its last price at the right end, so there's no legend. IBM is dashed so it can be told apart from AMZN without relying on colour.\n- **Notes on the chart:** the line under the title states the main takeaway, and two labels point out GOOG's peak and AAPL's low in 2003.\n\nThe style checker found no problems after I moved two labels that overlapped.\n\n**Files:**\n- `stocks_line.py` (run with `uv run stocks_line.py`)\n- `figures/stocks_line.png`\n- `figures/stocks_line.pdf`\n\n**Possible next step:** start every company at 100 on its first date so the lines show growth directly. That would replace the log axis and make \"who grew most\" readable without working out percentages. I can also switch to a normal price axis or shade the 2008 crash if you'd like.",
+    "checker": {
+      "stocks_line.py": {
+        "script": "stocks_line.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              11.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "stocks_line.pdf",
+              "stocks_line.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-taxis-hist",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "histogram of taxi fares from data/raw/public/taxis.csv",
+    "checks": [
+      "A histogram (not bars per category) of the fare column; right-skewed with most fares under $20."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.3237304,
+    "turns": 9,
+    "duration_s": 47.1,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "taxi_fare_histogram.pdf",
+      "taxi_fare_histogram.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-taxis-hist/workspace; cat .claude/skills/matplotlib/style-reference.",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-taxis-hist/workspace; cat > taxi_fare_histogram.py <<'EOF'\n# /// scr",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-taxis-hist/workspace; python - <<'EOF'\np=\"taxi_fare_histogram.py\"; s"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 2
+    },
+    "final_message": "the histogram of taxi fares. It passes the style checker with no issues, and I checked the image by eye after fixing two problems: dollar signs that were rendering as math formatting, and an arrow that didn't point at the middle of its bar.\n\n**What it shows** (1,000 NYC taxi rides, all from March 2019):\n- **Most fares are low.** The median fare is $9.50, the most common range is $6\u20138, and 74% of rides cost under $15.\n- **The distribution has a long tail toward higher fares,** reaching a maximum of about $56.\n- **There's a spike at exactly $52.** That's NYC's flat fare for trips to and from JFK airport, and 15 rides hit it. I colored that bar red so it stands out from the smooth tail.\n\nThe bars are in $2 steps, which work better here than automatic sizing because many fares are round half-dollar amounts. A dashed line marks the median.\n\n**One thing to check:** I labelled the $52 spike \"JFK flat rate\", but not all 15 of those rides have JFK in their pickup or dropoff zone. One, for example, is listed as Midtown Center to Midtown Center. They're probably airport trips with zone-coding errors, but the label is my interpretation, not something the data proves.\n\n**Next improvement I'd make:** split the histogram by the `color` column (yellow vs. green cabs) or by payment type. Pickup location probably drives the difference in fares, and right now the chart doesn't show that.\n\nFiles are in `figures/`:\n- `taxi_fare_histogram.py`\n- `taxi_fare_histogram.png`\n- `taxi_fare_histogram.pdf`",
+    "checker": {
+      "taxi_fare_histogram.py": {
+        "script": "taxi_fare_histogram.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              5.5
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "taxi_fare_histogram.pdf",
+              "taxi_fare_histogram.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-titanic-grouped",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "compare survival rates by passenger class and sex from data/raw/public/titanic.csv",
+    "checks": [
+      "Both class and sex are shown. Female 1st-class survival ~97%, male 3rd-class ~14%. Large deviations suggest a blanket dropna()."
+    ],
+    "model": "claude-opus-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.3560488,
+    "turns": 10,
+    "duration_s": 55.7,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_class_sex.pdf",
+      "titanic_survival_class_sex.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-titanic-grouped/workspace; S=.claude/skills/matplotlib; cat $S/style",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-titanic-grouped/workspace; cat > titanic_survival_class_sex.py <<'EO",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-titanic-grouped/workspace; python - <<'EOF'\np=\"titanic_survival_clas",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-opus-5-5/x-titanic-grouped/workspace; sed -i 's/figsize=(9, 6)/figsize=(10, 6)/"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 3
+    },
+    "final_message": "of Titanic survival rates by passenger class and sex. Women survived at a much higher rate than men in every class.\n\n| Class | Women | Men | Gap |\n|---|---|---|---|\n| 1st | 97% (n=94) | 37% (n=122) | +60 pts |\n| 2nd | 92% (n=76) | 16% (n=108) | +76 pts |\n| 3rd | 50% (n=144) | 14% (n=347) | +36 pts |\n\n- **Class mattered a lot for women:** nearly all 1st- and 2nd-class women survived, but only half of 3rd-class women did.\n- **Class mattered less for men:** 1st-class men were the only male group near the overall 38% survival rate. 2nd- and 3rd-class men were about equally likely to die.\n- **The gap between sexes was widest in 2nd class (76 points)**, not 1st, because 2nd-class men did so badly.\n\nOn the chart, men's bars have a striped pattern as well as a different colour, so the two sexes can be told apart without colour. The sample size for each group is shown under the class labels, and a dashed line marks the overall survival rate. The style checker found no errors. Its one warning is that the dashed line runs into its own \"All passengers 38%\" label, which I left as is.\n\n**Next improvement:** add 95% confidence intervals to the bars. Some groups are small (76 to 94 passengers), and error bars would show which differences are solid, such as 2nd-class versus 3rd-class men.\n\nFiles are in `./figures/`:\n- `titanic_survival_class_sex.py` (in the workspace root; re-run with `uv run titanic_survival_class_sex.py`)\n- `titanic_survival_class_sex.png`\n- `titanic_survival_class_sex.pdf`",
+    "checker": {
+      "titanic_survival_class_sex.py": {
+        "script": "titanic_survival_class_sex.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [
+              {
+                "severity": "WARN",
+                "message": "annotation 'All passengers 38%' sits on 1 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+              }
+            ],
+            "saved_as": [
+              "titanic_survival_class_sex.pdf",
+              "titanic_survival_class_sex.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "severity": "WARN",
+            "message": "annotation 'All passengers 38%' sits on 1 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+          }
+        ],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p1-titanic",
+    "kind": "pattern",
+    "pattern": "P1",
+    "prompt": "horizontal bar chart of survival rate by passenger class from data/raw/public/titanic.csv",
+    "checks": [
+      "Survival rates are ~63% (1st), ~47% (2nd), ~24% (3rd). Values near 68/80/50% mean rows were wrongly dropped by a blanket dropna()."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.12742040000000002,
+    "turns": 8,
+    "duration_s": 26.4,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_by_class.pdf",
+      "titanic_survival_by_class.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P1-horizontal-bar.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p1-titanic/workspace; cat > titanic_survival_by_class.py <<'EOF'\n# /"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 2,
+      "Read": 3
+    },
+    "final_message": "I've made the horizontal bar chart of survival rate by passenger class. The checker found no overlaps or style problems, and I looked at the PNG and it reads cleanly.\n\n- **Files:** `titanic_survival_by_class.py` (the script), `figures/titanic_survival_by_class.png` and `figures/titanic_survival_by_class.pdf`\n- **Takeaway:** survival fell with each step down in class, from 63.0% in first class to 47.3% in second and 24.2% in third. First-class passengers survived at 2.6x the rate of third class, and the subtitle says so.\n- **Design choices:** the classes keep their natural order, first on top, and the first-class bar is darkened to match the subtitle. Each label includes the group size (n=216, 184, 491), since the groups differ a lot in size.\n\nNext I'd split each bar by sex. The class gap is probably tangled up with how many women travelled in each class, and that would show whether class or sex drives it.\n\nI can also re-render at 300 DPI for publication.",
+    "checker": {
+      "titanic_survival_by_class.py": {
+        "script": "titanic_survival_by_class.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              7.0,
+              3.55
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "titanic_survival_by_class.pdf",
+              "titanic_survival_by_class.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p2-mpg",
+    "kind": "pattern",
+    "pattern": "P2",
+    "prompt": "vertical bar chart of average horsepower by number of cylinders from data/raw/public/mpg.csv",
+    "checks": [
+      "Five cylinder groups (3, 4, 5, 6, 8); 8-cylinder average is ~158 hp, 4-cylinder ~78 hp."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.13230920000000002,
+    "turns": 9,
+    "duration_s": 28.3,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "mpg_hp_by_cylinders.pdf",
+      "mpg_hp_by_cylinders.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P2-vertical-bar.md",
+      "bash: cat > mpg_hp_by_cylinders.py <<'EOF'\n# /// script\n# requires-python = \">=3.11\"\n# dependencies = [\n#     \"matplotlib\",\n# "
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 3
+    },
+    "final_message": "I made the vertical bar chart of average horsepower by number of cylinders. The checker found no overlaps or style problems, and I looked at the PNG and it reads cleanly.\n\n**Files** (in the workspace):\n- `mpg_hp_by_cylinders.py`\n- `figures/mpg_hp_by_cylinders.pdf`\n- `figures/mpg_hp_by_cylinders.png`\n\n**What it shows:** Average horsepower is 158 for 8-cylinder cars, about twice the 78 for 4-cylinder cars. The 3-, 5- and 6-cylinder averages are 99, 82 and 102. The 8-cylinder bar is darker to mark the main finding, and the subtitle states the 2.0x gap.\n\nThe 3- and 5-cylinder bars rest on only 4 and 3 cars, so each tick label shows its sample size (`n=`).\n\n**Next improvement:** I'd show the spread of horsepower within each group, for example as points over the bars, so the small groups and overlap between groups are visible.",
+    "checker": {
+      "mpg_hp_by_cylinders.py": {
+        "script": "mpg_hp_by_cylinders.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              8.5,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "mpg_hp_by_cylinders.pdf",
+              "mpg_hp_by_cylinders.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p3-globaltemp",
+    "kind": "pattern",
+    "pattern": "P3",
+    "prompt": "time series bar chart with rolling mean from data/raw/precomputed/p3/global_temp.csv \u2014 columns are year, value, rolling",
+    "checks": [
+      "Covers ~1880 to ~2025 with recent years clearly warmest."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.1489944,
+    "turns": 9,
+    "duration_s": 34.8,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "global_temp.pdf",
+      "global_temp.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P3-time-series.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p3-globaltemp/workspace && cat > global_temp_chart.py <<'EOF'\n# /// "
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 3
+    },
+    "final_message": "I made the bar chart with the rolling-mean line from `global_temp.csv`. The style checker found no overlaps or style problems, and I looked over the PNG.\n\n**What it shows:** annual global temperature anomalies as bars, red above zero and blue below. The dark line is your precomputed `rolling` column. The subtitle states the takeaway: the rolling mean has stayed above zero since 1973, and 2024 set the record (+1.28 \u00b0C). I also labelled the coolest year, 1909 at \u22120.50 \u00b0C.\n\n**Assumptions to confirm:**\n- **Baseline:** the file doesn't name a baseline period, so the legend just says \"Above zero\" and \"Below zero\". If you know it, such as 1951\u20131980, I can name it.\n- **Window:** I labelled the line \"10-year rolling mean\" because the column has 9 missing values, which fits a 10-year window. Please confirm. The line runs 1885\u20132021, and the 2022\u20132025 bars have no rolling value.\n\n**Files** (in the workspace):\n- `global_temp_chart.py`\n- `figures/global_temp.png`\n- `figures/global_temp.pdf`\n\nThe script leaves two computed variables, `n_above` and `first_above`, unused; they're harmless and can be deleted.\n\n**Next improvement:** I'd shade or mark the last four years that have no rolling value, so it's clear the line stops by design.\n\nI can also re-render at 300 DPI if you need a publication version.",
+    "checker": {
+      "global_temp_chart.py": {
+        "script": "global_temp_chart.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              14.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "global_temp.pdf",
+              "global_temp.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p4-penguins",
+    "kind": "pattern",
+    "pattern": "P4",
+    "prompt": "violin plot of penguin body mass by species from data/raw/public/penguins.csv",
+    "checks": [
+      "Three species; Gentoo is clearly heaviest (median ~5000 g), Adelie and Chinstrap ~3700 g."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.1616814,
+    "turns": 11,
+    "duration_s": 36.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "penguin_body_mass_violin.pdf",
+      "penguin_body_mass_violin.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P4-violin-strip.md",
+      "bash: cat > penguin_mass_violin.py <<'EOF'\n# /// script\n# requires-python = \">=3.11\"\n# dependencies = [\n#     \"matplotlib\",\n# ",
+      "bash: sed -i 's/xytext=(0, 14), textcoords=\"offset points\",$/xytext=(0, 14), textcoords=\"offset points\",\\n                    "
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 5,
+      "Read": 3
+    },
+    "final_message": "I made the violin plot of body mass by species, with every penguin shown as a dot and the median marked in red.\n\nGentoo are clearly the heaviest, with a median of 5,000 g. Adelie and Chinstrap are nearly identical, both at a median of 3,700 g, so Gentoo sit 1,300 g above Adelie. That is the subtitle on the chart.\n\nI dropped the two penguins with no body mass recorded, which leaves 342. Each species label shows its count (Gentoo 123, Adelie 151, Chinstrap 68).\n\nThe checker flagged the median labels as sitting on a few dots, and I left that as is. A white box behind the labels cleared it but hid data points, so I took the boxes out. The final script ran cleanly, but I didn't re-run the checker or look at the PNG after removing the boxes.\n\nFiles are in `/tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p4-penguins/workspace`:\n- `penguin_mass_violin.py`\n- `figures/penguin_body_mass_violin.png`\n- `figures/penguin_body_mass_violin.pdf`\n\nNext I'd split the dots by sex, since the male/female difference probably explains much of the spread within each species. I can also re-render at 300 DPI for publication.",
+    "checker": {
+      "penguin_mass_violin.py": {
+        "script": "penguin_mass_violin.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              11.0,
+              5.7
+            ],
+            "n_axes": 1,
+            "issues": [
+              {
+                "severity": "WARN",
+                "message": "annotation '5,000 g' sits on 5 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+              },
+              {
+                "severity": "WARN",
+                "message": "annotation '3,700 g' sits on 4 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+              },
+              {
+                "severity": "WARN",
+                "message": "annotation '3,700 g' sits on 3 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+              }
+            ],
+            "saved_as": [
+              "penguin_body_mass_violin.pdf",
+              "penguin_body_mass_violin.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "severity": "WARN",
+            "message": "annotation '5,000 g' sits on 5 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+          },
+          {
+            "severity": "WARN",
+            "message": "annotation '3,700 g' sits on 4 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+          },
+          {
+            "severity": "WARN",
+            "message": "annotation '3,700 g' sits on 3 data points in panel 0 \u2014 offset it or use ax.annotate() with an arrow"
+          }
+        ],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p5-glue",
+    "kind": "pattern",
+    "pattern": "P5",
+    "prompt": "lollipop chart of model score range across NLP tasks from data/raw/precomputed/p5/glue.csv \u2014 columns are name, min, max, avg",
+    "checks": [
+      "Eight models; ERNIE has the highest average (~89.7)."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.14278100000000002,
+    "turns": 8,
+    "duration_s": 29.7,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "glue_lollipop.pdf",
+      "glue_lollipop.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P5-lollipop.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p5-glue/workspace; cat > glue_lollipop.py <<'EOF'\n# /// script\n# req"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 2,
+      "Read": 3
+    },
+    "final_message": "I made the lollipop chart of GLUE score range by model. The checker found no overlaps or style problems, and I checked the PNG by eye.\n\nEach row shows a model's minimum and maximum task score as dark dots joined by a grey bar, with the average as a lighter dot. Models are sorted by average, best on top, and the averages are labelled. The legend sits above the plot.\n\nThe takeaway: ERNIE has the best average (89.7), and the older BiLSTM models have the widest ranges. BiLSTM varies most, at 71.2 points from min to max, while ERNIE's range is much tighter.\n\nOne thing to know: BiLSTM+CoVe has the lowest average (61.6) but a higher minimum than plain BiLSTM, so ranking by average and by minimum differ slightly.\n\nNext I'd add a dashed reference line at a human or baseline score, if you have one, so the reader can see which models clear it.\n\nFiles are in the working directory:\n- `glue_lollipop.py`\n- `figures/glue_lollipop.png`\n- `figures/glue_lollipop.pdf`\n\nI can also re-render at 300 DPI for publication or drop the min/max labels for a cleaner look.",
+    "checker": {
+      "glue_lollipop.py": {
+        "script": "glue_lollipop.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              8.6
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "glue_lollipop.pdf",
+              "glue_lollipop.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p7-mpg",
+    "kind": "pattern",
+    "pattern": "P7",
+    "prompt": "correlation heatmap from data/raw/precomputed/p7/mpg.csv \u2014 pre-computed correlation matrix, load with pd.read_csv(index_col=0), annotate cells",
+    "checks": [
+      "5x5 matrix; mpg is strongly negatively correlated with weight/displacement/horsepower."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.1304268,
+    "turns": 8,
+    "duration_s": 19.3,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "mpg_correlation_heatmap.pdf",
+      "mpg_correlation_heatmap.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P7-heatmap.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p7-mpg/workspace; cat > mpg_corr_heatmap.py <<'EOF'\n# /// script\n# r"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 2,
+      "Read": 3
+    },
+    "final_message": "I made the annotated correlation heatmap from `data/raw/precomputed/p7/mpg.csv`. The checker reported no overlaps or style problems, and I looked at the PNG and it reads cleanly.\n\nThe matrix is loaded with `index_col=0`. It shows the lower triangle without the diagonal, with each cell annotated to two decimals on a diverging blue\u2013red scale from \u22121 to 1.\n\n**Takeaway:** mpg is most strongly related to weight (r = \u22120.83); heavier cars burn more fuel. Displacement, horsepower and weight also move together tightly (r = 0.86\u20130.93).\n\n**Next improvement:** order the variables by hierarchical clustering so the displacement\u2013horsepower\u2013weight block sits together. It's a small change, but it would make that block stand out.\n\nFiles are in the working directory:\n- `mpg_corr_heatmap.py`\n- `figures/mpg_correlation_heatmap.pdf`\n- `figures/mpg_correlation_heatmap.png`\n\nI rendered at 150 DPI. Say if you want 300 DPI for publication.",
+    "checker": {
+      "mpg_corr_heatmap.py": {
+        "script": "mpg_corr_heatmap.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              6.8,
+              5.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "mpg_correlation_heatmap.pdf",
+              "mpg_correlation_heatmap.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p8-chickweight",
+    "kind": "pattern",
+    "pattern": "P8",
+    "prompt": "multi-panel of chick weight over time from data/raw/public/chickweight.csv \u2014 one subplot per diet",
+    "checks": [
+      "Four panels (one per diet), shared y-axis so diets are comparable."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.24659360000000002,
+    "turns": 15,
+    "duration_s": 74.6,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "chickweight_by_diet.pdf",
+      "chickweight_by_diet.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P8-multi-panel.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p8-chickweight/workspace; cat > chickweight_by_diet.py <<'EOF'\n# ///",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p8-chickweight/workspace; python - <<'EOF'\ns=open('chickweight_by_di",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p8-chickweight/workspace; python - <<'EOF'\ns=open('chickweight_by_di",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p8-chickweight/workspace; python - <<'EOF'\ns=open('chickweight_by_di"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 6,
+      "Read": 6
+    },
+    "final_message": " a 2\u00d72 multi-panel chart with one panel per diet. The checker reports no overlaps or style problems, and I looked at the final PNG.\n\nEach panel shows the thin grey weight curve of every chick, with the diet's mean as a bold line on top. All panels share the same y-axis (0\u2013390 g) so they can be compared directly. The figure has a title, a one-line takeaway, panel letters (a)\u2013(d), and the day-21 mean labelled at the end of each line.\n\n**What it shows:** Diet 3 chicks end heaviest, at a mean of 270 g on day 21. That is 1.5\u00d7 Diet 1, which is lowest at 178 g. Diet 2 ends at 215 g and Diet 4 at 239 g. All four diets start at about 41 g and the means only separate after day 8\u201310. Within Diet 2 there is one chick that barely grew, staying near 75 g.\n\n**Files** (in the workspace):\n- `chickweight_by_diet.py` is the script. It reads the CSV and computes the means in code.\n- `figures/chickweight_by_diet.png` and `figures/chickweight_by_diet.pdf` are the chart, at 150 DPI.\n\n**Next improvement:** add a faint band for the 25th\u201375th percentile (or a 95% confidence interval) around each mean. The grey lines alone make it hard to tell whether Diet 3's lead over Diet 4 is more than chick-to-chick variation.\n\nNot every chick has a day-21 measurement, so the means are over the chicks that were still measured. The n shown in each panel title counts every chick on that diet.\n\nI can re-render at 300 DPI for publication, or put all four diet means on one overlay panel if you want that comparison too.",
+    "checker": {
+      "chickweight_by_diet.py": {
+        "script": "chickweight_by_diet.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              8.0
+            ],
+            "n_axes": 4,
+            "issues": [],
+            "saved_as": [
+              "chickweight_by_diet.pdf",
+              "chickweight_by_diet.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "p9-titanic",
+    "kind": "pattern",
+    "pattern": "P9",
+    "prompt": "PR and ROC curves from data/raw/precomputed/p9/titanic.npz \u2014 load with np.load, arrays: precision_array, recall_array, tpr_array, fpr_array, precision_avg, recall_avg, tpr_avg, fpr_avg, baseline",
+    "checks": [
+      "Two panels (PR and ROC) with fold curves, an average curve, and a no-skill baseline."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.1513208,
+    "turns": 8,
+    "duration_s": 31.0,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_pr_roc.pdf",
+      "titanic_pr_roc.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/P9-pr-roc.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/p9-titanic/workspace; cat > titanic_pr_roc.py <<'EOF'\n# /// script\n#"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 2,
+      "Read": 3
+    },
+    "final_message": "I made the PR and ROC figure from `titanic.npz`: panel (a) is precision-recall and panel (b) is ROC. The layout checker found no problems, and I looked over the rendered PNG.\n\nEach panel shows the five grey fold curves, the dark average curve and an orange dashed no-skill line. The legends carry AP and AUC for the average, and a caption under each panel gives the fold range.\n\n**Takeaway:** the model beats chance, but only modestly.\n- **Average precision:** 0.767, against a 0.676 no-skill baseline. Across folds it ranges from 0.678 to 0.819.\n- **ROC AUC:** 0.664, with folds from 0.561 to 0.786.\n- **Fold spread:** the folds disagree a lot, so the model is unstable, probably because each fold is small.\n- **Early precision:** at very low recall the curve is unreliable, since a few predictions decide it.\n\nFiles:\n- `titanic_pr_roc.py`\n- `figures/titanic_pr_roc.pdf`\n- `figures/titanic_pr_roc.png`\n\nNext I'd add an annotation at the low-recall dip to flag where the precision estimates are noisy. I can also re-render at 300 DPI for publication.",
+    "checker": {
+      "titanic_pr_roc.py": {
+        "script": "titanic_pr_roc.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              12.0,
+              6.0
+            ],
+            "n_axes": 2,
+            "issues": [],
+            "saved_as": [
+              "titanic_pr_roc.pdf",
+              "titanic_pr_roc.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-gapminder-scatter",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "scatter plot of GDP per capita vs life expectancy in 2007 from data/raw/public/gapminder.csv, coloured by continent",
+    "checks": [
+      "Points for ~180 countries in 2007 only; GDP per capita on a log scale is preferable; positive relationship visible."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.17718,
+    "turns": 11,
+    "duration_s": 38.3,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "gapminder_gdp_vs_lifeexp_2007.pdf",
+      "gapminder_gdp_vs_lifeexp_2007.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: cat > gapminder_scatter.py <<'EOF'\n# /// script\n# requires-python = \">=3.11\"\n# dependencies = [\n#     \"matplotlib\",\n#   ",
+      "bash: sed -i 's|    ax.minorticks_off()|    ax.minorticks_off()\\n    ax.set_ylim(df[\"lifeExp\"].min() - 3, df[\"lifeExp\"].max() "
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 4
+    },
+    "final_message": "I've made the 2007 scatter of GDP per capita against life expectancy, coloured by continent, with a log x-axis. The checker reported no overlaps or style drift, and I checked the final image by eye.\n\n- **Encoding:** each continent has its own colour and marker shape, with its country count in the legend.\n- **Takeaway:** life expectancy rises with income, with r = 0.80 on log income, and flattens above about $10k. The subtitle says this.\n- **Labelled points:** Japan (highest life expectancy, 82.6), Swaziland (lowest, 39.6) and Qatar (highest GDP, $82,011).\n- **Data note:** the file has 183 countries in 2007 and no missing values in the plotted columns. Its continent column includes an \"FSU\" group (9 countries), which I kept as its own group.\n\nNext, I'd size the points by population, the classic Gapminder view. I'd also add a smoothed trend line to show the plateau directly. I can do either if you want.\n\nFiles are in `/tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/x-gapminder-scatter/workspace`:\n- `gapminder_scatter.py`\n- `figures/gapminder_gdp_vs_lifeexp_2007.png`\n- `figures/gapminder_gdp_vs_lifeexp_2007.pdf`",
+    "checker": {
+      "gapminder_scatter.py": {
+        "script": "gapminder_scatter.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              6.5
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "gapminder_gdp_vs_lifeexp_2007.pdf",
+              "gapminder_gdp_vs_lifeexp_2007.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-stocks-line",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "line chart of stock prices over time for each company in data/raw/public/stocks.csv",
+    "checks": [
+      "A multi-line chart (not bars) with one line per symbol (AAPL, AMZN, GOOG, IBM, MSFT); dates on x-axis 2000\u20132010."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.1532894,
+    "turns": 9,
+    "duration_s": 26.8,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "stocks_line.pdf",
+      "stocks_line.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: cat > stocks_line.py <<'EOF'\n# /// script\n# requires-python = \">=3.11\"\n# dependencies = [\n#     \"matplotlib\",\n#     \"sea"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 3,
+      "Read": 3
+    },
+    "final_message": "I charted monthly share prices for all five companies (AAPL, AMZN, GOOG, IBM, MSFT) from 2000 to 2010. The overlap checker reported no problems, and I checked the PNG by eye.\n\n**Takeaway:** Google dominates. It enters in August 2004 at $102 and peaks at $707 in October 2007, a little over three times Apple's 2010 price of $223. The other four stay under about $225 throughout. The chart also shows Google's fall to roughly $290 in late 2008 and its recovery to $560 by March 2010.\n\n**What's on the chart:**\n- Lines are labelled directly at their right ends, with no legend.\n- Alternating dashed and solid lines mean the series don't depend on colour alone.\n- Two annotations mark Google's peak and its entry point.\n\n**Files**\n- `stocks_line.py` \u2014 the script, which reads the CSV and does all calculations in code\n- `figures/stocks_line.png`\n- `figures/stocks_line.pdf`\n\n**Next improvement:** the four non-Google stocks are squashed near the bottom on a linear axis. I'd add a second panel (or a log-scale version) so their relative moves, such as the 2008 drop, are readable. Tell me if you want it, or a different annotation, a 300 DPI render or another colour scheme.",
+    "checker": {
+      "stocks_line.py": {
+        "script": "stocks_line.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              11.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "stocks_line.pdf",
+              "stocks_line.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-taxis-hist",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "histogram of taxi fares from data/raw/public/taxis.csv",
+    "checks": [
+      "A histogram (not bars per category) of the fare column; right-skewed with most fares under $20."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.17035499999999998,
+    "turns": 11,
+    "duration_s": 33.1,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "taxi_fare_hist.pdf",
+      "taxi_fare_hist.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: cat > taxi_fare_hist.py <<'EOF'\n# /// script\n# requires-python = \">=3.11\"\n# dependencies = [\n#     \"matplotlib\",\n#     \"",
+      "bash: python - <<'EOF'\ns=open('taxi_fare_hist.py').read()\ns=s.replace('\"Fare ($, $2 bins)\"','r\"Fare (\\\\$, \\\\$2 bins)\"')\na=s.in"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 4
+    },
+    "final_message": "The histogram is done, and the figure checker found no problems.\n\n- **Files:** `taxi_fare_hist.py` (script), `figures/taxi_fare_hist.png` and `figures/taxi_fare_hist.pdf`. Both images were saved at 150 DPI.\n- **Takeaway:** Taxi fares are right-skewed. 52% of the 1,000 rides cost under $10. The median is $9.50 and the mean is $12.68, because a long tail of longer trips pulls the mean up. The chart also shows a small spike of 15 rides at $52\u201354.\n- **Next improvement:** The $52\u201354 spike looks like a flat fare, for example airport trips. I'd check the `pickup_zone` and `dropoff_zone` columns to confirm that before putting a label on it.\n\nI can switch to a log x-axis, use other bin widths, or split the histogram by payment type or borough if you want any of those.",
+    "checker": {
+      "taxi_fare_hist.py": {
+        "script": "taxi_fare_hist.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              10.0,
+              5.5
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "taxi_fare_hist.pdf",
+              "taxi_fare_hist.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  },
+  {
+    "id": "x-titanic-grouped",
+    "kind": "offpattern",
+    "pattern": null,
+    "prompt": "compare survival rates by passenger class and sex from data/raw/public/titanic.csv",
+    "checks": [
+      "Both class and sex are shown. Female 1st-class survival ~97%, male 3rd-class ~14%. Large deviations suggest a blanket dropna()."
+    ],
+    "model": "claude-sonnet-5-5",
+    "skill": "/tmp/claude-0/-home-user-matplotlib-skill/5ed3b241-bdfd-5bc3-b80b-6c7854407d27/scratchpad/skill-v2/matplotlib",
+    "cost_usd": 0.1709814,
+    "turns": 11,
+    "duration_s": 40.9,
+    "is_error": false,
+    "timed_out": false,
+    "figures": [
+      "titanic_survival_class_sex.pdf",
+      "titanic_survival_class_sex.png"
+    ],
+    "skill_invoked": [
+      "matplotlib"
+    ],
+    "skill_files_read": [
+      "style-reference.md",
+      "patterns/other-charts.md",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/x-titanic-grouped/workspace; cat > titanic_survival.py <<'EOF'\n# ///",
+      "bash: cd /tmp/matplotlib-skill-bench/v2/claude-sonnet-5-5/x-titanic-grouped/workspace; python - <<'EOF'\ns=open('titanic_surviv"
+    ],
+    "tool_counts": {
+      "Skill": 1,
+      "Bash": 4,
+      "Read": 4
+    },
+    "final_message": "I made a grouped bar chart of survival rate by passenger class and sex. The figure checker found no overlaps or style problems.\n\n| Class | Female | Male | Gap |\n|---|---|---|---|\n| First | 97% (n=94) | 37% (n=122) | 60 points |\n| Second | 92% (n=76) | 16% (n=108) | 76 points |\n| Third | 50% (n=144) | 14% (n=347) | 36 points |\n\n**Takeaway:** Women survived at a higher rate than men in every class. Class matters a lot for women, whose survival fell from 97% in First to 50% in Third. For men, only First class did noticeably better, at 37% against 14\u201316% in Second and Third.\n\nSecond class has the widest gap, because its men did about as badly as Third-class men while its women did almost as well as First-class women.\n\n**Chart details:** Women are in red and men in blue hatched bars, so the two groups also differ by pattern and not just color.\n\n**Files:**\n- `titanic_survival.py` (the script)\n- `figures/titanic_survival_class_sex.png`\n- `figures/titanic_survival_class_sex.pdf`\n\n**Next improvement:** I'd add 95% confidence intervals or the group sizes to the chart. Third-class men are 347 passengers, but Second-class women are only 76, so the rates are not equally certain.\n\nI can also re-render at 300 DPI for publication or restyle it if you'd like.",
+    "checker": {
+      "titanic_survival.py": {
+        "script": "titanic_survival.py",
+        "run_error": null,
+        "figures": [
+          {
+            "size_in": [
+              9.0,
+              6.0
+            ],
+            "n_axes": 1,
+            "issues": [],
+            "saved_as": [
+              "titanic_survival_class_sex.pdf",
+              "titanic_survival_class_sex.png"
+            ],
+            "formats": [
+              "pdf",
+              "png"
+            ],
+            "dpi": [
+              150
+            ]
+          }
+        ],
+        "issues": [],
+        "errors": 0
+      }
+    }
+  }
+]

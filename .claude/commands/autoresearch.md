@@ -309,7 +309,7 @@ designer would make. Justify every score of 2 with a specific observation.
 
 | Check | 0 | 1 | 2 |
 |-------|---|---|---|
-| 7. **Title quality** | Missing title or placeholder text ("Chart Title") | Classical title describes the metric (e.g., "Collisions per Billion Miles by State") | Classical title + insight annotation below chart that states a data-specific finding |
+| 7. **Title quality** | Missing title or placeholder text ("Chart Title") | Classical title describes the metric (e.g., "Collisions per Billion Miles by State") | Classical title + a subtitle or at-the-data annotation that states a data-specific finding (not a detached corner footer) |
 | 8. **Typography hierarchy** | All text same weight/size, no visual priority | Some hierarchy (title larger), but labels compete for attention | Clear progression: title > subtitle > labels > annotations. Professional editorial quality |
 | 9. **Reader self-sufficiency** | Reader needs external context (no units, unlabeled axes, ambiguous categories) | Most context present, one gap (missing units or vague axis label) | Unfamiliar reader can fully interpret. Units clear, values labeled, axes descriptive |
 | 10. **Adaptive composition** | Template defaults applied without regard for data | 1–2 layout choices adapted to data | Layout demonstrates understanding of the specific dataset. Non-obvious choices that improve communication |
@@ -346,7 +346,7 @@ Read all 3 generated `.py` files. Each check scored 0/1/2/3.
 | Check | 0 | 1 | 2 | 3 |
 |-------|---|---|---|---|
 | 1. **No hardcoded data** | Displayed values hardcoded as literals | Most values from DataFrame, some literals | All displayed values from DataFrame | All from data + handles edge cases (empty DataFrame, single-row) |
-| 2. **Defensive data handling** | No defensive coding | Basic `dropna()` after load | `dropna()` + type checks or column existence validation | `dropna()` + type checks + fallback values + informative error messages |
+| 2. **Defensive data handling** | No defensive coding | `dropna(subset=[plotted columns])` after load | scoped `dropna` + type checks or column existence validation | scoped `dropna` + type checks + fallback values + informative error messages |
 | 3. **Code organization** | Monolithic block, no comments, poor variable names | Section comments present, flat structure, generic names | Logical sections, descriptive names, comments at key steps | Publication-quality: helpers where warranted, consistent naming, docstring explains intent |
 | 4. **Consistent approach** | 3 fundamentally different structural approaches | 2 similar, 1 divergent | Same structure, minor variation in details | Identical structural approach with data-appropriate adaptations |
 | 5. **Save convention** | Missing PDF or PNG, wrong dpi, missing bbox_inches | Correct formats, missing `bbox_inches="tight"` | PDF+PNG, dpi=150, `bbox_inches="tight"` | + `figures/` dir created with `mkdir(exist_ok=True)`, descriptive filename |
