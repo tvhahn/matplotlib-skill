@@ -1,7 +1,7 @@
 # Horizontal Bar Chart
 
 **Use for:** one value per category, ranked — percentages, counts, scores; long category names.
-**Exemplars:** `exemplars/P1-a.png` (10 states, the leader highlighted) and `exemplars/P1-b.png` (7 regions, decimals). Fixed: Blues_d bars, bar-end labels, hidden value axis, left title + computed subtitle. Varies: number format, height, which bar is highlighted.
+**Exemplars:** `exemplars/P1-a.png` (10 states, the leader highlighted) and `exemplars/P1-b.png` (8 discovery methods, counts with thousands separators). Fixed: Blues_d bars, bar-end labels, hidden value axis, left title + computed subtitle. Varies: number format, height, which bar is highlighted.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")

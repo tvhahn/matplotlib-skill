@@ -1,7 +1,7 @@
 # Decision Boundary
 
 **Use for:** a classifier's decision regions and confidence over two features. For an ordinary scatter plot use `other-charts.md`.
-**Exemplars:** `exemplars/P6-a.png` (features on different scales → square panel) and `exemplars/P6-b.png` (same-scale features → equal aspect). Fixed: probability-sized background dots, coloured contours, two outside legends. Varies: aspect handling, circled errors, feature labels.
+**Exemplars:** `exemplars/P6-a.png` (3 classes) and `exemplars/P6-b.png` (2 classes, features in different units). Fixed: probability-sized background dots, coloured contours, two outside legends. Varies: aspect handling, circled errors, feature labels.
 
 ```python
 from matplotlib.lines import Line2D

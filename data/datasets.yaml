@@ -727,3 +727,39 @@
   rows: 178
   patterns: [13]
   description: True vs predicted wine cultivar for a confusion matrix (y_true, y_pred)
+
+- name: precomputed_ml_training_diabetes
+  file: raw/precomputed/ml/training_diabetes.csv
+  source: derived from public/diabetes.csv (MLP, target above median)
+  license: CC-BY-4.0
+  domain: medical
+  rows: 150
+  patterns: [13]
+  description: Per-epoch train/validation loss and accuracy; overfits after epoch 26
+
+- name: precomputed_ml_predictions_iris
+  file: raw/precomputed/ml/predictions_iris.csv
+  source: derived from public/iris.csv (5-fold Logistic Regression, sepal features)
+  license: CC-BY-4.0
+  domain: ecology
+  rows: 150
+  patterns: [13]
+  description: Out-of-fold y_true/y_pred for iris species from sepal features (accuracy ~81%)
+
+- name: precomputed_p9_iris
+  file: raw/precomputed/p9/iris.npz
+  source: derived from public/iris.csv (5-fold Logistic Regression, sepal features)
+  license: CC-BY-4.0
+  domain: ecology
+  rows: 150
+  patterns: [9]
+  description: 5-fold PR/ROC curves for versicolor vs others
+
+- name: precomputed_p9_diabetes
+  file: raw/precomputed/p9/diabetes.npz
+  source: derived from public/diabetes.csv (5-fold Logistic Regression)
+  license: CC-BY-4.0
+  domain: medical
+  rows: 442
+  patterns: [9]
+  description: 5-fold PR/ROC curves for disease progression above the median

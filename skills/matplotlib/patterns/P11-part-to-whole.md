@@ -3,7 +3,7 @@
 **Use for:** composition — each component's share within a group (100% bars) or how
 the mix changes over time (stacked area). Never a pie: shares compared by length or
 height along a common baseline read far more precisely than angles.
-**Exemplars:** `exemplars/P11-share-bars.png` (3 classes, the story component at the baseline) and `exemplars/P11-stacked-area.png` (3 sources over 17 years). Fixed: white separators, story component on the common baseline, names inside the bands. Varies: which component is coloured, label placement.
+**Exemplars:** `exemplars/P11-share-bars.png` (3 groups, 2 components) and `exemplars/P11-stacked-area.png` (2 named components + Other over 20 years). Fixed: white separators, story component on the common baseline, names inside the bands. Varies: which component is coloured, label placement.
 
 ## Contents
 - 100% stacked horizontal bars (share within each of a few groups)

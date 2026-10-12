@@ -1,7 +1,7 @@
 # PR/ROC Curves
 
 **Use for:** evaluating a classifier, usually across cross-validation folds. Panel (a) precision-recall, panel (b) ROC.
-**Exemplars:** `exemplars/P9-a.png` (weak, unstable model) and `exemplars/P9-b.png` (strong model). Fixed: PR then ROC, grey folds + cubehelix average + orange dashed baseline, panel frames. Varies: legend position, subtitle verdict (stable vs varying).
+**Exemplars:** `exemplars/P9-a.png` (moderate model, folds vary) and `exemplars/P9-b.png` (weak class; PR legend moved off the curves). Fixed: PR then ROC, grey folds + cubehelix average + orange dashed baseline, panel frames. Varies: legend position, subtitle verdict (stable vs varying).
 
 ```python
 import numpy as np

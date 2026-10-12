@@ -459,6 +459,19 @@ P9_CONFIGS = {
         "features": ["duration", "waiting"],
         "target": "kind",
     },
+    "diabetes": {
+        "file": "public/diabetes.csv",
+        "features": None,  # all numeric except target
+        "target": "target",
+        "binarize_median": True,  # progression above the median vs below
+    },
+    "iris": {
+        "file": "public/iris.csv",
+        "features": ["sepal length (cm)", "sepal width (cm)"],
+        "target": "target",
+        "positive_class": 1,  # versicolor vs others: the hard class
+        "exclude_cols": ["target_name"],
+    },
     "wine": {
         "file": "public/wine.csv",
         "features": None,  # all numeric except target
@@ -491,7 +504,9 @@ def generate_p9():
 
         # Prepare binary target
         target_series = df[cfg["target"]]
-        if "positive_class" in cfg:
+        if cfg.get("binarize_median"):
+            y = (target_series > target_series.median()).astype(int).values
+        elif "positive_class" in cfg:
             y = (target_series == cfg["positive_class"]).astype(int).values
         elif not pd.api.types.is_numeric_dtype(target_series):
             # Encode string target as binary (first class vs rest)
@@ -581,6 +596,9 @@ def generate_p9():
 ML_TRAINING = {
     "breast_cancer": {"file": "public/breast_cancer.csv", "target": "target", "epochs": 80, "lr": 3e-4},
     "wine": {"file": "public/wine.csv", "target": "target", "epochs": 120, "lr": 3e-3},
+    # Disease progression above the median → binary; small, noisy, overfits visibly
+    "diabetes": {"file": "public/diabetes.csv", "target": "target", "epochs": 150,
+                 "lr": 2e-4, "binarize_median": True},
 }
 
 ML_PREDICTIONS = {
@@ -590,6 +608,8 @@ ML_PREDICTIONS = {
         "features": ["bill_length_mm", "flipper_length_mm"],
     },
     "wine": {"file": "public/wine.csv", "target": "target_name", "features": ["alcohol", "color_intensity"]},
+    "iris": {"file": "public/iris.csv", "target": "target_name",
+             "features": ["sepal length (cm)", "sepal width (cm)"]},
 }
 
 
@@ -606,6 +626,8 @@ def generate_ml():
     for name, cfg in ML_TRAINING.items():
         df = pd.read_csv(RAW / cfg["file"]).dropna()
         y = df[cfg["target"]].values
+        if cfg.get("binarize_median"):
+            y = (y > np.median(y)).astype(int)
         X = df.drop(columns=[cfg["target"]]).select_dtypes("number").values
         X_tr, X_va, y_tr, y_va = train_test_split(
             X, y, test_size=0.4, stratify=y, random_state=0

@@ -1,7 +1,7 @@
 # Violin + Strip Plot
 
 **Use for:** comparing distributions across categories while showing every observation.
-**Exemplars:** `exemplars/P4-a.png` (3 species, haloed median labels over the strip) and `exemplars/P4-b.png` (5 continents, one decimal). Fixed: white violins with black points, red median ticks. Varies: height, strip alpha, units, subtitle comparison.
+**Exemplars:** `exemplars/P4-a.png` (2 groups with a long right tail) and `exemplars/P4-b.png` (3 species, one decimal). Fixed: white violins with black points, red median ticks with haloed labels. Varies: height, strip alpha, units, subtitle comparison.
 
 ```python
 import matplotlib.patheffects as pe

@@ -1,7 +1,7 @@
 # Lollipop / Dumbbell Chart
 
 **Use for:** min/avg/max ranges per item — model scores across folds or tasks, price ranges by grade.
-**Exemplars:** `exemplars/P5-a.png` (8 models) and `exemplars/P5-b.png` (6 countries, money). Fixed: dark min/max dots, light average dot, grey range bar, best on top. Varies: label density, number format, subtitle.
+**Exemplars:** `exemplars/P5-a.png` (6 classifiers' fold scores) and `exemplars/P5-b.png` (12 years, larger numbers). Fixed: dark min/max dots, light average dot, grey range bar, best on top. Varies: label density, number format, subtitle.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")

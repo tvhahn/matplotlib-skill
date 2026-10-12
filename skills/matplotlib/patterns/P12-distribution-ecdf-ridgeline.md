@@ -4,7 +4,7 @@
 "what share is below x?" or the tails matter; ridgeline for many *ordered* groups
 (months, years, ranks). A few groups with raw points → P4; one variable → histogram
 (other-charts.md).
-**Exemplars:** `exemplars/P12-ecdf.png` (2 groups, medians marked) and `exemplars/P12-ridgeline.png` (12 months in calendar order, the peak row highlighted). Fixed: ECDF colour + line style + direct labels; ridgeline white outlines, lower rows in front. Varies: guide lines, highlighted row, x clipping.
+**Exemplars:** `exemplars/P12-ecdf.png` (2 groups, medians marked) and `exemplars/P12-ridgeline.png` (7 ordered grades, the highest median highlighted). Fixed: ECDF colour + line style + direct labels; ridgeline white outlines, lower rows in front. Varies: guide lines, highlighted row, x clipping, number format.
 
 ## Contents
 - ECDF (2–4 groups)
@@ -89,6 +89,7 @@ df = pd.read_csv("data.csv").dropna(subset=["group", "value"])
 order = list(df["group"].drop_duplicates())  # natural order (months, years) — never alphabetical
 n = len(order)
 med = df.groupby("group")["value"].median()
+fmt = ".2f" if med.abs().max() < 10 else ".1f" if med.abs().max() < 100 else ",.0f"
 focus, low = med.idxmax(), med.idxmin()
 
 # Gaussian KDE with Scott's bandwidth, in numpy (no scipy needed)
@@ -113,7 +114,7 @@ for i, g in enumerate(order):
 
 # The focus row's median, in white inside its dark ridge beside the median tick
 b = n - 1 - order.index(focus)
-ax.annotate(f"{med[focus]:.1f}", xy=(med[focus], b + 0.45), xytext=(-5, 0),
+ax.annotate(f"{med[focus]:{fmt}}", xy=(med[focus], b + 0.45), xytext=(-5, 0),
             textcoords="offset points", ha="right", va="center", fontsize=10.5,
             color="white", weight="semibold", zorder=2 * n + 4)
 
@@ -125,7 +126,7 @@ ax.grid(axis="y", visible=False)
 
 # --- Title + takeaway subtitle (computed) ---
 ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey", weight="semibold", pad=26)
-ax.annotate(f"Medians run from {med[low]:.1f} in {low} to {med[focus]:.1f} in {focus}",
+ax.annotate(f"Medians run from {med[low]:{fmt}} in {low} to {med[focus]:{fmt}} in {focus}",
             xy=(0, 1), xycoords="axes fraction", xytext=(0, 8), textcoords="offset points",
             ha="left", va="bottom", fontsize=10.5, color="dimgrey")
 ax.tick_params(axis="both", which="both", length=0, labelcolor="dimgrey")

@@ -1,7 +1,7 @@
 # Vertical Bar Chart
 
 **Use for:** one value per category with few, short category names, or categories with a natural order (years, sizes, ratings).
-**Exemplars:** `exemplars/P2-a.png` (ordinal cylinders kept in natural order, one colour) and `exemplars/P2-b.png` (3 nominal islands sorted by value). Fixed: bar-end labels, no value axis. Varies: order (natural vs by value), palette size, subtitle wording.
+**Exemplars:** `exemplars/P2-a.png` (ordinal cylinder counts kept in natural order) and `exemplars/P2-b.png` (3 nominal species sorted by value). Fixed: bar-end labels, no value axis. Varies: order (natural vs by value), subtitle wording.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")

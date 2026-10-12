@@ -1,7 +1,7 @@
 # Multi-Panel Grid (GridSpec)
 
 **Use for:** small multiples — the same metric across groups or conditions (2x2, 3x2, 3x3), or related views of the same data.
-**Exemplars:** `exemplars/P8-a.png` (4 diets, 2x2) and `exemplars/P8-b.png` (5 continents, 3x2 with the 6th cell hidden). Fixed: lightgrey panel frames, bold (a)–(f) labels, outer-edge axis labels, shared y. Varies: grid shape, grey context lines, subtitle.
+**Exemplars:** `exemplars/P8-a.png` (4 groups, 2x2, small decimals) and `exemplars/P8-b.png` (5 groups, 3x2 with the 6th cell hidden). Fixed: lightgrey panel frames, bold (a)–(e) labels, outer-edge axis labels, shared y. Varies: grid shape, number format, subtitle.
 **Layout:** `gridspec.GridSpec(rows, cols)` with at least 2 columns; a "3x2 grid" is 3 rows × 2 columns. Prefer balanced grids over N×1 stacks or 1×N strips, which make panels squat. For 5 items use 3x2 and hide the 6th cell.
 
 ```python

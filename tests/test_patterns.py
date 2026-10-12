@@ -206,3 +206,41 @@ def test_skill_references_exist():
     paths |= set(re.findall(r"`(patterns/[\w.-]+\.md)`", text))
     missing = [p for p in sorted(paths) if not (SKILL / p).exists()]
     assert not missing, f"SKILL.md references missing files: {missing}"
+
+
+def _source_stem(path):
+    """data/raw/precomputed/ml/training_wine.csv → 'wine'; public/penguins.csv → 'penguins'."""
+    stem = Path(path).stem
+    for prefix in ("training_", "predictions_"):
+        stem = stem.removeprefix(prefix)
+    return stem
+
+
+def test_exemplar_data_disjoint_from_benchmark():
+    """An exemplar drawn from a benchmark prompt's dataset is a worked answer: models copy it.
+
+    The first v3 benchmark run was contaminated this way (an exemplar on the Iowa data was
+    reproduced callout-for-callout), so every exemplar declares its sources and none may
+    share a source dataset with any prompt in scripts/benchmark_prompts.yaml.
+    """
+    import yaml
+
+    sys.path.insert(0, str(REPO / "scripts"))
+    import render_exemplars
+
+    prompts = yaml.safe_load((REPO / "scripts" / "benchmark_prompts.yaml").read_text())
+    bench = {
+        _source_stem(p)
+        for c in prompts
+        for p in re.findall(r"data/raw/[\w./-]+\.\w+", c["prompt"])
+    }
+    assert bench, "no data paths found in benchmark prompts"
+    clashes = {
+        name: sorted(set(sources) & bench)
+        for name, *_, sources in render_exemplars.EXEMPLARS
+        if set(sources) & bench
+    }
+    assert not clashes, f"exemplars share data with benchmark prompts: {clashes}"
+    rendered = {e[0] for e in render_exemplars.EXEMPLARS}
+    on_disk = {p.stem for p in (SKILL / "exemplars").glob("*.png")}
+    assert rendered == on_disk, f"exemplars on disk vs catalogue differ: {rendered ^ on_disk}"

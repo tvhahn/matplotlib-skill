@@ -1228,6 +1228,8 @@ def _check_fractional_ticks(ctx):
                 continue
             if np.abs(v - np.round(v)).max() > 1e-9:
                 continue
+            if v.min() >= 0 and v.max() <= 1:
+                continue  # 0/1 rates and probabilities (a perfect ROC step) — fractions are right
             bad = [
                 lab.get_text()
                 for lab in _visible_ticklabels(axis)
@@ -1534,7 +1536,16 @@ def _check_annotation_count(ctx):
             )
         marks = [m for m in marks if len(m)]
         marks = np.vstack(marks) if marks else np.empty((0, 2))
-        ends = [s["ends"] for s in _series(ax) if s["kind"] == "line"]
+        # both ends of every drawn line, grey context lines included (slope charts
+        # label each grey line at its start and end)
+        ends = []
+        for ln in ax.get_lines():
+            xy = np.column_stack(ln.get_data()).astype(float) if len(ln.get_xdata()) else None
+            if xy is None or len(xy) < 2:
+                continue
+            xy = xy[np.isfinite(xy).all(axis=1)]
+            if len(xy) >= 2:
+                ends.append(ln.get_transform().transform(xy[[0, -1]]))
         ends = np.vstack(ends) if ends else np.empty((0, 2))
         count = []
         for t, bb in items:

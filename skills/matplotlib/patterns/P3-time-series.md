@@ -1,7 +1,7 @@
 # Time Series: Bars with Rolling Mean
 
 **Use for:** periodic values (annual, monthly) shown as bars above/below a reference, with a smoothing trend line. For plain line charts over time use `other-charts.md`.
-**Exemplars:** `exemplars/P3-a.png` (anomalies around zero) and `exemplars/P3-b.png` (all-positive series vs its mean). Fixed: red/blue bars around the named reference, cubehelix rolling line, Patch+Line2D legend. Varies: reference, annotated moment, subtitle.
+**Exemplars:** `exemplars/P3-a.png` (all-positive series against its mean) and `exemplars/P3-b.png` (values around zero; legend moved to the empty corner). Fixed: red/blue bars around the named reference, cubehelix rolling line, Patch+Line2D legend. Varies: reference, annotated moment, legend position, subtitle.
 
 ```python
 from matplotlib.lines import Line2D

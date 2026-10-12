@@ -1,7 +1,7 @@
 # Slope Chart / Dumbbell
 
 **Use for:** change between two points per item — two years, before/after, rank change.
-**Exemplars:** `exemplars/P10-slope.png` (5 continents, the biggest gain in ACCENT_RED) and `exemplars/P10-dumbbell.png` (6 countries, one missing start value). Fixed: values printed at both ends instead of a y-axis; grey context, colour only for the story. Varies: which item is highlighted, sort key, missing-value note.
+**Exemplars:** `exemplars/P10-slope.png` (5 methods, the biggest gain in ACCENT_RED, a zero start kept) and `exemplars/P10-dumbbell.png` (12 months, sorted by the end value). Fixed: values printed at the ends instead of a y-axis; grey context, colour only for the story. Varies: which item is highlighted, sort key, number format.
 Many time points → line chart (`other-charts.md`); min/avg/max ranges → P5.
 
 ## Contents
@@ -22,6 +22,7 @@ missing = wide.index[wide.isna().any(axis=1)].tolist()  # no line without both e
 wide = wide.dropna()
 change = (wide[p1] - wide[p0]).sort_values()
 focus, least = change.index[-1], change.index[0]  # the item the takeaway is about
+fmt = ".1f" if wide.abs().max().max() < 100 else ",.0f"  # thousands separators for big values
 
 ACCENT_RED, HALO = "#bd0c0c", [pe.withStroke(linewidth=3, foreground="white")]
 fig, ax = plt.subplots(figsize=(7, 6.5), dpi=150)
@@ -47,14 +48,14 @@ for x, col, ha, dx in ((0, p0, "right", -10), (1, p1, "left", 10)):
     ys_all += list(ys)
     for item, vi, y in zip(s.index, v, ys):
         hl = item == focus
-        ax.annotate(f"{item}  {vi:.1f}" if x == 0 else f"{vi:.1f}", xy=(x, vi),
+        ax.annotate(f"{item}  {vi:{fmt}}" if x == 0 else f"{vi:{fmt}}", xy=(x, vi),
                     xytext=(x + dx / 300, y), textcoords="data", ha=ha, va="center",
                     fontsize=10.5, color=ACCENT_RED if hl else "dimgrey",
                     weight="semibold" if hl else "normal",
                     arrowprops=dict(arrowstyle="-", color="lightgrey", lw=0.6) if abs(y - vi) > gap / 4 else None)
 
 # Change on the focus line, at the data
-ax.annotate(f"{change[focus]:+.1f}", xy=(0.5, wide.loc[focus].mean()), xytext=(8, -6),
+ax.annotate(f"{change[focus]:+{fmt}}", xy=(0.5, wide.loc[focus].mean()), xytext=(8, -6),
             textcoords="offset points", ha="left", va="top", fontsize=10.5, color=ACCENT_RED,
             weight="semibold", path_effects=HALO)
 
@@ -65,7 +66,8 @@ ax.set_yticks([])
 ax.grid(axis="y", visible=False)
 
 # --- Title + takeaway subtitle (computed); a second line names items left out ---
-lines = [f"{focus}: {change[focus]:+.1f} from {p0} to {p1}, the largest gain; {least}: {change[least]:+.1f}"]
+lines = [f"{focus}: {change[focus]:+{fmt}} from {p0} to {p1}, the largest gain; "
+         f"{least}: {change[least]:+{fmt}}"]
 if missing:
     lines.append(f"Not shown: {', '.join(missing)} (no value for {p0} or {p1})")
 ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey", weight="semibold",

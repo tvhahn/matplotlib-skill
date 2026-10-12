@@ -12,7 +12,7 @@ style-reference invariants. Each section names its **Signature** (keep) and
 
 ## Line chart
 
-**Exemplar:** `exemplars/other-line.png` — five stocks, cased lines, direct end labels (light hues darkened for text).
+**Exemplar:** `exemplars/other-line.png` — three months of airline passengers, cased lines, direct end labels (light hues darkened for text).
 
 ```python
 import matplotlib
@@ -71,7 +71,7 @@ sns.despine(left=True, bottom=True)
 
 ## Scatter plot
 
-**Exemplar:** `exemplars/other-scatter.png` — three species, colour + marker shape, panel frame.
+**Exemplar:** `exemplars/other-scatter.png` — three cylinder groups, colour + marker shape, panel frame, legend in the empty corner.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -115,7 +115,7 @@ sns.despine(left=True, bottom=True)
 
 ## Histogram
 
-**Exemplar:** `exemplars/other-histogram.png` — skewed fares, median pinned to its line.
+**Exemplar:** `exemplars/other-histogram.png` — bimodal waiting times, median pinned to its line.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -155,7 +155,7 @@ sns.despine(left=True, bottom=True)
 
 ## Grouped bar
 
-**Exemplar:** `exemplars/other-grouped.png` — survival by class and sex, gap stated in the subtitle.
+**Exemplar:** `exemplars/other-grouped.png` — fuel economy by cylinders and transmission — not a rate, so labels and subtitle use the data's own units.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
