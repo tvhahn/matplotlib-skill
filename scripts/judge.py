@@ -19,6 +19,10 @@ disagree counts as a tie:
 
 With two or more --judges, the summary reports how often the judges agree.
 
+Variety across repeated runs (the uniformity check — exemplars must not make every
+run of a prompt look the same):
+    uv run scripts/judge.py variety logs/bench/v3
+
 Human anchor set (calibrates the AI judges against a person's ratings):
     uv run scripts/judge.py anchor-sample logs/bench/v2base logs/bench/v3 --n 30 --out docs/benchmarks/2026-10-skill-v3/human-anchor
     # rate the PNGs in ratings.csv, then:
@@ -281,6 +285,66 @@ def summarize_pairwise(rows, name_a, name_b, judges, out_dir):
     (out_dir / "summary.txt").write_text(text + "\n")
 
 
+# --------------------------------------------------------------------------- variety
+
+VARIETY_PROMPT = """These {n} PNGs ({files}) are independent attempts at the same request
+(see task.json). Read them all. Compare them with each other, not with an ideal.
+
+Rate how different they are:
+- "annotations": the subtitle/takeaway text and the callouts — what they say and
+  where they sit.
+- "design": chart type, ordering, highlighting, layout and encoding choices.
+
+Each is "near-identical" (same choices, cosmetic differences only), "similar"
+(same approach, a few different choices) or "different" (clearly different
+choices). Reply with ONLY one JSON object, no prose, no code fence:
+{{"annotations": "...", "design": "...", "note": "one sentence"}}"""
+
+
+def judge_variety(results_dir, judge, parallel):
+    results_dir = Path(results_dir).resolve()
+    cells = {}
+    for m in run_metas(results_dir):
+        cells.setdefault(m.parent.parent, []).append(m)
+    jobs = [(cell, ms) for cell, ms in sorted(cells.items()) if len(ms) >= 2]
+
+    def one(job):
+        cell, metas = job
+        meta = json.loads(metas[0].read_text())
+        room = ROOM_ROOT / "variety" / results_dir.name / "__".join(cell.relative_to(results_dir).parts)
+        shutil.rmtree(room, ignore_errors=True)
+        room.mkdir(parents=True)
+        (room / "task.json").write_text(task_json(meta))
+        files = []
+        for k, m in enumerate(sorted(metas), 1):
+            pngs = sorted(m.parent.glob("*.png"))
+            if pngs:
+                shutil.copy(pngs[0], room / f"attempt{k}.png")
+                files.append(f"attempt{k}.png")
+        if len(files) < 2:
+            res = {"error": "fewer than 2 charts"}
+        else:
+            res = ask(room, VARIETY_PROMPT.format(n=len(files), files=", ".join(files)), judge)
+        shutil.rmtree(room, ignore_errors=True)
+        res.update(cell="/".join(cell.relative_to(results_dir).parts), model=meta["model"],
+                   case=meta["id"], kind=meta.get("kind"))
+        return res
+
+    with ThreadPoolExecutor(max_workers=parallel) as pool:
+        rows = list(pool.map(one, jobs))
+    out = results_dir / "judgements"
+    out.mkdir(exist_ok=True)
+    (out / f"variety-{judge}.json").write_text(json.dumps(rows, indent=2))
+    ok = [r for r in rows if "annotations" in r]
+    print(f"variety ({results_dir.name}, judge {judge}): {len(ok)} cells")
+    for dim in ("annotations", "design"):
+        for model in sorted({r["model"] for r in ok}) + ["ALL"]:
+            rs = [r for r in ok if model in ("ALL", r["model"])]
+            c = {v: sum(r[dim] == v for r in rs) for v in ("near-identical", "similar", "different")}
+            print(f"  {dim:<12} {model:<20} " + "  ".join(f"{k} {v / len(rs):.0%}" for k, v in c.items()))
+    return rows
+
+
 # --------------------------------------------------------------------------- human anchor
 
 
@@ -374,7 +438,13 @@ def main():
     s.add_argument("--out", required=True)
     c = sub.add_parser("anchor-compare")
     c.add_argument("out")
+    v = sub.add_parser("variety")
+    v.add_argument("results_dir")
+    v.add_argument("--judge", default="claude-opus-5-5")
+    v.add_argument("--parallel", type=int, default=8)
     args = ap.parse_args()
+    if args.mode == "variety":
+        return judge_variety(args.results_dir, args.judge, args.parallel)
     if args.mode == "anchor-sample":
         return anchor_sample(args.dirs, args.n, args.out)
     if args.mode == "anchor-compare":
