@@ -90,3 +90,74 @@
   prompt: "compare survival rates by passenger class and sex from data/raw/public/titanic.csv"
   checks:
     - "Both class and sex are shown. Female 1st-class survival ~97%, male 3rd-class ~14%. Large deviations suggest a blanket dropna()."
+
+- id: p6-wine
+  kind: pattern
+  pattern: P6
+  prompt: "decision boundary plot from data/raw/precomputed/p6/wine.npz — load with np.load(allow_pickle=True); arrays: mesh_x0, mesh_x1, yy_hat, yy_prob, X, y, class_names, feature_names"
+  checks:
+    - "Three classes with coloured regions and the training points overlaid; axes are alcohol and malic acid."
+
+# --- Output modes (v3) ---
+
+- id: m-publication-tips
+  kind: mode
+  prompt: "publication-quality figure, 300 DPI, of average tip as a percentage of the total bill by day of the week from data/raw/public/tips.csv"
+  checks:
+    - "Four days in natural order (Thur, Fri, Sat, Sun), tip percentage around 15-17%; saved as PDF and PNG at 300 DPI."
+
+- id: m-quick-seattle
+  kind: mode
+  prompt: "quick exploratory plot of daily precipitation over time in data/raw/public/seattle_weather.csv"
+  checks:
+    - "Precipitation over 2012-2015 with wet winters and dry summers visible; PNG only is fine."
+
+- id: m-function-happiness
+  kind: mode
+  prompt: "add a function plot_region_scores(df) to plots.py that draws mean happiness score by region from data/raw/public/world_happiness.csv, and a short script make_figures.py that calls it and saves the figure to figures/"
+  checks:
+    - "Seven regions; North America highest (~7.2), Europe and Africa lowest (~4.1-4.2). Function returns fig, ax."
+
+# --- Chart types beyond P1–P9 (v3.1 router + new patterns) ---
+
+- id: n-slope-gapminder
+  kind: newchart
+  prompt: "how did life expectancy by continent change between 1952 and 2007? data in data/raw/public/gapminder.csv"
+  checks:
+    - "Two time points per continent (a slope or dumbbell chart is ideal). Africa 39→55, Americas 53→73, Asia 46→71, Europe 64→77, Oceania 69→71. FSU has no 1952 value."
+
+- id: n-dumbbell-healthexp
+  kind: newchart
+  prompt: "compare health spending per capita in 1970 and 2020 for each country in data/raw/public/healthexp.csv"
+  checks:
+    - "Before/after per country (dumbbell, slope or paired bars). USA ~327→11859, far above the others in 2020. Canada has no 1970 value."
+
+- id: n-mix-iowa
+  kind: newchart
+  prompt: "show how the mix of Iowa's electricity generation sources changed over time, from data/raw/public/iowa_electricity.csv"
+  checks:
+    - "Part-to-whole over 2001–2017 (stacked area or 100% stacked bars). Renewables rise from ~3% to ~39%; fossil fuels fall from ~87% to ~52%."
+
+- id: n-ecdf-taxis
+  kind: newchart
+  prompt: "ECDF of taxi trip distance for cash vs credit card payments from data/raw/public/taxis.csv"
+  checks:
+    - "Two step curves (cash, credit card) from 0 to 1; credit-card trips tend to be longer."
+
+- id: n-ridgeline-seattle
+  kind: newchart
+  prompt: "show how the distribution of daily maximum temperature shifts across the months of the year, from data/raw/public/seattle_weather.csv"
+  checks:
+    - "Twelve months in calendar order; medians ~8 °C in Jan/Dec rising to ~26 °C in Jul/Aug."
+
+- id: n-training-cancer
+  kind: newchart
+  prompt: "plot the training and validation loss curves from data/raw/precomputed/ml/training_breast_cancer.csv (columns epoch, train_loss, val_loss, train_acc, val_acc)"
+  checks:
+    - "Two loss curves over 80 epochs; validation loss bottoms out near epoch 37 (~0.09) and creeps back up while training loss keeps falling (overfitting)."
+
+- id: n-confusion-wine
+  kind: newchart
+  prompt: "confusion matrix from data/raw/precomputed/ml/predictions_wine.csv (columns y_true, y_pred)"
+  checks:
+    - "3x3 matrix for class_0/1/2; overall accuracy ~82%; class_1 is classified best (62/71); class_2 is most often mistaken for class_0 (9)."

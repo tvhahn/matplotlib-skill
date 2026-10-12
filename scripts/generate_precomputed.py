@@ -5,7 +5,7 @@ Each chart pattern that currently embeds computation (aggregation, ML models,
 correlation matrices) gets pre-computed outputs so the pattern files contain
 only visualization code.
 
-Output: data/raw/precomputed/{p3,p5,p6,p7,p9}/<dataset>.{csv,npz}
+Output: data/raw/precomputed/{p3,p5,p6,p7,p9,ml}/<dataset>.{csv,npz}
 """
 
 from pathlib import Path
@@ -570,6 +570,83 @@ def generate_p9():
         )
 
 
+
+# ---------------------------------------------------------------------------
+# ML diagnostics: training curves and out-of-fold predictions
+# Output CSVs:
+#   training_<name>.csv    epoch, train_loss, val_loss, train_acc, val_acc
+#   predictions_<name>.csv y_true, y_pred   (5-fold out-of-fold predictions)
+# ---------------------------------------------------------------------------
+
+ML_TRAINING = {
+    "breast_cancer": {"file": "public/breast_cancer.csv", "target": "target", "epochs": 80, "lr": 3e-4},
+    "wine": {"file": "public/wine.csv", "target": "target", "epochs": 120, "lr": 3e-3},
+}
+
+ML_PREDICTIONS = {
+    "penguins": {
+        "file": "public/penguins.csv",
+        "target": "species",
+        "features": ["bill_length_mm", "flipper_length_mm"],
+    },
+    "wine": {"file": "public/wine.csv", "target": "target_name", "features": ["alcohol", "color_intensity"]},
+}
+
+
+def generate_ml():
+    """Per-epoch learning curves (MLP) and out-of-fold class predictions."""
+    from sklearn.metrics import accuracy_score, log_loss
+    from sklearn.model_selection import cross_val_predict, train_test_split
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.preprocessing import StandardScaler
+
+    outdir = OUT / "ml"
+    outdir.mkdir(parents=True, exist_ok=True)
+
+    for name, cfg in ML_TRAINING.items():
+        df = pd.read_csv(RAW / cfg["file"]).dropna()
+        y = df[cfg["target"]].values
+        X = df.drop(columns=[cfg["target"]]).select_dtypes("number").values
+        X_tr, X_va, y_tr, y_va = train_test_split(
+            X, y, test_size=0.4, stratify=y, random_state=0
+        )
+        scaler = StandardScaler().fit(X_tr)
+        X_tr, X_va = scaler.transform(X_tr), scaler.transform(X_va)
+        # Small train set + wide net + no regularisation so the validation
+        # curve turns up: the chart has an overfitting point to annotate.
+        clf = MLPClassifier(
+            hidden_layer_sizes=(128, 64), alpha=0.0, learning_rate_init=cfg["lr"],
+            batch_size=32, random_state=0,
+        )
+        classes = np.unique(y)
+        rows = []
+        for epoch in range(1, cfg["epochs"] + 1):
+            clf.partial_fit(X_tr, y_tr, classes=classes)
+            rows.append(
+                {
+                    "epoch": epoch,
+                    "train_loss": log_loss(y_tr, clf.predict_proba(X_tr), labels=classes),
+                    "val_loss": log_loss(y_va, clf.predict_proba(X_va), labels=classes),
+                    "train_acc": accuracy_score(y_tr, clf.predict(X_tr)),
+                    "val_acc": accuracy_score(y_va, clf.predict(X_va)),
+                }
+            )
+        out = pd.DataFrame(rows).round(5)
+        out.to_csv(outdir / f"training_{name}.csv", index=False)
+        best = out.loc[out["val_loss"].idxmin()]
+        print(f"  ML/training_{name}: {len(out)} epochs, best val_loss at epoch {int(best.epoch)}")
+
+    for name, cfg in ML_PREDICTIONS.items():
+        df = pd.read_csv(RAW / cfg["file"]).dropna(subset=cfg["features"] + [cfg["target"]])
+        X = df[cfg["features"]].values
+        y = df[cfg["target"]].values
+        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        clf = LogisticRegression(max_iter=10000, random_state=42)
+        pred = cross_val_predict(clf, X, y, cv=skf)
+        out = pd.DataFrame({"y_true": y, "y_pred": pred})
+        out.to_csv(outdir / f"predictions_{name}.csv", index=False)
+        print(f"  ML/predictions_{name}: {len(out)} rows, accuracy {np.mean(y == pred):.3f}")
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -591,6 +668,9 @@ def main():
 
     print("\nP9: PR/ROC Curves (5-fold CV)")
     generate_p9()
+
+    print("\nML: training curves + out-of-fold predictions")
+    generate_ml()
 
     print("\nDone! Output in data/raw/precomputed/")
 
