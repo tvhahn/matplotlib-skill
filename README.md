@@ -113,7 +113,20 @@ claude --add-dir /path/to/matplotlib-skill
 | P7 Heatmap | Correlation matrices, spectrograms |
 | P8 Multi-Panel | Multi-panel grid layouts (2x2, 3x2, 3x3) |
 | P9 PR/ROC | PR/ROC classification evaluation curves |
+| P10 Slope / Dumbbell | Two values per item: before/after, two years, rank change |
+| P11 Part-to-Whole | 100% stacked bars, stacked area over time |
+| P12 ECDF / Ridgeline | Distributions: quantiles across 2–4 groups; many ordered groups |
+| P13 Training Diagnostics | Training/validation curves, confusion matrix |
 | Other charts | Line, scatter, histogram, grouped bar (`patterns/other-charts.md`) |
+
+Each pattern ships with exemplar PNGs (`skills/matplotlib/exemplars/`, rendered from the
+templates by `scripts/render_exemplars.py`) that the model looks at before writing code,
+and `SKILL.md` routes requests by *what the reader must do × the shape of the data*.
+After the layout checker, an independent reviewer subagent that never sees the code
+critiques the PNG (`skills/matplotlib/critic.md`). Several craft idioms in
+`style-reference.md` (white halos on labels, pinned reference-line labels, line casing,
+zoom insets) are adapted from Nicolas Rougier's
+[*Scientific Visualization: Python + Matplotlib*](https://github.com/rougier/scientific-visualization-book) (code BSD-2).
 
 ## Design Philosophy
 
@@ -149,15 +162,23 @@ See [`data/datasets.yaml`](data/datasets.yaml) for the full manifest with attrib
 
 ## Verification
 
-Every chart the skill makes is linted by `skills/matplotlib/scripts/check_figure.py`, which runs the script and measures text collisions, legends covering data, labels spilling into other panels, and style drift — things that are easy to miss in a downsized PNG.
+Every chart the skill makes is linted by `skills/matplotlib/scripts/check_figure.py`, which runs the script and measures text collisions, legends covering data, labels spilling into other panels, misleading scales (bars not at zero, dual or inverted axes), series that differ by colour alone under simulated colour blindness, faint text, and style drift — things that are easy to miss in a downsized PNG.
 
 ```bash
 # Multi-model benchmark in isolated clean rooms (no Docker; needs the claude CLI)
-uv run scripts/benchmark.py --label mytest --models claude-sonnet-5-5,claude-opus-5-5,claude-haiku-4-5
+uv run scripts/benchmark.py --label mytest --runs 3 --models claude-sonnet-5-5,claude-opus-5-5,claude-haiku-4-5
 
-# Every pattern template runs on real data and passes the checker
-uv run --no-project --with pytest --with matplotlib --with seaborn --with pandas --with numpy \
-    pytest tests/test_patterns.py -q
+# Headless vision judges: absolute scores, and blind pairwise in both A/B orders
+uv run scripts/judge.py absolute logs/bench/mytest
+uv run scripts/judge.py pairwise logs/bench/baseline logs/bench/mytest
+
+# Every pattern template runs on real data and passes the checker; the checker
+# catches a corpus of deliberately broken charts
+uv run --no-project --with pytest --with matplotlib --with seaborn --with pandas --with numpy --with pyyaml \
+    pytest tests/ -q
+
+# Re-render the exemplar PNGs after changing a template
+uv run scripts/render_exemplars.py
 
 # Generate charts in a Docker clean room (Docker required)
 scripts/chart-test-container.sh --quick            # 5 prompts, random from pools
@@ -172,8 +193,8 @@ uv run scripts/evaluate_skill.py --check-renders
 
 Contributions are welcome — whether it's improving an existing pattern or adding an entirely new chart type. Some ideas to get started:
 
-- **Improve a pattern:** Refine annotations, spacing, or palette choices in any of the 9 existing patterns
-- **Add a new chart type:** Line, scatter, histogram, and grouped bar have short templates in `other-charts.md`; stacked bars, `fill_between` area charts, and slope charts are on the wishlist
+- **Improve a pattern:** Refine annotations, spacing, or palette choices in any of the 13 existing patterns
+- **Add a new chart type:** Slope/dumbbell, part-to-whole, ECDF/ridgeline and training diagnostics joined in v3; waterfall, bump charts, connected scatter and beeswarms are on the wishlist
 - **Add datasets:** New public datasets that pair well with existing or new patterns
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on modifying patterns, adding new ones, and running tests.

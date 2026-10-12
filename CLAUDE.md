@@ -12,10 +12,12 @@ This repo doubles as evidence for a blog article. See `docs/blog/building-a-clau
 
 ### Key Paths
 
-- `skills/matplotlib/` — SKILL.md, style-reference.md, patterns/P1–P9 + other-charts.md, scripts/check_figure.py (canonical; `.claude/skills/matplotlib` is a symlink)
+- `skills/matplotlib/` — SKILL.md, style-reference.md, critic.md, patterns/P1–P13 + other-charts.md, exemplars/*.png, scripts/check_figure.py (canonical; `.claude/skills/matplotlib` is a symlink)
 - `data/` — datasets.yaml manifest, raw/ datasets
-- `scripts/` — benchmark.py (+ benchmark_prompts.yaml, judge_rubric.md), chart-test-container.sh, evaluate_skill.py
-- `tests/test_patterns.py` — executes every pattern template on real data and lints the figure
+- `scripts/` — benchmark.py (+ benchmark_prompts.yaml), judge.py (+ judge_rubric.md), render_exemplars.py, chart-test-container.sh, evaluate_skill.py
+- `tests/test_patterns.py` — executes every pattern template on real data and lints the figure; checks exemplars and SKILL.md references
+- `tests/test_checker.py` + `tests/broken/` — deliberately broken charts the checker must catch, and good ones it must pass
+- `docs/idea-garden/2026-10-v3-roadmap.md` — v3 proposal; `docs/benchmarks/2026-10-skill-v3/` — v3 results
 - `docs/gallery/` — key iteration snapshots (00-original-inspiration, 50-template-improvements-v2, TEMPLATE.md)
 - `gallery-archive/` — all 51 iteration entries (local-only, git-excluded via `.git/info/exclude`)
 
@@ -54,15 +56,20 @@ All charts follow the aesthetic defined in `skills/matplotlib/style-reference.md
 
 ```bash
 # Primary (no Docker): multi-model benchmark in isolated clean rooms outside the repo
-uv run scripts/benchmark.py --label v2                          # 12 prompts × Sonnet/Opus/Haiku
+uv run scripts/benchmark.py --label v3 --runs 3                 # 23 prompts × Sonnet/Opus/Haiku × 3
 uv run scripts/benchmark.py --label quick --models claude-sonnet-5-5 --only p1-titanic,x-stocks-line
 uv run scripts/benchmark.py --label noskill --no-skill --models claude-sonnet-5-5
-uv run scripts/benchmark.py --recheck logs/bench/v2             # re-score with current checker
-# Then judge PNGs with vision subagents using scripts/judge_rubric.md
+uv run scripts/benchmark.py --recheck logs/bench/v3             # re-score with current checker
+# Judge headlessly (judges see only PNG + task + rubric)
+uv run scripts/judge.py absolute logs/bench/v3 --judges claude-opus-5-5,claude-sonnet-5-5
+uv run scripts/judge.py pairwise logs/bench/v2base logs/bench/v3   # both A/B orders
 
-# Pattern templates must run clean (fast, no Claude calls)
-uv run --no-project --with pytest --with matplotlib --with seaborn --with pandas --with numpy \
-    pytest tests/test_patterns.py -q
+# Templates + checker corpus must run clean (fast, no Claude calls)
+uv run --no-project --with pytest --with matplotlib --with seaborn --with pandas --with numpy --with pyyaml \
+    pytest tests/ -q
+
+# After changing any template: re-render exemplars (must all print "clean")
+uv run scripts/render_exemplars.py
 
 # Lint any chart script (also what the skill runs in its workflow)
 uv run skills/matplotlib/scripts/check_figure.py path/to/chart.py
@@ -112,7 +119,9 @@ grep 'dpi=' skills/matplotlib/patterns/*.md
 ## Future Work
 
 `patterns/other-charts.md` covers line, scatter, histogram, and grouped bar with short templates.
-Candidates for full patterns if usage warrants: stacked/100% bar, `fill_between` area, slope chart.
+v3 added P10–P13 (slope/dumbbell, part-to-whole, ECDF/ridgeline, training diagnostics).
+Candidates next: waterfall, bump chart, connected scatter; publication presets in physical
+units (column widths), slides mode, notebook-mode checking (roadmap Direction E).
 
 Benchmark isolation note: Claude Code discovers skills in ancestor directories, so clean rooms
 must live outside this repo (benchmark.py uses /tmp/matplotlib-skill-bench).

@@ -1,6 +1,7 @@
 # Heatmap / Spectrogram
 
 **Use for:** correlation matrices, pivot tables (e.g. month × year), spectrograms and other `pcolormesh` grids.
+**Exemplars:** `exemplars/P7-a.png` (5 variables) and `exemplars/P7-b.png` (7 variables). Fixed: lower triangle, RdBu_r centred at 0, annotated cells. Varies: size, annotation font size, subtitle.
 
 ## Contents
 - Correlation heatmap / pivot table

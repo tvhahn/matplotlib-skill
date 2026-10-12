@@ -9,6 +9,7 @@ The aesthetic every chart follows. Read it before writing chart code.
 - Spines, grid, panel frames
 - Typography, titles and takeaways
 - Annotations
+- Craft: labels on data, emphasis, insets, bands
 - Legends
 - Multi-panel conventions
 - Figure sizing
@@ -73,7 +74,14 @@ TRAFFIC_LIGHT = ["#33a02c", "#fdbf6f", "#e31a1c"]  # pass / warn / fail
 ```
 
 `#fee090` (yellow) is too light for thin lines or small markers on white; use it
-only for filled areas or swap in `#555555`.
+only for filled areas or swap in `#555555`. Orange `#fc8d59` and light blue `#91bfdb`
+are fine as lines and fills but too faint as text (< 3:1 on white): when a direct label
+takes its series colour, darken those two by ~30% (multiply RGB by 0.7).
+
+**Colour is never the only cue.** Red `#d73027` and blue `#4575b4` have almost the same
+lightness (they merge in greyscale print), and red vs `#555555` is close for protanopes.
+So whenever series differ by colour, they also differ by something else: a direct label,
+a marker shape, or a line style. The checker flags pairs that differ by colour alone.
 
 ## Spines, grid, panel frames
 
@@ -144,6 +152,7 @@ ax.annotate(f"Peak: {peak_val:,.0f} ({peak_year})", xy=(peak_year, peak_val), xy
 - Avoid a detached footer sentence in a figure corner; use the subtitle or put the
   note at the data.
 - Supporting marks (raw points, fold curves, context lines): grey, `alpha≈0.4`.
+- A label that lands on data gets a white halo (see Craft), not a bbox.
 
 **Value labels on bar ends** (horizontal bars):
 
@@ -163,6 +172,102 @@ handles grouped bars. Match format to data: `f"{v:,.0f}"` large integers,
 ax.text(0.03, 0.95, f"RMSE = {rmse:.3f}\n$R^2$ = {r2:.3f}", transform=ax.transAxes,
         va="top", ha="left", fontsize=9, color="dimgrey")
 ```
+
+## Craft: labels on data, emphasis, insets, bands
+
+Small matplotlib idioms that keep labels readable and emphasis honest. Several are
+adapted from Nicolas Rougier's *Scientific Visualization: Python + Matplotlib*
+(code BSD-2, github.com/rougier/scientific-visualization-book).
+
+**Halo, not a box.** When a label or leader line must sit on top of data (strip
+points, lines, dense cells), outline it in white. A bbox hides the data; a halo
+only separates the text from it.
+
+```python
+import matplotlib.patheffects as pe
+HALO = [pe.withStroke(linewidth=3, foreground="white")]
+t = ax.annotate("Gentoo median 5,000 g", xy=(x, y), xytext=(10, 10), textcoords="offset points",
+                fontsize=10, color="dimgrey", arrowprops=dict(arrowstyle="-", color="dimgrey", lw=0.8))
+t.set_path_effects(HALO)
+t.arrow_patch.set_path_effects(HALO)
+```
+
+**Labels pinned to a reference line.** Blend data and axes coordinates so a label
+stays on its line whatever the limits become (no `ax.get_ylim()[1] * 0.95`):
+
+```python
+ax.axvline(med, color="dimgrey", linestyle="--", linewidth=1)
+ax.text(med, 0.98, f" Median {med:,.1f}", transform=ax.get_xaxis_transform(),
+        ha="left", va="top", fontsize=10, color="dimgrey")
+# horizontal line: ax.text(0.99, ref, "Target", transform=ax.get_yaxis_transform(), ha="right", va="bottom")
+```
+
+**Highlight one, grey the rest.** The focus series in colour on top of the others
+in light grey — per panel in small multiples, or across a busy line chart:
+
+```python
+for name in series:
+    focus = name == highlight
+    ax.plot(x, df[name], color=ACCENT_RED if focus else "#bdbdbd",
+            linewidth=2.2 if focus else 0.9, zorder=3 if focus else 1)
+```
+
+**White casing under crossing lines.** Draw each line twice — a wider white line
+first — and set the stacking order explicitly, so crossings read as over/under:
+
+```python
+for i, name in enumerate(order):  # first = on top
+    z = 10 - i
+    ax.plot(x, y[name], color="white", linewidth=4.5, zorder=z)
+    ax.plot(x, y[name], color=pal[name], linewidth=2, zorder=z)
+```
+
+**Emphasis encoded twice.** When one bar or row is the story, colour its tick label
+and make it semibold too — the emphasis survives greyscale and colour blindness:
+
+```python
+for lbl in ax.get_yticklabels():
+    if lbl.get_text() == focus:
+        lbl.set_color(ACCENT_RED)
+        lbl.set_fontweight("semibold")
+```
+
+**Size legend: area, not radius.** Scale `s` (an area) linearly with the value and
+let matplotlib build legend entries in data units:
+
+```python
+sc = ax.scatter(x, y, s=v / v.max() * 400, color=pal[3], edgecolors="white", linewidths=0.5)
+handles, labels = sc.legend_elements(prop="sizes", num=3, color="#bdbdbd",
+                                     func=lambda s: s / 400 * v.max())
+ax.legend(handles, labels, title="Population (M)", loc="lower right", frameon=True,
+          facecolor="white", framealpha=0.8, edgecolor="lightgrey", labelcolor="dimgrey")
+```
+
+**Zoom inset** for the region the takeaway lives in (the low-FPR corner of a ROC,
+a crowded cluster). Place it over empty space and frame it like a panel:
+
+```python
+axin = ax.inset_axes([0.45, 0.08, 0.5, 0.42], xlim=(0, 0.1), ylim=(0.8, 1.0))
+axin.plot(fpr_avg, tpr_avg, color=pal[5], linewidth=2)
+axin.tick_params(length=0, labelsize=8, labelcolor="dimgrey")
+axin.grid(False)
+axin.patch.set_edgecolor("lightgrey"); axin.patch.set_linewidth(0.8)
+ax.indicate_inset_zoom(axin, edgecolor="lightgrey")
+```
+
+**Opaque tint instead of alpha for bands.** Overlapping translucent bands blend into
+a muddy third colour. Use a light tint of the series colour, white-edged, beneath
+the line:
+
+```python
+tint = sns.light_palette(color, 4)[1]
+ax.fill_between(x, lo, hi, facecolor=tint, edgecolor="white", linewidth=0.75, zorder=1)
+ax.plot(x, mid, color=color, linewidth=2, zorder=2)
+```
+
+**Side callouts** when labels can't sit next to their points: stack them in a
+column beside the axes with elbow leaders (`connectionstyle="angle,angleA=0,angleB=90"`),
+ordered top-to-bottom like the points they describe. Use sparingly.
 
 ## Legends
 

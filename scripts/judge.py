@@ -18,6 +18,11 @@ disagree counts as a tie:
     uv run scripts/judge.py pairwise logs/bench/v2base logs/bench/v3
 
 With two or more --judges, the summary reports how often the judges agree.
+
+Human anchor set (calibrates the AI judges against a person's ratings):
+    uv run scripts/judge.py anchor-sample logs/bench/v2base logs/bench/v3 --n 30 --out docs/benchmarks/2026-10-skill-v3/human-anchor
+    # rate the PNGs in ratings.csv, then:
+    uv run scripts/judge.py anchor-compare docs/benchmarks/2026-10-skill-v3/human-anchor
 Results go to <results-dir>/judgements/ (absolute) or
 logs/bench/pairwise-<a>-vs-<b>/ (pairwise).
 """
@@ -276,6 +281,80 @@ def summarize_pairwise(rows, name_a, name_b, judges, out_dir):
     (out_dir / "summary.txt").write_text(text + "\n")
 
 
+# --------------------------------------------------------------------------- human anchor
+
+
+def anchor_sample(dirs, n, out, seed=0):
+    """Copy a stratified, anonymised sample of charts and a blank ratings sheet."""
+    import csv
+
+    rng = random.Random(seed)
+    pool = []
+    for d in dirs:
+        d = Path(d).resolve()
+        for m in run_metas(d):
+            pngs = sorted(m.parent.glob("*.png"))
+            if pngs:
+                meta = json.loads(m.read_text())
+                pool.append((d, m, pngs[0], meta))
+    # stratify by (model, kind) so every cell is represented
+    strata = {}
+    for item in pool:
+        strata.setdefault((item[3]["model"], item[3].get("kind")), []).append(item)
+    for v in strata.values():
+        rng.shuffle(v)
+    picked = []
+    while len(picked) < n and any(strata.values()):
+        for k in sorted(strata, key=str):
+            if strata[k] and len(picked) < n:
+                picked.append(strata[k].pop())
+    rng.shuffle(picked)
+    out = Path(out)
+    (out / "charts").mkdir(parents=True, exist_ok=True)
+    key, rows = {}, []
+    for i, (d, m, png, meta) in enumerate(picked, 1):
+        cid = f"c{i:02d}"
+        shutil.copy(png, out / "charts" / f"{cid}.png")
+        key[cid] = {"results_dir": d.name, "run": run_key(m, d)}
+        rows.append({"id": cid, "request": meta["prompt"], **{k: "" for k in DIMS},
+                     "overall": "", "notes": ""})
+    (out / "key.json").write_text(json.dumps(key, indent=2))
+    with open(out / "ratings.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+    print(f"{len(rows)} charts → {out}/charts; rate them in {out}/ratings.csv "
+          f"(0–3 per dimension, overall 1–10; rubric: scripts/judge_rubric.md)")
+
+
+def anchor_compare(out):
+    """Correlate human ratings with every AI judge's absolute scores for the same runs."""
+    import csv
+
+    out = Path(out)
+    key = json.loads((out / "key.json").read_text())
+    human = {}
+    with open(out / "ratings.csv") as f:
+        for r in csv.DictReader(f):
+            if r["overall"].strip():
+                human[r["id"]] = float(r["overall"])
+    if len(human) < 3:
+        sys.exit("fewer than 3 rated charts in ratings.csv")
+    judged = {}
+    for cid, k in key.items():
+        jdir = REPO / "logs" / "bench" / k["results_dir"] / "judgements"
+        for jf in jdir.glob("absolute-*.json"):
+            for r in json.loads(jf.read_text()):
+                if r["run"] == k["run"] and "overall" in r:
+                    judged.setdefault(r["judge"], {})[cid] = r["overall"]
+    for judge, scores in judged.items():
+        common = sorted(set(scores) & set(human))
+        if len(common) > 2:
+            r = statistics.correlation([human[c] for c in common], [scores[c] for c in common])
+            mad = statistics.mean(abs(human[c] - scores[c]) for c in common)
+            print(f"{judge}: pearson r={r:.2f} vs human, mean |Δ|={mad:.2f} (n={len(common)})")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -289,7 +368,17 @@ def main():
         s.add_argument("--judges", default="claude-opus-5-5",
                        help="comma-separated judge models")
         s.add_argument("--parallel", type=int, default=8)
+    s = sub.add_parser("anchor-sample")
+    s.add_argument("dirs", nargs="+")
+    s.add_argument("--n", type=int, default=30)
+    s.add_argument("--out", required=True)
+    c = sub.add_parser("anchor-compare")
+    c.add_argument("out")
     args = ap.parse_args()
+    if args.mode == "anchor-sample":
+        return anchor_sample(args.dirs, args.n, args.out)
+    if args.mode == "anchor-compare":
+        return anchor_compare(args.out)
     judges = args.judges.split(",")
     if args.mode == "absolute":
         judge_absolute(args.results_dir, judges, args.parallel)

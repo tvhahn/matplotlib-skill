@@ -45,28 +45,28 @@ def blocks():
 def setup_data(stem, idx, tmp):
     """Write the files a template reads and return extra globals it expects."""
     g = {}
-    if stem.startswith("P1"):
+    if stem.startswith("P1-"):
         d = pd.read_csv(RAW / "public/car_crashes.csv").nlargest(10, "total")
         g["df"] = d.rename(columns={"abbrev": "category", "total": "value"})[
             ["category", "value"]
         ]
-    elif stem.startswith("P2"):
+    elif stem.startswith("P2-"):
         d = pd.read_csv(RAW / "public/diamonds.csv")
         g["raw"] = d.rename(columns={"clarity": "category", "carat": "value"})
-    elif stem.startswith("P3"):
+    elif stem.startswith("P3-"):
         shutil.copy(RAW / "precomputed/p3/co2_concentration.csv", tmp / "data.csv")
-    elif stem.startswith("P4"):
+    elif stem.startswith("P4-"):
         d = pd.read_csv(RAW / "public/diamonds.csv")
         d.rename(columns={"price": "value", "color": "category"}).to_csv(
             tmp / "data.csv", index=False
         )
-    elif stem.startswith("P5"):
+    elif stem.startswith("P5-"):
         shutil.copy(RAW / "precomputed/p5/healthexp.csv", tmp / "data.csv")
-    elif stem.startswith("P6"):
+    elif stem.startswith("P6-"):
         shutil.copy(RAW / "precomputed/p6/penguins.npz", tmp / "data.npz")
-    elif stem.startswith("P7") and idx == 0:
+    elif stem.startswith("P7-") and idx == 0:
         shutil.copy(RAW / "precomputed/p7/diamonds.csv", tmp / "data.csv")
-    elif stem.startswith("P7"):
+    elif stem.startswith("P7-"):
         rng = np.random.default_rng(0)
         g.update(
             time_axis=np.linspace(0, 30, 120),
@@ -75,25 +75,58 @@ def setup_data(stem, idx, tmp):
             data=rng.gamma(2, 1, (80, 120)),
             binned_data=rng.gamma(2, 1, (20, 120)),
         )
-    elif stem.startswith("P8"):
-        d = pd.read_csv(RAW / "public/fmri.csv")
-        s = d.groupby("timepoint")["signal"].mean()
-        g.update(
-            all_values=s.values,
-            x_data=s.index.values,
-            y_data=s.values,
-            x_last=s.index[-1],
-            y_last=s.values[-1],
-        )
-        d.rename(columns={"region": "group", "timepoint": "x", "signal": "y"}).to_csv(
+    elif stem.startswith("P8-"):
+        d = pd.read_csv(RAW / "public/chickweight.csv")
+        d["diet"] = "Diet " + d["diet"].astype(str)
+        d.rename(columns={"diet": "group", "time": "x", "weight": "y"}).to_csv(
             tmp / "data.csv", index=False
         )
-    elif stem.startswith("P9"):
+    elif stem.startswith("P9-"):
         (tmp / "data/raw/precomputed/p9").mkdir(parents=True)
         shutil.copy(
             RAW / "precomputed/p9/penguins.npz",
             tmp / "data/raw/precomputed/p9/dataset.npz",
         )
+    elif stem.startswith("P10-") and idx == 0:  # slope: continents 1952 vs 2007
+        d = pd.read_csv(RAW / "public/gapminder.csv")
+        d = d[d["year"].isin([1952, 2007])]
+        d.rename(columns={"continent": "item", "year": "period", "lifeExp": "value"})[
+            ["item", "period", "value"]
+        ].to_csv(tmp / "data.csv", index=False)
+    elif stem.startswith("P10-"):  # dumbbell: health spending 1970 vs 2020
+        d = pd.read_csv(RAW / "public/healthexp.csv")
+        d.rename(columns={"Country": "item", "Year": "period", "Spending_USD": "value"})[
+            ["item", "period", "value"]
+        ].to_csv(tmp / "data.csv", index=False)
+    elif stem.startswith("P11-") and idx == 0:  # 100% bars: Titanic class x fate
+        d = pd.read_csv(RAW / "public/titanic.csv")
+        d["alive"] = d["alive"].map({"yes": "Survived", "no": "Died"})
+        d.rename(columns={"class": "group", "alive": "component"})[
+            ["group", "component"]
+        ].to_csv(tmp / "data.csv", index=False)
+    elif stem.startswith("P11-"):  # stacked area: Iowa generation by source
+        d = pd.read_csv(RAW / "public/iowa_electricity.csv")
+        d["year"] = pd.to_datetime(d["year"]).dt.year
+        d.rename(
+            columns={"year": "x", "source": "component", "net_generation": "value"}
+        ).to_csv(tmp / "data.csv", index=False)
+    elif stem.startswith("P12-") and idx == 0:  # ECDF: taxi distance by payment
+        d = pd.read_csv(RAW / "public/taxis.csv")
+        d["payment"] = d["payment"].str.capitalize()
+        d.rename(columns={"payment": "group", "distance": "value"})[
+            ["group", "value"]
+        ].to_csv(tmp / "data.csv", index=False)
+    elif stem.startswith("P12-"):  # ridgeline: Seattle max temperature by month
+        d = pd.read_csv(RAW / "public/seattle_weather.csv", parse_dates=["date"])
+        d = d.sort_values("date")
+        d["group"] = d["date"].dt.strftime("%b")  # file order = calendar order
+        d.rename(columns={"temp_max": "value"})[["group", "value"]].to_csv(
+            tmp / "data.csv", index=False
+        )
+    elif stem.startswith("P13-") and idx == 0:  # training curves
+        shutil.copy(RAW / "precomputed/ml/training_breast_cancer.csv", tmp / "data.csv")
+    elif stem.startswith("P13-"):  # confusion matrix
+        shutil.copy(RAW / "precomputed/ml/predictions_wine.csv", tmp / "data.csv")
     elif stem == "other-charts":
         if idx == 0:
             d = pd.read_csv(RAW / "public/stocks.csv")
@@ -114,9 +147,11 @@ def setup_data(stem, idx, tmp):
             d = pd.read_csv(RAW / "public/diamonds.csv")
             d.rename(columns={"price": "value"}).to_csv(tmp / "data.csv", index=False)
         else:
-            d = pd.read_csv(RAW / "public/tips.csv")
+            d = pd.read_csv(RAW / "public/titanic.csv")
+            d["class"] = d["class"].str.title()
+            d["sex"] = d["sex"].str.title()
             d.rename(
-                columns={"day": "group", "smoker": "subgroup", "tip": "value"}
+                columns={"class": "group", "sex": "subgroup", "survived": "value"}
             ).to_csv(tmp / "data.csv", index=False)
     return g
 
@@ -149,3 +184,25 @@ def test_skill_frontmatter():
     desc = front["description"]
     assert 50 < len(desc) <= 1024 and "<" not in desc
     assert "Use when" in desc  # says when to trigger, not just what it does
+
+
+def test_exemplars_referenced_and_present():
+    """Every exemplar a pattern names exists, and every exemplar file is named somewhere."""
+    named = set()
+    for md in (SKILL / "patterns").glob("*.md"):
+        named |= set(re.findall(r"exemplars/([\w.-]+\.png)", md.read_text()))
+    on_disk = {p.name for p in (SKILL / "exemplars").glob("*.png")}
+    assert named, "no pattern references an exemplar"
+    assert not named - on_disk, f"missing exemplar files: {sorted(named - on_disk)}"
+    assert not on_disk - named, f"unreferenced exemplar files: {sorted(on_disk - named)}"
+    for png in (SKILL / "exemplars").glob("*.png"):
+        assert png.stat().st_size < 400_000, f"{png.name} too large for the model to read cheaply"
+
+
+def test_skill_references_exist():
+    """Files SKILL.md points at by ${CLAUDE_SKILL_DIR}/... or patterns/... exist."""
+    text = (SKILL / "SKILL.md").read_text()
+    paths = set(re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w./-]+\.(?:md|py))", text))
+    paths |= set(re.findall(r"`(patterns/[\w.-]+\.md)`", text))
+    missing = [p for p in sorted(paths) if not (SKILL / p).exists()]
+    assert not missing, f"SKILL.md references missing files: {missing}"

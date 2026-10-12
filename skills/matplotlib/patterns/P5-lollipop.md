@@ -1,6 +1,7 @@
 # Lollipop / Dumbbell Chart
 
 **Use for:** min/avg/max ranges per item — model scores across folds or tasks, price ranges by grade.
+**Exemplars:** `exemplars/P5-a.png` (8 models) and `exemplars/P5-b.png` (6 countries, money). Fixed: dark min/max dots, light average dot, grey range bar, best on top. Varies: label density, number format, subtitle.
 
 ```python
 sns.set_theme(font_scale=1.0, style="whitegrid", font="DejaVu Sans")
@@ -40,7 +41,7 @@ ax.set_ylabel("")
 best, widest = df.iloc[-1], df.loc[(df["max"] - df["min"]).idxmax()]
 ax.set_title("Chart Title", loc="left", fontsize=14, color="dimgrey",
              weight="semibold", pad=46)
-ax.annotate(f'{best["name"]} has the best average; {widest["name"]} varies most '
+ax.annotate(f'{best["name"]} has the highest average; {widest["name"]} varies most '
             f'({widest["max"] - widest["min"]:{fmt}} from min to max)',
             xy=(0, 1), xycoords="axes fraction", xytext=(0, 28), textcoords="offset points",
             ha="left", va="bottom", fontsize=10.5, color="dimgrey")
