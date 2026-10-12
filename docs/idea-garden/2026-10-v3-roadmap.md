@@ -29,6 +29,21 @@ book has no slope, dumbbell or waffle charts.
 (exemplars + independent critic)** as the v3 headline, carrying the Rougier craft
 layer with it. Direction B (router + new charts) is v3.1.
 
+
+## Status (implemented on `claude/kind-gates-bgjbvg`)
+
+| Item | Status |
+|---|---|
+| Phase 0 template debt (rows 1, 3, 6, 7, 8) | Done |
+| Phase 0 rows 2, 4, 5 (Tim's call) | **Pending Tim.** Hexes and P2's Signature unchanged; the non-destructive default was taken: the checker flags colour-only encodings (CVD-simulated) and faint text, and light hues are darkened only when used as text |
+| Eval hardening: 3 runs/cell, both-order pairwise, judge agreement, P6 + mode prompts, checker negative tests | Done (`scripts/judge.py`, `tests/test_checker.py`) |
+| Human anchor set | Tooling done; ratings **pending Tim** |
+| A. Exemplars + independent critic | Done — results in `docs/benchmarks/2026-10-skill-v3/` |
+| B. Router + new chart types | Done (P10–P13) |
+| C. Checker v3 | Done, except the data-fidelity dump (deferred) |
+| D. Rougier craft layer | Done (style-reference "Craft") |
+| E. Output modes (physical sizes, slides, notebook checks, restyle path) | Not started; alt text added to the report step |
+
 ---
 
 ## Phase 0 — Fix before building (small, do regardless)
