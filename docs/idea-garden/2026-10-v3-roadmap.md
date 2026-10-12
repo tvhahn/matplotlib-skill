@@ -33,15 +33,19 @@ layer with it. Direction B (router + new charts) is v3.1.
 
 ## Phase 0 — Fix before building (small, do regardless)
 
-Real defects the audit found in v2. Each one is small.
+Real defects the audit found in v2. Each one is small. Rows marked **Tim's call**
+change colours Tim chose, so they are decisions, not fixes (the README already keeps
+the P9 orange baseline on those grounds). Options for row 4: swap `#555555` for a
+lighter grey or move it later in the order; or keep the hexes and rely on a second
+encoding (marker/linestyle/direct label) that the checker enforces.
 
 | # | Defect | Where |
 |---|---|---|
 | 1 | P9 and P6 templates still build a detached below-axes footer the style reference forbids | `P9-pr-roc.md:81`, `P6-decision-boundary.md:71` |
-| 2 | P2 Signature locks `DIVERGING_COLORBLIND` for ≤4 single-series bars; style-reference says one series → one colour | `P2-vertical-bar.md:48` |
+| 2 | **Tim's call.** P2 Signature locks `DIVERGING_COLORBLIND` for ≤4 single-series bars; style-reference says one series → one colour | `P2-vertical-bar.md:48` |
 | 3 | Grouped-bar Signature says DIVERGING; style-reference says CATEGORICAL for nominal | `other-charts.md` |
-| 4 | `CATEGORICAL` red `#d73027` vs grey `#555555`: ΔE 7.7 under protanopia (validator WARN). Red vs blue `#4575b4` have near-identical luminance (0.167 vs 0.173), so they merge in greyscale print | `style-reference.md` |
-| 5 | Orange `#fc8d59` (2.25:1) and light blue `#91bfdb` (1.92:1) are below 3:1 contrast on white — too faint for thin lines | `style-reference.md` |
+| 4 | **Tim's call.** `CATEGORICAL` red `#d73027` vs grey `#555555`: ΔE 7.7 under protanopia (validator WARN). Red vs blue `#4575b4` have near-identical luminance (0.167 vs 0.173), so they merge in greyscale print | `style-reference.md` |
+| 5 | **Tim's call.** Orange `#fc8d59` (2.25:1) and light blue `#91bfdb` (1.92:1) are below 3:1 contrast on white — too faint for thin lines | `style-reference.md` |
 | 6 | P8 template references undefined `all_values/x_data/y_last` (the test injects them); `hspace_map` lacks 3×3 | `P8-multi-panel.md` |
 | 7 | Takeaway subtitle missing from P3, P6, P9 and all four other-charts templates; other-charts titles lack `weight="semibold"` | patterns |
 | 8 | P1 hardcodes `%` in value labels | `P1-horizontal-bar.md:24` |
@@ -50,8 +54,8 @@ Real defects the audit found in v2. Each one is small.
 - ≥3 runs per cell (Haiku P9 already flipped between runs at n=1).
 - Pairwise judging in both A/B orders; report inter-judge agreement.
 - Add P6 and the output modes (notebook, function, publication, quick) to the prompts.
-- A **human anchor set**: Tim rates ~30 charts once. VisJudge-Bench found GPT-5 judges
-  correlate with expert ratings at only r ≈ 0.43, so the pairwise result stays the
+- A **human anchor set**: Tim rates ~30 charts once. VisJudge-Bench reportedly found
+  GPT-5 judges correlate with expert ratings at only r ≈ 0.43 (unverified), so the pairwise result stays the
   headline and the anchor set calibrates the judges.
 - **Negative tests for the checker**: today `test_patterns.py` only proves clean
   templates pass; nothing proves broken charts fail.
@@ -73,18 +77,26 @@ Real defects the audit found in v2. Each one is small.
   Signature (the describe→diff method from ChartIR).
 
 **Why.**
-- ChartMimic: models score ~82 copying a chart's look but ~61 *adapting* that look to
-  new data. Adapting is exactly what this skill asks for, and images carry taste that
-  prose loses.
-- Separating critic from author is the best-measured lever in the literature
-  (METAL +5.2% over prior best; PlotGen −10–15% without visual feedback; MatPlotAgent
-  48.9 → 61.2 with it). A model judging its own PNG tends to approve it — which
-  matches Opus's colliding callouts in v2.
+- ChartMimic's "Customized Mimic" task — write code for new data while keeping a
+  reference chart's style — is exactly the job an exemplar sets up, and GPT-4o already
+  scores 83.2 on it (81.2 on straight copying). Models use a reference image well;
+  today the skill gives them none. (This shows the channel works, not that exemplars
+  will beat v2's prose — the acceptance test below decides that.)
+- Visual feedback is the best-measured lever in the literature. MatPlotAgent (GPT-4,
+  MatPlotBench): direct decoding 48.9 → full agent 61.2; removing only the visual
+  feedback drops it to 53.4. METAL, which splits critique by modality, reports +5.2%
+  over the prior best, rising with token budget. A model judging its own PNG tends to
+  approve it — which matches Opus's colliding callouts in v2.
 
 **Risk — the blog's own lesson.** Exemplars can re-create the uniformity trap
 ("measure uniformity, you get uniform"). Mitigations: two exemplars per pattern
 on different data; captions that name what *should* vary; the critic grades the
 Signature, not resemblance.
+
+**Feasibility.** `SKILL.md` `allowed-tools` is `Bash, Write, Edit, Read, Glob, Grep` —
+no `Agent`, so the critic needs `Agent` added (or a forked-context critic skill).
+`scripts/benchmark.py` passes no tool allow/deny flags, so clean rooms won't block it,
+but confirm the critic actually fires in the transcript tool counts.
 
 **Cost.** ~1–1.5k tokens per exemplar image, only the matching pattern's is loaded.
 The critic adds a subagent call (~+30–50% cost per chart, estimate).
@@ -200,6 +212,11 @@ showed it." The exemplar uniformity risk and its mitigation is the same lesson a
 the autoresearch episode, from the other side.
 
 ## Sources
+
+Verified against the papers: ChartMimic (abstract + main results), MatPlotAgent
+(Table 4), METAL (abstract). Reported by the research pass but **not yet verified**:
+PlotGen's ablation figures, VisJudge-Bench's r ≈ 0.43, VisPath's +17%, Misviz's
+99.7% precision. Check those before quoting them in the blog.
 
 - Rougier, *Scientific Visualization: Python + Matplotlib* — https://github.com/rougier/scientific-visualization-book (code BSD-2; text CC BY-NC-SA 4.0). Ten Simple Rules chapter originally PLOS Comp Bio 2014.
 - ChartMimic — https://arxiv.org/abs/2406.09961
