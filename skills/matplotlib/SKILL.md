@@ -2,7 +2,7 @@
 name: matplotlib
 description: "Creates publication-quality matplotlib/seaborn charts in Python with an opinionated, despined, annotation-rich style (whitegrid, DejaVu Sans, ColorBrewer and cubehelix palettes, dimgrey text) and saves a reproducible script plus PDF/PNG. Use when the user asks for a chart, plot, graph, or figure from data in Python — bar, line, scatter, histogram, violin, lollipop, heatmap, small multiples, slope or dumbbell, stacked or 100% bar, area, ECDF, ridgeline, decision boundary, PR/ROC, training curves, or confusion matrix — or wants an existing matplotlib figure restyled. Also use for terse requests that only name a chart and a data file (e.g. 'PR and ROC curves from results.npz'): make the chart."
 argument-hint: "[chart request, e.g. 'bar chart of accuracy by model from results.csv']"
-allowed-tools: Bash, Write, Edit, Read, Glob, Grep, Agent
+allowed-tools: Bash, Write, Edit, Read, Glob, Grep, Agent, Task
 ---
 
 # Persona
@@ -122,10 +122,10 @@ Output mode:
 
 ## 2–3. Configure from the data
 
-Pick the pattern with the tables above. Read its file, then Read the exemplar PNGs it
-lists: they show the Signature on real data and how the rest adapted to that data.
-Match the finish, not the content — your annotations, ordering and layout come from
-your data and takeaway.
+Pick the pattern with the tables above. Read its file, then open the exemplar PNGs it
+lists with the Read tool (`cat` or `ls` shows you nothing of an image): they show the
+Signature on real data and how the rest adapted to that data. Match the finish, not
+the content — your annotations, ordering and layout come from your data and takeaway.
 
 Start from the pattern template, keep its **Signature**, and adapt everything else
 (figsize, font sizes, alpha, label format, legend position) to the data:
@@ -204,6 +204,13 @@ font="DejaVu Sans")`, `sns.despine(left=True, bottom=True)`, dimgrey annotation 
 tick-label colour, legend frame kwargs, `bbox_inches="tight"`.
 
 ## 6. Review
+
+Do this step every time, including when the checker reports nothing and the chart
+looks fine to you: the checker measures geometry, the reviewer judges whether the
+chart says what you meant, and you cannot — you see the chart you intended to draw.
+A chart that has not been through the reviewer is not finished. The only exception
+is a session with no subagent tool (Agent, or Task in some versions); then follow
+critic.md yourself and say so in the report.
 
 Follow `${CLAUDE_SKILL_DIR}/critic.md`: hand the PNG, the request, your intended
 takeaway and the pattern's exemplars to a fresh reviewer subagent that never sees

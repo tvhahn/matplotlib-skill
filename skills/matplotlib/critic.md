@@ -6,11 +6,12 @@ that has never seen the code.
 
 ## How to run it
 
-Spawn one subagent with the Agent tool (general-purpose) and wait for its reply — do
-not run it in the background. Fill in the brackets of the prompt below. Give it the
-file paths only; never paste or attach the script. If the Agent tool is unavailable,
-do the review yourself by following the same prompt, and describe the PNG *before*
-you reread your code.
+Spawn one subagent with the Agent tool (called Task in some versions; subagent
+type general-purpose) and wait for its reply — do not run it in the background. It
+costs one short call and is part of every chart, not an optional extra. Fill in the
+brackets of the prompt below. Give it the file paths only; never paste or attach the
+script. If no subagent tool is available, do the review yourself by following the
+same prompt, and describe the PNG *before* you reread your code.
 
 ```text
 You are reviewing a chart for a demanding data-visualisation editor. You have not
