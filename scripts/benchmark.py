@@ -280,7 +280,8 @@ def summarize(out_root):
     for r in rows:
         chk = r.get("checker") or {}
         issues = sum(
-            len(v.get("issues", [])) for v in chk.values() if isinstance(v, dict)
+            sum(i.get("severity") != "INFO" for i in v.get("issues", []))
+            for v in chk.values() if isinstance(v, dict)
         )
         pngs = sum(f.endswith(".png") for f in r["figures"])
         read = ",".join(x for x in r["skill_files_read"] if not x.startswith("bash"))[
