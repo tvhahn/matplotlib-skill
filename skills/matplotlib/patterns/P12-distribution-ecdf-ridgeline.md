@@ -4,6 +4,7 @@
 "what share is below x?" or the tails matter; ridgeline for many *ordered* groups
 (months, years, ranks). A few groups with raw points → P4; one variable → histogram
 (other-charts.md).
+**Exemplars:** `exemplars/P12-ecdf.png` (2 groups, medians marked) and `exemplars/P12-ridgeline.png` (12 months in calendar order, the peak row highlighted). Fixed: ECDF colour + line style + direct labels; ridgeline white outlines, lower rows in front. Varies: guide lines, highlighted row, x clipping.
 
 ## Contents
 - ECDF (2–4 groups)
@@ -26,15 +27,17 @@ STYLES, MARKERS = ["-", "--", ":", "-."], ["o", "s", "^", "D"]  # second encodin
 fmt = ".2f" if med.max() < 10 else ".1f" if med.max() < 100 else ",.0f"
 HALO = [pe.withStroke(linewidth=3, foreground="white")]
 fig, ax = plt.subplots(figsize=(10, 6), dpi=150)
-xmax = df["value"].quantile(0.99)  # clip the long tail and say so in the x label
+xlo, xmax = df["value"].min(), df["value"].quantile(0.99)  # cut the long tail; say so in the label
 for i, (g, c, ls, mk) in enumerate(zip(groups, COLORS, STYLES, MARKERS)):
     v = df.loc[df["group"] == g, "value"]
     ax.ecdf(v, color=c, linestyle=ls, linewidth=2, zorder=3)
     ax.scatter([med[g]], [0.5], s=45, color=c, marker=mk, edgecolors="white", zorder=4)
     # Direct label with the median: rightmost curve below-right, the others above-left
-    q, dx, ha = (0.3, 10, "left") if i == 0 else (0.85 - 0.2 * (len(groups) - 1 - i), -10, "right")
-    t = ax.annotate(f"{g}  (median {med[g]:{fmt}})", xy=(v.quantile(q), q), xytext=(dx, 0),
-                    textcoords="offset points", ha=ha, va="center", fontsize=11, color=c,
+    q, dx, ha = (0.3, 10, "left") if i == 0 else (0.85 - 0.2 * (len(groups) - 1 - i), -4, "right")
+    x = v.quantile(q) if i == 0 else max(v.quantile(q), xlo + 0.3 * (xmax - xlo))  # room on the left
+    t = ax.annotate(f"{g}  (median {med[g]:{fmt}})", xy=(x, (v <= x).mean()), xytext=(dx, 0 if i == 0 else 4),
+                    textcoords="offset points", ha=ha, va="center" if i == 0 else "bottom",
+                    fontsize=11, color=c,
                     weight="semibold")
     t.set_path_effects(HALO)  # middle curves have no empty side
 
@@ -43,7 +46,7 @@ ax.axhline(0.5, color="dimgrey", linestyle=(0, (2, 3)), linewidth=0.8, zorder=2)
 ax.text(0.99, 0.5, "median", transform=ax.get_yaxis_transform(), ha="right", va="bottom",
         fontsize=10, color="dimgrey")
 
-ax.set_xlim(df["value"].min(), xmax)
+ax.set_xlim(xlo, xmax)
 ax.set_ylim(0, 1.02)
 ax.yaxis.set_major_formatter(mticker.PercentFormatter(xmax=1, decimals=0))
 ax.set_xlabel("Value (units; axis cut at the 99th percentile)", fontsize=12, labelpad=8, color="dimgrey")

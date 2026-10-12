@@ -3,6 +3,7 @@
 **Use for:** model training reports — train vs validation loss (and accuracy) per
 epoch, and a confusion matrix from true/predicted labels. Threshold curves → P9;
 decision regions → P6.
+**Exemplars:** `exemplars/P13-training.png` (loss on a log scale + accuracy, best epoch marked) and `exemplars/P13-confusion.png` (3 classes, row-normalised). Fixed: validation solid red, train dashed blue, best-epoch guide; confusion cells show % and n. Varies: log scale, second panel, the error the subtitle names.
 
 ## Contents
 - Training curves (loss, optional accuracy panel)

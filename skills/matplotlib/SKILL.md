@@ -53,7 +53,8 @@ conflicts with the communicative goal, adapt the pattern to serve the principle.
 | — | `patterns/other-charts.md` | Line charts, scatter plots, histograms, grouped bars, anything else |
 
 A plain "line chart over time" is `other-charts.md`, not P3. A scatter plot of two
-variables is `other-charts.md`, not P6.
+variables is `other-charts.md`, not P6. Before/after per item is P10, not a line
+chart. Stacked bars are P11, not P2. A confusion matrix is P13, not P7.
 
 # Choosing the chart
 

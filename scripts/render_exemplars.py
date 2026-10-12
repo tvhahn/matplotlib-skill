@@ -166,6 +166,56 @@ def oc_titanic(tmp):
     return {}
 
 
+def p10_gapminder(tmp):
+    d = pub("gapminder.csv")
+    d = d[d["year"].isin([1952, 2007])]
+    csv(d.rename(columns={"continent": "item", "year": "period", "lifeExp": "value"})[
+        ["item", "period", "value"]], tmp)
+    return {}
+
+
+def p10_healthexp(tmp):
+    d = pub("healthexp.csv")
+    csv(d.rename(columns={"Country": "item", "Year": "period", "Spending_USD": "value"})[
+        ["item", "period", "value"]], tmp)
+    return {}
+
+
+def p11_titanic(tmp):
+    d = pub("titanic.csv")
+    d["alive"] = d["alive"].map({"yes": "Survived", "no": "Died"})
+    csv(d.rename(columns={"class": "group", "alive": "component"})[["group", "component"]], tmp)
+    return {}
+
+
+def p11_iowa(tmp):
+    d = pub("iowa_electricity.csv")
+    d["year"] = pd.to_datetime(d["year"]).dt.year
+    csv(d.rename(columns={"year": "x", "source": "component", "net_generation": "value"}), tmp)
+    return {}
+
+
+def p12_taxis(tmp):
+    d = pub("taxis.csv")
+    d["payment"] = d["payment"].str.capitalize()
+    csv(d.rename(columns={"payment": "group", "distance": "value"})[["group", "value"]], tmp)
+    return {}
+
+
+def p12_seattle(tmp):
+    d = pd.read_csv(RAW / "public/seattle_weather.csv", parse_dates=["date"]).sort_values("date")
+    d["group"] = d["date"].dt.strftime("%b")
+    csv(d.rename(columns={"temp_max": "value"})[["group", "value"]], tmp)
+    return {}
+
+
+def p13(name):
+    def f(tmp):
+        shutil.copy(RAW / f"precomputed/ml/{name}.csv", tmp / "data.csv")
+        return {}
+    return f
+
+
 # --------------------------------------------------------------------------- catalogue
 # (output name, pattern file stem, block index, setup, [(placeholder, replacement), ...])
 
@@ -223,6 +273,24 @@ EXEMPLARS = [
         ("Dataset Name (positive = class)", "Titanic Survival (positive = survived)")]),
     ("P9-b", "P9-pr-roc", 0, p9("breast_cancer"), [
         ("Dataset Name (positive = class)", "Breast Cancer (positive = benign)")]),
+    ("P10-slope", "P10-slope-dumbbell", 0, p10_gapminder, [
+        ("Chart Title", "Life Expectancy by Continent, 1952 vs 2007")]),
+    ("P10-dumbbell", "P10-slope-dumbbell", 1, p10_healthexp, [
+        ("Chart Title", "Health Spending per Capita (USD), 1970 vs 2020")]),
+    ("P11-share-bars", "P11-part-to-whole", 0, p11_titanic, [
+        ("Chart Title", "Titanic Passengers Who Survived, by Class")]),
+    ("P11-stacked-area", "P11-part-to-whole", 1, p11_iowa, [
+        ("Chart Title", "Iowa Electricity Generation by Source, 2001–2017")]),
+    ("P12-ecdf", "P12-distribution-ecdf-ridgeline", 0, p12_taxis, [
+        ("Chart Title", "NYC Taxi Trip Distance by Payment Type"),
+        ("Value (units; axis cut", "Trip distance (miles; axis cut")]),
+    ("P12-ridgeline", "P12-distribution-ecdf-ridgeline", 1, p12_seattle, [
+        ("Chart Title", "Seattle Daily Maximum Temperature by Month, 2012–2015"),
+        ("Value (units)", "Daily maximum temperature (°C)")]),
+    ("P13-training", "P13-training-diagnostics", 0, p13("training_breast_cancer"), [
+        ("Chart Title", "MLP Training History — Breast Cancer")]),
+    ("P13-confusion", "P13-training-diagnostics", 1, p13("predictions_wine"), [
+        ("Chart Title", "Logistic Regression Confusion Matrix — Wine Cultivars")]),
     ("other-line", "other-charts", 0, oc_stocks, [
         ("Chart Title", "Monthly Closing Price, 2000–2010"), ("Value (units)", "Price (USD)")]),
     ("other-scatter", "other-charts", 1, oc_penguins, [

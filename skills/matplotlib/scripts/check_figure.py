@@ -1109,10 +1109,22 @@ def _flat_edge(vals):
     return None
 
 
+def _offset_rows(ax):
+    """Ridgeline / joyplot: several fills, each on its own flat baseline."""
+    bases = set()
+    for coll in ax.collections:
+        if isinstance(coll, PolyCollection) and not isinstance(coll, QuadMesh):
+            for path in coll.get_paths():
+                b = _flat_edge(np.asarray(path.vertices, float)[:, 1])
+                if b is not None:
+                    bases.add(round(b, 6))
+    return len(bases) >= 3
+
+
 def _check_areas_at_zero(ctx):
     for j, ax in ctx["vis"]:
-        if _is_heatmap(ax):
-            continue
+        if _is_heatmap(ax) or _offset_rows(ax):
+            continue  # ridgeline rows sit on offset baselines by design
         for coll in ax.collections:
             if not isinstance(coll, PolyCollection) or not coll.get_visible():
                 continue
@@ -1537,11 +1549,23 @@ def _check_annotation_count(ctx):
             if len(txt) <= 30 and len(ends) and _text_mark_dist(t, bb, ends) <= thr:
                 continue  # direct label at a line end
             count.append(txt)
-        if len(count) > MAX_ANNOTATIONS:
+        # One label per category row/column or per band (ridgeline medians, band
+        # names, n= per bar) is a labelling scheme, not free-standing notes.
+        n_cat = max(
+            sum(not _is_numeric_label(lab.get_text()) for lab in _visible_ticklabels(a))
+            for a in (ax.xaxis, ax.yaxis)
+        )
+        n_fill = sum(
+            isinstance(c, PolyCollection) and not isinstance(c, QuadMesh)
+            for c in ax.collections
+        )
+        per_mark = max(n_cat, n_fill) if max(n_cat, n_fill) >= 3 else 0
+        free = len(count) - per_mark if per_mark and len(count) >= per_mark - 1 else len(count)
+        if free > MAX_ANNOTATIONS:
             ctx["add"](
                 "WARN",
                 "too-many-annotations",
-                f"panel {j} has {len(count)} free-standing annotations "
+                f"panel {j} has {free} free-standing annotations "
                 f"(e.g. '{_short(count[0], 25)}') — one to three annotations "
                 "per panel; keep the ones that state the takeaway",
             )

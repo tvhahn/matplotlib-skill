@@ -1,6 +1,7 @@
 # Slope Chart / Dumbbell
 
 **Use for:** change between two points per item — two years, before/after, rank change.
+**Exemplars:** `exemplars/P10-slope.png` (5 continents, the biggest gain in ACCENT_RED) and `exemplars/P10-dumbbell.png` (6 countries, one missing start value). Fixed: values printed at both ends instead of a y-axis; grey context, colour only for the story. Varies: which item is highlighted, sort key, missing-value note.
 Many time points → line chart (`other-charts.md`); min/avg/max ranges → P5.
 
 ## Contents

@@ -3,6 +3,7 @@
 **Use for:** composition — each component's share within a group (100% bars) or how
 the mix changes over time (stacked area). Never a pie: shares compared by length or
 height along a common baseline read far more precisely than angles.
+**Exemplars:** `exemplars/P11-share-bars.png` (3 classes, the story component at the baseline) and `exemplars/P11-stacked-area.png` (3 sources over 17 years). Fixed: white separators, story component on the common baseline, names inside the bands. Varies: which component is coloured, label placement.
 
 ## Contents
 - 100% stacked horizontal bars (share within each of a few groups)
@@ -41,7 +42,7 @@ for c in comps:
     for i, (x0, wi) in enumerate(zip(left, w)):
         if wi >= 0.07:  # label only segments wide enough to hold it
             ax.text(x0 + wi / 2, i, f"{wi:.0%}", ha="center", va="center", fontsize=10.5,
-                    weight="semibold", color="white" if lum < 0.5 else "dimgrey")
+                    weight="semibold", color="white" if lum < 0.6 else "dimgrey")
     if names_fit:
         ax.text(left[-1] + 0.005, n - 0.55, c, ha="left", va="bottom", fontsize=10.5,
                 weight="semibold", color=colors[c] if c == focus else "dimgrey")
@@ -119,7 +120,7 @@ for c in order:
     ax.annotate(label, xy=(x1, y), xytext=(-10 if inside else 8, 0),
                 textcoords="offset points", ha="right" if inside else "left", va="center",
                 fontsize=10.5, weight="semibold",
-                color="white" if inside and lum < 0.5 else "dimgrey")
+                color="white" if inside and lum < 0.6 else "dimgrey")
 
 # The focus component's biggest one-step gain, inside its band where it happens
 step = share[focus].diff()
