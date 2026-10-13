@@ -38,8 +38,8 @@ layer with it. Direction B (router + new charts) is v3.1.
 | Phase 0 rows 2, 4, 5 (Tim's call) | **Pending Tim.** Hexes and P2's Signature unchanged; the non-destructive default was taken: the checker flags colour-only encodings (CVD-simulated) and faint text, and light hues are darkened only when used as text |
 | Eval hardening: 3 runs/cell, both-order pairwise, judge agreement, P6 + mode prompts, checker negative tests | Done (`scripts/judge.py`, `tests/test_checker.py`) |
 | Human anchor set | Tooling done; ratings **pending Tim** |
-| A. Exemplars + independent critic | Done — results in `docs/benchmarks/2026-10-skill-v3/` |
-| B. Router + new chart types | Done (P10–P13) |
+| A. Exemplars + independent critic | Done. Pairwise 73–77% of decided pairs vs v2; misses on absolute targets, Haiku variety and cost — see `docs/benchmarks/2026-10-skill-v3/` |
+| B. Router + new chart types | Done (P10–P13); all acceptance tests pass |
 | C. Checker v3 | Done, except the data-fidelity dump (deferred) |
 | D. Rougier craft layer | Done (style-reference "Craft") |
 | E. Output modes (physical sizes, slides, notebook checks, restyle path) | Not started; alt text added to the report step |

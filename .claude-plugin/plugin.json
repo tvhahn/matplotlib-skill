@@ -1,7 +1,7 @@
 {
   "name": "matplotlib",
   "description": "Publication-quality matplotlib/seaborn charts with opinionated aesthetics",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "author": {
     "name": "Tim von Hahn"
   },
