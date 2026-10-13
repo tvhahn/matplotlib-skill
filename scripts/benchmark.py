@@ -146,7 +146,8 @@ def run_checker(room):
     scripts = [
         p
         for p in room.rglob("*.py")
-        if not {"data", ".claude", ".venv"} & set(p.relative_to(room).parts)
+        if not {"data", ".claude", ".venv", "venv", "env", "site-packages"}
+        & set(p.relative_to(room).parts)
     ]
     for script in sorted(scripts):
         proc = subprocess.run(

@@ -1,0 +1,122 @@
+{
+  "c01": {
+    "results_dir": "v3",
+    "run": "claude-opus-5-5/m-function-happiness/r3"
+  },
+  "c02": {
+    "results_dir": "v2base",
+    "run": "claude-opus-5-5/p2-mpg/r1"
+  },
+  "c03": {
+    "results_dir": "v3",
+    "run": "claude-sonnet-5-5/p7-mpg/r3"
+  },
+  "c04": {
+    "results_dir": "v3",
+    "run": "claude-opus-5-5/n-confusion-wine/r3"
+  },
+  "c05": {
+    "results_dir": "v3",
+    "run": "claude-sonnet-5-5/m-quick-seattle/r3"
+  },
+  "c06": {
+    "results_dir": "v2base",
+    "run": "claude-haiku-4-5/n-ecdf-taxis/r3"
+  },
+  "c07": {
+    "results_dir": "v2base",
+    "run": "claude-haiku-4-5/m-publication-tips/r1"
+  },
+  "c08": {
+    "results_dir": "v2base",
+    "run": "claude-sonnet-5-5/n-confusion-wine/r1"
+  },
+  "c09": {
+    "results_dir": "v3",
+    "run": "claude-sonnet-5-5/p6-wine/r3"
+  },
+  "c10": {
+    "results_dir": "v2base",
+    "run": "claude-opus-5-5/x-titanic-grouped/r2"
+  },
+  "c11": {
+    "results_dir": "v2base",
+    "run": "claude-sonnet-5-5/x-titanic-grouped/r1"
+  },
+  "c12": {
+    "results_dir": "v3",
+    "run": "claude-haiku-4-5/p4-penguins/r1"
+  },
+  "c13": {
+    "results_dir": "v2base",
+    "run": "claude-opus-5-5/n-ecdf-taxis/r2"
+  },
+  "c14": {
+    "results_dir": "v3",
+    "run": "claude-haiku-4-5/x-titanic-grouped/r1"
+  },
+  "c15": {
+    "results_dir": "v3",
+    "run": "claude-sonnet-5-5/x-gapminder-scatter/r2"
+  },
+  "c16": {
+    "results_dir": "v2base",
+    "run": "claude-sonnet-5-5/n-training-cancer/r3"
+  },
+  "c17": {
+    "results_dir": "v2base",
+    "run": "claude-opus-5-5/m-publication-tips/r3"
+  },
+  "c18": {
+    "results_dir": "v3",
+    "run": "claude-opus-5-5/m-function-happiness/r2"
+  },
+  "c19": {
+    "results_dir": "v2base",
+    "run": "claude-haiku-4-5/p5-glue/r1"
+  },
+  "c20": {
+    "results_dir": "v3",
+    "run": "claude-haiku-4-5/m-function-happiness/r2"
+  },
+  "c21": {
+    "results_dir": "v3",
+    "run": "claude-haiku-4-5/m-quick-seattle/r3"
+  },
+  "c22": {
+    "results_dir": "v3",
+    "run": "claude-haiku-4-5/n-mix-iowa/r3"
+  },
+  "c23": {
+    "results_dir": "v3",
+    "run": "claude-opus-5-5/p8-chickweight/r2"
+  },
+  "c24": {
+    "results_dir": "v3",
+    "run": "claude-opus-5-5/x-titanic-grouped/r2"
+  },
+  "c25": {
+    "results_dir": "v3",
+    "run": "claude-haiku-4-5/x-taxis-hist/r1"
+  },
+  "c26": {
+    "results_dir": "v2base",
+    "run": "claude-opus-5-5/n-confusion-wine/r3"
+  },
+  "c27": {
+    "results_dir": "v2base",
+    "run": "claude-haiku-4-5/p5-glue/r3"
+  },
+  "c28": {
+    "results_dir": "v2base",
+    "run": "claude-haiku-4-5/x-taxis-hist/r1"
+  },
+  "c29": {
+    "results_dir": "v2base",
+    "run": "claude-sonnet-5-5/m-function-happiness/r1"
+  },
+  "c30": {
+    "results_dir": "v2base",
+    "run": "claude-haiku-4-5/n-training-cancer/r1"
+  }
+}
