@@ -1,0 +1,692 @@
+[
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same sorted horizontal bar chart with North America highlighted and value labels. Only the wording changes: the subtitle says 1.7x, 1.75x, or 'leads at 7.15, 1.7x', and one title says 'Mean' instead of 'Average'.",
+    "cost_usd": 0.08602499999999999,
+    "cell": "claude-haiku-4-5/m-function-happiness",
+    "model": "claude-haiku-4-5",
+    "case": "m-function-happiness",
+    "kind": "mode"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are vertical bar charts in calendar order with value labels and no y-axis; attempt 1 colors each bar differently and its subtitle calls out the peak and the low, while attempts 2 and 3 use one color with a 'Fri 1.11x Sat' subtitle, and attempt 2 has thin bars that sit off-center from their labels.",
+    "cost_usd": 0.15885159999999998,
+    "cell": "claude-haiku-4-5/m-publication-tips",
+    "model": "claude-haiku-4-5",
+    "case": "m-publication-tips",
+    "kind": "mode"
+  },
+  {
+    "annotations": "different",
+    "design": "different",
+    "note": "Each subtitle makes a different point (peak plus seasonality, rainy-day count plus mean, peak plus rolling-mean peak), and the encodings differ too: attempt 1 is a single raw line, attempt 2 shows scatter points with a red rolling mean and a legend, and attempt 3 has a bold rolling mean over faint gray raw data.",
+    "cost_usd": 0.09968160000000001,
+    "cell": "claude-haiku-4-5/m-quick-seattle",
+    "model": "claude-haiku-4-5",
+    "case": "m-quick-seattle",
+    "kind": "mode"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "The three attempts appear pixel-identical: each is a row-normalized blue confusion matrix with bold diagonal percentages, n counts, and the same subtitle giving 81.5% accuracy and the class_2-to-class_0 error.",
+    "cost_usd": 0.09055360000000001,
+    "cell": "claude-haiku-4-5/n-confusion-wine",
+    "model": "claude-haiku-4-5",
+    "case": "n-confusion-wine",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "similar",
+    "note": "All three are the same gray-to-blue dumbbell chart with the same subtitle and year labels; attempt 3 flips the sort to ascending (Japan at the top), and attempt 1 adds an x-axis label, otherwise only the title wording differs.",
+    "cost_usd": 0.09262400000000001,
+    "cell": "claude-haiku-4-5/n-dumbbell-healthexp",
+    "model": "claude-haiku-4-5",
+    "case": "n-dumbbell-healthexp",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same ECDF chart with the same labels, markers and layout; the only change is that attempt 3's subtitle says 'trips' and 'miles' where attempts 1 and 2 say 'values', and attempts 1 and 2 are pixel-identical.",
+    "cost_usd": 0.0970666,
+    "cell": "claude-haiku-4-5/n-ecdf-taxis",
+    "model": "claude-haiku-4-5",
+    "case": "n-ecdf-taxis",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three use the same subtitle (renewables 4% to 39%), the same end labels for each layer and the same callout near 2009 (+7 pts); only the wording of that callout differs slightly, along with attempt 1's title, aspect ratio and bolding.",
+    "cost_usd": 0.10975779999999999,
+    "cell": "claude-haiku-4-5/n-mix-iowa",
+    "model": "claude-haiku-4-5",
+    "case": "n-mix-iowa",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same ridgeline, with July highlighted and its median labeled; attempts 1 and 2 are pixel-identical, and attempt 3 only adds a longer subtitle and a \u00b0C unit on the July label.",
+    "cost_usd": 0.1046192,
+    "cell": "claude-haiku-4-5/n-ridgeline-seattle",
+    "model": "claude-haiku-4-5",
+    "case": "n-ridgeline-seattle",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same slope chart with Asia highlighted in red, the same subtitle and the same +24.3 callout; the only differences are cosmetic: a 0.1 rounding difference in attempt 2, slightly different aspect ratios, and attempt 3 adding continent names to the 2007 labels.",
+    "cost_usd": 0.0904742,
+    "cell": "claude-haiku-4-5/n-slope-gapminder",
+    "model": "claude-haiku-4-5",
+    "case": "n-slope-gapminder",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three use the same two-panel layout: log-scale loss on top and accuracy below, with red solid validation and blue dashed train lines, direct line labels, and a marker plus vertical line at epoch 37 with the same callout; they differ only in the title, the subtitle wording (attempt 2 says the divergence is \"only 15.3%\" instead of giving a stop recommendation) and the panel height ratios.",
+    "cost_usd": 0.10807220000000001,
+    "cell": "claude-haiku-4-5/n-training-cancer",
+    "model": "claude-haiku-4-5",
+    "case": "n-training-cancer",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same horizontal bar chart with First class highlighted in dark navy, direct percentage labels and the same '2.6x more likely' subtitle; they differ only in category wording (First vs 1st Class) and font.",
+    "cost_usd": 0.0760634,
+    "cell": "claude-haiku-4-5/p1-titanic",
+    "model": "claude-haiku-4-5",
+    "case": "p1-titanic",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three attempts look pixel-identical: the same magenta bar chart in cylinder order, with the same title, the same '2.0x' subtitle and the same bold value labels.",
+    "cost_usd": 0.088303,
+    "cell": "claude-haiku-4-5/p2-mpg",
+    "model": "claude-haiku-4-5",
+    "case": "p2-mpg",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three use the same diverging red/blue anomaly bars with a 10-year rolling-mean line, the same templated subtitle and the same 2024 record callout; the only differences are small wording changes ('above zero' vs 'above relative to 1951\u20131980 average') and the y-axis label.",
+    "cost_usd": 0.1038686,
+    "cell": "claude-haiku-4-5/p3-globaltemp",
+    "model": "claude-haiku-4-5",
+    "case": "p3-globaltemp",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same horizontal violin plot with jittered points, red median ticks, the same median labels and the same subtitle; they differ only in jitter randomness and aspect ratio.",
+    "cost_usd": 0.098336,
+    "cell": "claude-haiku-4-5/p4-penguins",
+    "model": "claude-haiku-4-5",
+    "case": "p4-penguins",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same dumbbell chart with the same min/max/average labels and the same ERNIE-highest/BiLSTM-widest subtitle; attempt 2 only rewords the subtitle and x-axis label slightly.",
+    "cost_usd": 0.1118906,
+    "cell": "claude-haiku-4-5/p5-glue",
+    "model": "claude-haiku-4-5",
+    "case": "p5-glue",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same KNN decision-boundary plot. They have the same dot-grid confidence encoding, circled misclassified points and subtitle, and differ only in title wording, axis-label units and the confidence legend's title (attempts 2 and 3 are pixel-identical).",
+    "cost_usd": 0.10402660000000001,
+    "cell": "claude-haiku-4-5/p6-wine",
+    "model": "claude-haiku-4-5",
+    "case": "p6-wine",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same lower-triangle RdBu correlation heatmap with the same title and layout; the only difference is that attempt1's subtitle adds the word 'negatively'.",
+    "cost_usd": 0.083571,
+    "cell": "claude-haiku-4-5/p7-mpg",
+    "model": "claude-haiku-4-5",
+    "case": "p7-mpg",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "similar",
+    "note": "All three use the same 2x2 small-multiples layout, with a dark mean line, an end-point label in each panel, and a subtitle saying Diet 3 is about 1.5x Diet 1; attempts 1 and 3 put individual chicks in the grey background, while attempt 2 puts the other diets' mean lines there instead.",
+    "cost_usd": 0.114717,
+    "cell": "claude-haiku-4-5/p8-chickweight",
+    "model": "claude-haiku-4-5",
+    "case": "p8-chickweight",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three use the same two-panel PR/ROC layout with grey per-fold lines, a dark average line, an orange no-skill line and identical legends; the only differences are small rewordings of the subtitle and slight changes in spacing.",
+    "cost_usd": 0.1068964,
+    "cell": "claude-haiku-4-5/p9-titanic",
+    "model": "claude-haiku-4-5",
+    "case": "p9-titanic",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "similar",
+    "note": "All three are log-x scatters colored and shaped by continent, with almost the same correlation-and-Europe-median subtitle and no callouts; they differ in which groups appear: attempt 1 has no FSU group, attempt 2 adds FSU and uses dark crosses for Africa, and attempt 3 leaves out Africa.",
+    "cost_usd": 0.0989148,
+    "cell": "claude-haiku-4-5/x-gapminder-scatter",
+    "model": "claude-haiku-4-5",
+    "case": "x-gapminder-scatter",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three use the same multi-line chart with the same colors, end-of-line labels and subtitle; the only difference is attempt 2's title, which says 'Stock Prices Over Time' where the other two say 'Monthly Closing Price, 2000\u20132010'.",
+    "cost_usd": 0.097333,
+    "cell": "claude-haiku-4-5/x-stocks-line",
+    "model": "claude-haiku-4-5",
+    "case": "x-stocks-line",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same histogram with the same median line, callout and subtitle template; the only differences are title wording and how the numbers are formatted ($9.5 vs $9.50 vs 9.5).",
+    "cost_usd": 0.09339700000000001,
+    "cell": "claude-haiku-4-5/x-taxis-hist",
+    "model": "claude-haiku-4-5",
+    "case": "x-taxis-hist",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same grouped bar chart with the same subtitle and value labels; attempts 1 and 2 match pixel for pixel, and attempt 3 differs only in label capitalization (Female/Male, 'Survival rate').",
+    "cost_usd": 0.0894456,
+    "cell": "claude-haiku-4-5/x-titanic-grouped",
+    "model": "claude-haiku-4-5",
+    "case": "x-titanic-grouped",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "similar",
+    "note": "All three are sorted horizontal bar charts with nearly the same subtitle (Western Europe is 2.6 above Africa, and pale bars mean few countries) and the same value labels; the main difference is that attempt 2 highlights only Western Europe, while attempts 1 and 3 highlight both Western Europe and Africa.",
+    "cost_usd": 0.0935246,
+    "cell": "claude-opus-5-5/m-function-happiness",
+    "model": "claude-opus-5-5",
+    "case": "m-function-happiness",
+    "kind": "mode"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are vertical bar charts in Thu\u2013Sun order, with no bar highlighted, bold value labels and n under each day, and all use a 'tipping barely varies' takeaway; they differ in a few choices: attempt 2 adds 95% CI whiskers, attempts 1 and 2 add an 'All days 16.1%' reference line, attempt 1 puts its value labels inside the bars and uses maroon instead of blue, and attempts 2 and 3 add a second subtitle line noting the small Friday sample.",
+    "cost_usd": 0.170555,
+    "cell": "claude-opus-5-5/m-publication-tips",
+    "model": "claude-opus-5-5",
+    "case": "m-publication-tips",
+    "kind": "mode"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three use thin daily bars under a navy 30-day centred mean and call out the 55.9 mm wettest day. The subtitles differ in their framing: attempt 1 says 57% of days are dry, attempt 2 gives Nov vs Jul averages, and attempt 3 says rain fell on 43% of days. They also label the series differently, with a legend in attempt 1, an inline mean label in attempt 2 and inline labels for both series in attempt 3. Beyond that, attempt 2 uses teal bars and attempt 3 adds a marker dot and July minor ticks.",
+    "cost_usd": 0.0985048,
+    "cell": "claude-opus-5-5/m-quick-seattle",
+    "model": "claude-opus-5-5",
+    "case": "m-quick-seattle",
+    "kind": "mode"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same row-normalized Blues heatmap with bold diagonal percentages and n counts. The subtitles all give accuracy and the class_2\u2192class_0 error, but each adds a slightly different extra: best class, a row-normalised note, or a recall explanation. Only attempt 2 outlines the error cell, and attempts 2 and 3 add per-class n to the row labels.",
+    "cost_usd": 0.0901198,
+    "cell": "claude-opus-5-5/n-confusion-wine",
+    "model": "claude-opus-5-5",
+    "case": "n-confusion-wine",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are the same gray-to-blue dumbbell with the same title, takeaway and ordering, and all label 1970 and 2020 values; they differ in where the growth multiple sits (above each bar in 1 vs. a right-hand column in 2 and 3) and in how they treat Canada's missing 1970 value (a hollow 1971 dot in 1, 2020 only in 2, an asterisked 1971 value in 3).",
+    "cost_usd": 0.0927954,
+    "cell": "claude-opus-5-5/n-dumbbell-healthexp",
+    "model": "claude-opus-5-5",
+    "case": "n-dumbbell-healthexp",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same ECDF with the same styling, median markers and direct labels; they differ only in the extra callout: a 3-mile threshold line, a 90th-percentile gap arrow, or an 8-mile threshold line, each with a matching subtitle.",
+    "cost_usd": 0.0968662,
+    "cell": "claude-opus-5-5/n-ecdf-taxis",
+    "model": "claude-opus-5-5",
+    "case": "n-ecdf-taxis",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same 100% stacked area chart with renewables in blue and fossil/nuclear in gray, with end labels, a '+7 pts in 2009' callout and nearly the same subtitle; the only differences are small extras like 2001 start labels (attempts 1 and 2), the '15x' note (attempt 2) and the x-tick spacing.",
+    "cost_usd": 0.09820119999999999,
+    "cell": "claude-opus-5-5/n-mix-iowa",
+    "model": "claude-opus-5-5",
+    "case": "n-mix-iowa",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are the same ridgeline with white median ticks and July highlighted in navy. Attempt 2 also highlights and labels December, and attempt 3's subtitle adds a point about variability, but all three subtitles make the same 18\u00b0C Dec-to-Jul claim.",
+    "cost_usd": 0.10366719999999999,
+    "cell": "claude-opus-5-5/n-ridgeline-seattle",
+    "model": "claude-opus-5-5",
+    "case": "n-ridgeline-seattle",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are grey slope charts with Asia highlighted in red and a '+24.4 years' callout. The annotations differ only a little: the second subtitle line varies (spread shrinking vs. Africa's lag), attempt 1 adds a callout that Africa still trails Europe, and attempt 1 also puts extra right-side labels for Europe and Africa.",
+    "cost_usd": 0.098805,
+    "cell": "claude-opus-5-5/n-slope-gapminder",
+    "model": "claude-opus-5-5",
+    "case": "n-slope-gapminder",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are the same log-scale chart: a dashed train line, a red validation line with a marked minimum at epoch 37, and direct line labels. Attempts 2 and 3 add a gap-widening callout, attempt 2 also puts values in its line labels, and the subtitle wording varies a little across all three.",
+    "cost_usd": 0.10034000000000001,
+    "cell": "claude-opus-5-5/n-training-cancer",
+    "model": "claude-opus-5-5",
+    "case": "n-training-cancer",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are horizontal bar charts with the same subtitle (2.6x), the same dark-highlighted First bar and the same end-of-bar percent labels; the only differences are cosmetic: the label wording ('First' vs 'First class', n in parentheses or not) and the bar thickness.",
+    "cost_usd": 0.0769544,
+    "cell": "claude-opus-5-5/p1-titanic",
+    "model": "claude-opus-5-5",
+    "case": "p1-titanic",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are the same bar chart in cylinder order with the 8-cylinder bar highlighted, value labels and n= counts, and a '2.0x vs 4-cylinder' subtitle; attempts 1 and 2 also fade the small-sample bars and mention it in the subtitle, while attempt 3 drops the fading and bolds the 4-cylinder comparison bar's label instead.",
+    "cost_usd": 0.32389640000000003,
+    "cell": "claude-opus-5-5/p2-mpg",
+    "model": "claude-opus-5-5",
+    "case": "p2-mpg",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same red/blue anomaly bars with a dark 10-year rolling-mean line and the same two callouts (2024 record, 1976 last year below baseline). The subtitles pick slightly different numbers: a 1.42 vs 1.24 vs 1.4 \u00b0C rise, starting from 1908 or from 1885. The callout wording and leader-line placement also vary, and attempt 2 uses plain 'above/below zero' labels and no gridlines.",
+    "cost_usd": 0.11101939999999999,
+    "cell": "claude-opus-5-5/p3-globaltemp",
+    "model": "claude-opus-5-5",
+    "case": "p3-globaltemp",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same horizontal violin-plus-jitter chart with red median ticks; the only differences are small wording changes in the subtitle and median labels, plus a note in attempt 3 that 2 penguins with no recorded mass were excluded.",
+    "cost_usd": 0.09696660000000001,
+    "cell": "claude-opus-5-5/p4-penguins",
+    "model": "claude-opus-5-5",
+    "case": "p4-penguins",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "different",
+    "design": "similar",
+    "note": "All three are the same min-avg-max dumbbell chart sorted by average with matching colors, but their annotations take different angles: #1 bolds ERNIE vs BiLSTM in a spread column, #2 adds a dashed transformer/BiLSTM divider with a range column, and #3 drops the column for one callout about the worst-task floor jumping at BERT.",
+    "cost_usd": 0.1160938,
+    "cell": "claude-opus-5-5/p5-glue",
+    "model": "claude-opus-5-5",
+    "case": "p5-glue",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same dot-grid probability regions, contour boundaries, circled misclassified points and side legends. They differ in the subtitle's second clause and the callout: attempt 1 points an arrow at one Cultivar 0 point on the right, attempt 2 points at the upper left and uses 1-based class names with counts, and attempt 3 places an unpointed text note in the top-right corner and adds a legend entry for the circled points.",
+    "cost_usd": 0.1018858,
+    "cell": "claude-opus-5-5/p6-wine",
+    "model": "claude-opus-5-5",
+    "case": "p6-wine",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three use the same lower-triangle RdBu heatmap with the same title, layout and colorbar, and a subtitle that makes the same two points in slightly different words; the only other differences are cosmetic (attempt 1 bolds the mpg label, attempt 3 uses a typographic minus sign).",
+    "cost_usd": 0.09936700000000001,
+    "cell": "claude-opus-5-5/p7-mpg",
+    "model": "claude-opus-5-5",
+    "case": "p7-mpg",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three use the same 2x2 small-multiple layout with grey individual chick lines, a bold mean line, and an end-point label in grams, and all lead with the Diet 3 vs Diet 1 comparison at day 21. Attempts 2 and 3 add dashed lines for the other diets' means, and each attempt explains the legend and the chicks lost before day 21 differently: inline notes in 1, a legend box and n counts in 2, arrow callouts in 3.",
+    "cost_usd": 0.116284,
+    "cell": "claude-opus-5-5/p8-chickweight",
+    "model": "claude-opus-5-5",
+    "case": "p8-chickweight",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "different",
+    "design": "near-identical",
+    "note": "All three share the same two-panel layout and nearly the same subtitle, but each puts its single callout somewhere else: attempt 1 marks the weakest ROC fold (AUC 0.56), attempt 2 marks the +0.14 precision gap at 60% recall, and attempt 3 marks the worst fold on the PR curve (AP 0.68).",
+    "cost_usd": 0.1116428,
+    "cell": "claude-opus-5-5/p9-titanic",
+    "model": "claude-opus-5-5",
+    "case": "p9-titanic",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are log-x scatters colored by region and share the same subtitle point about the 26-year gap between Africa and Europe; they differ in callouts (Qatar+Swaziland, a rich-African cluster+Swaziland, Qatar+Swaziland relative to trend), in legend order and placement, in how the colors map to regions, and attempt 3 alone adds a trend line and puts the legend outside the plot.",
+    "cost_usd": 0.103337,
+    "cell": "claude-opus-5-5/x-gapminder-scatter",
+    "model": "claude-opus-5-5",
+    "case": "x-gapminder-scatter",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same multi-line chart with the same colors, dash styles and direct end labels, and their subtitles all say AAPL grew 8.6x while MSFT fell to 0.7x. The callouts differ a little: attempt 3 splits the GOOG peak and trough into two notes and leaves out the end prices, while attempts 1 and 2 place the 'GOOG listed' note differently.",
+    "cost_usd": 0.1006834,
+    "cell": "claude-opus-5-5/x-stocks-line",
+    "model": "claude-opus-5-5",
+    "case": "x-stocks-line",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same $2-bin histogram with a median line and a callout on the $52 JFK spike; only the wording of the subtitle and callout changes slightly.",
+    "cost_usd": 0.09656819999999999,
+    "cell": "claude-opus-5-5/x-taxis-hist",
+    "model": "claude-opus-5-5",
+    "case": "x-taxis-hist",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are red/blue grouped bars by class with value labels. Attempts 1 and 3 share the subtitle about second class having the widest gap and both add a third-class-women callout. Attempt 2 has a different ratio subtitle and no callout, attempt 1 adds an overall baseline line, and attempt 3 uses hatching and moves the n counts into the tick labels.",
+    "cost_usd": 0.0910488,
+    "cell": "claude-opus-5-5/x-titanic-grouped",
+    "model": "claude-opus-5-5",
+    "case": "x-titanic-grouped",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are sorted horizontal bar charts with value labels and one dark highlighted bar, but they differ in which bar is highlighted (Western Europe in 1 and 3, North America in 2), whether small-n regions are greyed (only 1), where the n labels sit (axis labels in 1 and 2, after the values in 3), and what the subtitle says (two compare Western Europe with Africa among larger regions, one points to the 3.1-point spread and the small-n caveat).",
+    "cost_usd": 0.0989334,
+    "cell": "claude-sonnet-5-5/m-function-happiness",
+    "model": "claude-sonnet-5-5",
+    "case": "m-function-happiness",
+    "kind": "mode"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are the same chronological single-colour bar chart with bold value labels and n counts under the day names; only the bar colour (blue vs magenta), the label wording and attempt 3's in-bar 'Highest, but only 19 parties' callout differ, while the subtitles all stress the narrow 15\u201317% range and Friday's small sample.",
+    "cost_usd": 0.161221,
+    "cell": "claude-sonnet-5-5/m-publication-tips",
+    "model": "claude-sonnet-5-5",
+    "case": "m-publication-tips",
+    "kind": "mode"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three plot daily precipitation over time and label the same 55.9 mm peak with a '43% of days' subtitle; the only differences are small ones, such as attempt 1 drawing a filled line instead of bars and slight changes in wording and aspect ratio.",
+    "cost_usd": 0.0952548,
+    "cell": "claude-sonnet-5-5/m-quick-seattle",
+    "model": "claude-sonnet-5-5",
+    "case": "m-quick-seattle",
+    "kind": "mode"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same row-normalised blue heatmap with percentages and counts, bold diagonal, and a boxed class_2\u2192class_0 cell; only the subtitle wording and the box style (dashed grey vs. solid red) differ.",
+    "cost_usd": 0.0871662,
+    "cell": "claude-sonnet-5-5/n-confusion-wine",
+    "model": "claude-sonnet-5-5",
+    "case": "n-confusion-wine",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are the same grey-to-blue dumbbell chart with the same sort order and endpoint labels; the subtitles take different angles (the 28-40x range, which country grew most and least by multiple, or by dollars), and attempt 3 drops the multiple callouts and adds an inline 'no 1970 data' note for Canada.",
+    "cost_usd": 0.09232560000000001,
+    "cell": "claude-sonnet-5-5/n-dumbbell-healthexp",
+    "model": "claude-sonnet-5-5",
+    "case": "n-dumbbell-healthexp",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same ECDF design, with median markers, direct labels and an axis cut at the 99th percentile; the subtitles use slightly different stats (one gives the share over 3 mi, the others give 90th percentiles), and only attempt 2 adds 90th-percentile marker callouts.",
+    "cost_usd": 0.0973398,
+    "cell": "claude-sonnet-5-5/n-ecdf-taxis",
+    "model": "claude-sonnet-5-5",
+    "case": "n-ecdf-taxis",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same stacked 100% area chart with blue renewables against grey fossil and nuclear layers, the same right-edge labels and the same +7-point 2009 callout in the same spot; only the title wording, the subtitle phrasing and the x-tick spacing differ.",
+    "cost_usd": 0.0981138,
+    "cell": "claude-sonnet-5-5/n-mix-iowa",
+    "model": "claude-sonnet-5-5",
+    "case": "n-mix-iowa",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are the same ridgeline with July highlighted and white median ticks. Each subtitle words the spread claim differently, and attempts 2 and 3 add a 7.8 label on December; the design differences are only cosmetic: attempt 1 clips the curves to the data range and has lighter gridlines.",
+    "cost_usd": 0.1020442,
+    "cell": "claude-sonnet-5-5/n-ridgeline-seattle",
+    "model": "claude-sonnet-5-5",
+    "case": "n-ridgeline-seattle",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are grey slope charts with Asia picked out in red. The subtitles and callouts differ: attempt 1 has only the Asia gain callout, attempt 2 adds an Oceania callout, a note about FSU and drops the right-side names, and attempt 3 labels every line's gain, shows country counts (n) and uses different data that changes Oceania's result.",
+    "cost_usd": 0.093491,
+    "cell": "claude-sonnet-5-5/n-slope-gapminder",
+    "model": "claude-sonnet-5-5",
+    "case": "n-slope-gapminder",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are log-scale line charts with a solid red validation line, a dashed blue train line, direct end labels, a vertical marker at the epoch-37 minimum and the same callout; only the title wording, the subtitle length and the figure height differ.",
+    "cost_usd": 0.0958016,
+    "cell": "claude-sonnet-5-5/n-training-cancer",
+    "model": "claude-sonnet-5-5",
+    "case": "n-training-cancer",
+    "kind": "newchart"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "similar",
+    "note": "All three are horizontal bar charts ordered first to third class, with a direct % label on each bar and a subtitle making the same point that first class survived at 2.6x the third-class rate. Attempts 1 and 3 highlight both first and third class, while attempt 2 highlights only first class and adds the overall 38% rate to its subtitle.",
+    "cost_usd": 0.07868040000000001,
+    "cell": "claude-sonnet-5-5/p1-titanic",
+    "model": "claude-sonnet-5-5",
+    "case": "p1-titanic",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three attempts are vertical bar charts in cylinder order with n= tick labels, a single color, and a subtitle saying 8-cylinder cars average about 2x 4-cylinder horsepower; the 3- and 5-cylinder bars (fewer than 10 cars) are shown with hatching in 1 and 3 and as paler bars in 2, and only the subtitle wording, hp unit labels and line breaks differ beyond that.",
+    "cost_usd": 0.0927084,
+    "cell": "claude-sonnet-5-5/p2-mpg",
+    "model": "claude-sonnet-5-5",
+    "case": "p2-mpg",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same red/blue anomaly bars with a 10-year rolling mean and a 2024 record callout; they differ only in the subtitle (rolling-mean range, trend per decade, or years-below-zero count), in attempt 2's takeaway-style title, and in attempts 2 and 3 adding a 1909 coldest-year callout.",
+    "cost_usd": 0.1104976,
+    "cell": "claude-sonnet-5-5/p3-globaltemp",
+    "model": "claude-sonnet-5-5",
+    "case": "p3-globaltemp",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same horizontal violin plot with jittered points, red median ticks, the same species order and the same median labels; the only differences are slight changes to the subtitle wording and label formats, such as 'median 5,000 g' versus '5,000'.",
+    "cost_usd": 0.09844059999999999,
+    "cell": "claude-sonnet-5-5/p4-penguins",
+    "model": "claude-sonnet-5-5",
+    "case": "p4-penguins",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same sorted dumbbell/lollipop with min/avg/max dots and value labels; the subtitles all lead with ERNIE's top average but add different secondary takeaways, and attempt2 also bolds ERNIE's label and darkens BiLSTM's bar.",
+    "cost_usd": 0.11808740000000001,
+    "cell": "claude-sonnet-5-5/p5-glue",
+    "model": "claude-sonnet-5-5",
+    "case": "p5-glue",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three share the same base, a KNN boundary with dot-size probability, contour lines and circled points that sit in another class's region. The subtitles all start from the same '34 of 178' line but go on to different points. Only attempt 2 adds an arrow callout about Class 2, and only attempt 3 uses separate marker shapes per class and adds a legend entry for the circles.",
+    "cost_usd": 0.0968272,
+    "cell": "claude-sonnet-5-5/p6-wine",
+    "model": "claude-sonnet-5-5",
+    "case": "p6-wine",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three use the same lower-triangle RdBu heatmap; only the subtitle wording changes and how many cells get an outline (two in attempt 1, one in attempt 2, none in attempt 3).",
+    "cost_usd": 0.0882358,
+    "cell": "claude-sonnet-5-5/p7-mpg",
+    "model": "claude-sonnet-5-5",
+    "case": "p7-mpg",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three use the same 2x2 small multiples with grey chick spaghetti, a bold mean line and end labels, plus the same takeaway; they differ in the reference overlay (all other diet means dashed in 1, none in 2, a Diet 1 baseline only in 3), in whether dropouts are marked with x (2 and 3 do), and in where the n and dropout notes sit.",
+    "cost_usd": 0.1157936,
+    "cell": "claude-sonnet-5-5/p8-chickweight",
+    "model": "claude-sonnet-5-5",
+    "case": "p8-chickweight",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three attempts look pixel-identical: the same title and subtitle, the same legends with AP and AUC fold ranges, and the same two-panel PR/ROC layout with gray fold lines, a navy average line and an orange dashed no-skill line.",
+    "cost_usd": 0.11122459999999999,
+    "cell": "claude-sonnet-5-5/p9-titanic",
+    "model": "claude-sonnet-5-5",
+    "case": "p9-titanic",
+    "kind": "pattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are log-scale scatters colored and marked by continent with the same r=0.80 / Europe-vs-Africa median subtitle. Attempt 2 adds a Japan callout. Attempt 3 drops Qatar, adds a red 'Africa: median 53 yrs' label, makes Africa red to highlight it, moves the legend to the upper left and uses different tick values.",
+    "cost_usd": 0.0996282,
+    "cell": "claude-sonnet-5-5/x-gapminder-scatter",
+    "model": "claude-sonnet-5-5",
+    "case": "x-gapminder-scatter",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "similar",
+    "note": "All three are log-scale multi-line charts with the same palette and end-of-line labels; they differ in the callouts (attempts 1 and 3 mark GOOG's peak, attempt 2 marks GOOG's Aug 2004 entry and puts growth multiples in its labels) and in small encoding choices (attempt 3 uses dashed lines for IBM and MSFT and $ tick labels, and attempt 2 shows yearly ticks).",
+    "cost_usd": 0.10008979999999999,
+    "cell": "claude-sonnet-5-5/x-stocks-line",
+    "model": "claude-sonnet-5-5",
+    "case": "x-stocks-line",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "similar",
+    "design": "near-identical",
+    "note": "All three are the same single-color $2-bin histogram with dashed median and dotted 90th-percentile lines and nearly the same subtitle; only attempt 2 adds a callout for the $52 spike, and its bins are offset slightly.",
+    "cost_usd": 0.09374560000000001,
+    "cell": "claude-sonnet-5-5/x-taxis-hist",
+    "model": "claude-sonnet-5-5",
+    "case": "x-taxis-hist",
+    "kind": "offpattern"
+  },
+  {
+    "annotations": "near-identical",
+    "design": "near-identical",
+    "note": "All three are the same grouped bar chart with red female bars and hatched blue male bars, value labels and a 'widest gap in Second (76 pts)' subtitle; they differ only in title wording, attempt 1 also mentioning the narrowest gap, and attempt 3 splitting the n counts by sex.",
+    "cost_usd": 0.0910106,
+    "cell": "claude-sonnet-5-5/x-titanic-grouped",
+    "model": "claude-sonnet-5-5",
+    "case": "x-titanic-grouped",
+    "kind": "offpattern"
+  }
+]

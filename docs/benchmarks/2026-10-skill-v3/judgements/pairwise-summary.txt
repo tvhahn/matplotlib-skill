@@ -1,0 +1,23 @@
+pairwise v2base vs v3 (both orders; disagreement → tie)
+
+judge claude-opus-5-5  (order-consistency 88%)
+  ALL                    v3 128 | v2base  48 | tie  31   v3 win-rate (excl. ties) 73%, of all 62%
+  claude-haiku-4-5       v3  41 | v2base  16 | tie  12   v3 win-rate (excl. ties) 72%, of all 59%
+  claude-opus-5-5        v3  44 | v2base  13 | tie  12   v3 win-rate (excl. ties) 77%, of all 64%
+  claude-sonnet-5-5      v3  43 | v2base  19 | tie   7   v3 win-rate (excl. ties) 69%, of all 62%
+  kind:mode              v3  16 | v2base   6 | tie   5   v3 win-rate (excl. ties) 73%, of all 59%
+  kind:newchart          v3  48 | v2base   9 | tie   6   v3 win-rate (excl. ties) 84%, of all 76%
+  kind:offpattern        v3  18 | v2base  15 | tie   3   v3 win-rate (excl. ties) 55%, of all 50%
+  kind:pattern           v3  46 | v2base  18 | tie  17   v3 win-rate (excl. ties) 72%, of all 57%
+
+judge claude-sonnet-5-5  (order-consistency 82%)
+  ALL                    v3 130 | v2base  39 | tie  38   v3 win-rate (excl. ties) 77%, of all 63%
+  claude-haiku-4-5       v3  47 | v2base  14 | tie   8   v3 win-rate (excl. ties) 77%, of all 68%
+  claude-opus-5-5        v3  37 | v2base  12 | tie  20   v3 win-rate (excl. ties) 76%, of all 54%
+  claude-sonnet-5-5      v3  46 | v2base  13 | tie  10   v3 win-rate (excl. ties) 78%, of all 67%
+  kind:mode              v3  19 | v2base   3 | tie   5   v3 win-rate (excl. ties) 86%, of all 70%
+  kind:newchart          v3  44 | v2base   8 | tie  11   v3 win-rate (excl. ties) 85%, of all 70%
+  kind:offpattern        v3  18 | v2base  12 | tie   6   v3 win-rate (excl. ties) 60%, of all 50%
+  kind:pattern           v3  49 | v2base  16 | tie  16   v3 win-rate (excl. ties) 75%, of all 60%
+
+judge agreement claude-opus-5-5 vs claude-sonnet-5-5: 74% (n=207)
