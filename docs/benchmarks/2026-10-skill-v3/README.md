@@ -12,11 +12,13 @@ v2 had no pattern for. Bottom: an existing pattern.*
 
 ## Headline
 
-- **v3 wins blind pairwise judging against v2: 73–77% of decided pairs** (both judges,
-  every pair judged in both A/B orders). The gain is largest on the new chart types
-  (84–85%) and smallest on off-pattern charts (55–60%).
+- **v3 wins blind pairwise judging against v2.** On the original 12 prompts it wins
+  56–58% of all pairs (67–71% of pairs that weren't tied); over all 23 prompts, 62–63%
+  of all pairs (73–77% of decided). Each pair is judged in both A/B orders by two
+  judges, and an order disagreement counts as a tie. The gain is largest on the new
+  chart types (84–85% of decided) and smallest off-pattern (55–60%).
 - **Every run now routes to the right pattern** (205/207, against 145/207 for v2), and
-  the checker findings left on final charts fell from 64 to 5.
+  the checker findings left on final charts fell from 64 to 5, of which 2 are real.
 - **Measured costs:** v3 runs cost 1.7× as much and take 1.9× as long, mostly because of
   the reviewer. Haiku's repeated runs became markedly *more* uniform. Absolute scores
   rose but missed the targets set in the roadmap.
@@ -100,12 +102,16 @@ modes 6.26 → 6.74; **new chart types 7.08 → 8.05** (Haiku 5.57 → 7.71). On
 | | v2 | v3 |
 |---|---|---|
 | Runs with a chart | 204/207 | 205/207 |
-| Routed to the expected pattern | 145/207 (0/63 on new chart types — no pattern existed) | **205/207** |
+| Routed to the expected pattern¹ | 145/207 (0/63 on new chart types — no pattern existed) | **205/207** |
 | Opened the exemplar PNGs | — | 196/207 |
 | Independent review ran | — | 184/207 (Opus 69, Haiku 67, Sonnet 48) |
-| Checker findings on final charts (WARN + STYLE) | 58 + 6 | **4 + 1** |
+| Checker findings on final charts (WARN + STYLE) | 58 + 6 | **4 + 1** (3 of them one known false positive) |
 | Cost per run — Haiku / Sonnet / Opus | $0.143 / $0.162 / $0.335 | $0.258 / $0.228 / $0.588 |
 | Time per run (mean) | 57 s | 106 s |
+
+¹ Expected pattern per prompt is in `scripts/bench_report.py` (`EXPECTED`). Accepted
+alternatives: ridgeline → P12 or P4; publication tips → P2 or other-charts; quick
+Seattle → other-charts or P3; function happiness → P1 or P2.
 
 Notes on the process numbers:
 - **Sonnet skips the review most in quick, exploratory and function-mode requests**
@@ -130,16 +136,22 @@ The share of cells whose three runs have **near-identical annotations** (Opus ju
 - **Near-identical design:** 65% for v2 and 62% for v3.
 - **Opus became more varied,** Sonnet is unchanged, and **Haiku became much more
   uniform.**
-- **Part of the Haiku number is by design.** Templates compute the subtitle from the data,
-  so a model that follows them closely writes the same correct sentence every run.
-- **The rest is a real effect:** Haiku follows exemplars and templates more literally than
-  the larger models. The scatter regression above is an instance of it.
+- **Why Haiku converged:** the variety judge's notes show it is not copying the clean
+  exemplars, which use other data. It runs the v3 templates almost literally, so their
+  computed subtitles and callouts come back word for word across runs. Examples are the
+  line template's "AAPL 8.6x vs MSFT 0.7x" subtitle and the stacked-area template's
+  "+N pts in YEAR" callout.
+- **The trade-off:** the richer a template's built-in takeaway logic, the more the
+  smallest model's charts converge on it. That is mostly harmless when the computed
+  takeaway is right (Haiku's absolute scores rose most). It hurts when the template's
+  takeaway is the wrong story for the data, or when guidance outside the code (use a log
+  axis) is ignored — the scatter regression.
 
 ## Acceptance tests (from the roadmap)
 
 | Direction | Test | Result |
 |---|---|---|
-| A. Exemplars + critic | Pairwise ≥ 65% wins on the original prompts, both orders | **Pass on decided pairs** (67% / 71%); **miss if ties count as losses** (56% / 58% of all pairs) |
+| A. Exemplars + critic | Pairwise ≥ 65% wins on the original prompts, both orders | **Miss** — 56% / 58% of all pairs (ties are not wins); 67% / 71% of decided pairs |
 | | Mean judge ≥ 8.3; Haiku ≥ 7.8 | **Miss** — 7.70 overall (Opus 8.22, Sonnet 7.91, Haiku 6.96) |
 | | No loss of variety | **Miss for Haiku** (41% → 82% near-identical); pass for Sonnet and Opus |
 | | Cost ≤ 1.5× v2 | **Miss** — 1.68× overall (Haiku 1.80×, Opus 1.76×, Sonnet 1.41×); the review round drives it |
@@ -159,7 +171,8 @@ chart came back with the exemplar's own "+7 pts in 2009" callout.
 
 ![contamination](contamination.png)
 
-That run is kept in `logs/bench/v3-leaky` (local; `logs/` is git-ignored) and only its
+(The fix commit's message says 16; 22 is the correct count.) That run is kept in
+`logs/bench/v3-leaky` (local; `logs/` is git-ignored) and only its
 variety numbers are reported above.
 
 **What changed after it:**
@@ -174,6 +187,9 @@ the answer.
 
 ## What to fix next
 
+0. **Haiku uniformity:** have templates compute *candidate* facts (ratio, gap, record,
+   trend) and ask the model to choose and word the takeaway itself, rather than shipping
+   one finished subtitle string. Measure with `judge.py variety`.
 1. **P4 median labels:** place them above the violin outline, clear of the strip, instead
    of haloed over the points. Then drop the checker's "halo makes it OK" downgrade for
    labels sitting on more than a few points.
@@ -198,6 +214,9 @@ the answer.
   they are used for text.
 - **Sample size:** 3 runs per cell is better than 1 but still small per prompt. Per-prompt
   verdicts (e.g. P4 4–8) are suggestive, not conclusive.
+- **Frontmatter:** `allowed-tools` lists both `Agent` and `Task` (the subagent tool's
+  name differs between Claude Code versions). Claude Code 2.1.296 accepted it in every
+  benchmark run; older versions were not tested.
 - **Spend:** about $330 in total — runs $44 (v2), $74 (contaminated v3), $74 (v3), and
   judging $138.
 
